@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+    "version": "0.0.1",
+    "name": "Kido Scraper Script Generator",
+    "short_name": "Kido Scraper",
+    "description": "KidoZen tool to build scripts for data extraction from websites",
+    "permissions": ["<all_urls>", "tabs", "notifications", "storage", "unlimitedStorage", "downloads"],
+    "icons": {},
+    "browser_action": {
+        "default_icon": {},
+        "default_title": "Kido Scraper",
+        "default_popup": "view/popup.html"
+    },
+    "options_page": "view/options.html",
+    "devtools_page": "view/devtools/init.html",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "background": {
+        "scripts": []
+    },
+    "web_accessible_resources": [],
+    "content_scripts": [{
+        "matches": ["*://*/*"],
+        "js": [
+            "lib/angular.min.js",
+            "lib/angular-route.min.js"
+        ],
+        "css": []
+    }]
+}

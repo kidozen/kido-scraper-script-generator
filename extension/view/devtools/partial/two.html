@@ -1,0 +1,8 @@
+<h3>{{ site.name }}</h3>
+<h4>{{ site.url }}</h4>
+<select ng-model="stepType" ng-options="t.id as t.name for t in types"></select>
+<button ng-click="addStep()">Add step</button>
+<a href="#">Back</a>
+<ul>
+    <li ng-repeat="s in site.steps">{{ s.type }}</li>
+</ul>
