@@ -1,4 +1,4 @@
-/* global window, angular, StepForm */
+/* global window, angular, Site */
 (function(angular) {
     'use strict';
 
@@ -9,17 +9,32 @@
         var factory = {};
 
         factory.store = function(key, value) {
-            collection[key] = value;
+            collection[key] = new Site(value);
         };
 
         factory.get = function(key) {
+            console.log('KidoStorage.get', key);
             if (key) {
-                return collection[key];
+                return collection[key] ? collection[key].toJson() : undefined;
             }
-            return collection;
+            return Object
+                .keys(collection)
+                .map(function(item) {
+                    return collection[item].toJson();
+                });
         };
 
         return factory;
+    })
+
+    .controller('ZeroController', function($scope, $location, KidoStorage) {
+        $scope.sites = KidoStorage.get() || [];
+        $scope.addNewSite = function() {
+            $location.path('/one');
+        };
+        $scope.export = function(site) {
+            console.log(new Site(site).toCasper());
+        };
     })
 
     .controller('OneController', function($scope, $location, KidoStorage) {
@@ -33,7 +48,8 @@
             }
             KidoStorage.store($scope.name, {
                 name: $scope.name,
-                url: $scope.url
+                url: $scope.url,
+                steps: []
             });
             $location.path('/two/' + $scope.name);
         };
@@ -67,10 +83,12 @@
         $scope.site = KidoStorage.get($routeParams.name);
         $scope.currentStep = {
             type: $routeParams.type || 'form',
+            name: '',
             selectors: [{
                 key: '',
                 value: ''
-            }]
+            }],
+            submit: ''
         };
         $scope.addSelector = function() {
             $scope.currentStep.selectors.push({
@@ -84,14 +102,16 @@
         $scope.submit = function() {
             $scope.site.steps.push($scope.currentStep);
             KidoStorage.store($routeParams.name, $scope.site);
-            var stepForm = new StepForm($scope.site.steps[0]);
-            console.log(stepForm);
-            $location.path('/two/' + $routeParams.name);
+            $location.path('/zero');
         };
     })
 
     .config(function($routeProvider) {
         $routeProvider
+            .when('/zero', {
+                templateUrl: 'partial/zero.html',
+                controller: 'ZeroController'
+            })
             .when('/one', {
                 templateUrl: 'partial/one.html',
                 controller: 'OneController'
@@ -105,7 +125,7 @@
                 controller: 'ThreeController'
             })
             .otherwise({
-                redirectTo: '/one'
+                redirectTo: '/zero'
             });
     })
 

@@ -1,0 +1,8 @@
+<h2>My Sites</h2>
+<ul>
+    <li ng-repeat="s in sites">
+        <label>{{ s.name }}</label>
+        <button ng-click="export(s)">Export</button>
+    </li>
+</ul>
+<button ng-click="addNewSite()">Add new site</button>
