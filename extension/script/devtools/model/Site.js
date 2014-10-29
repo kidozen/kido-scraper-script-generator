@@ -1,5 +1,5 @@
 var Site = (function() {
-    /* global multiline, StepForm */
+    /* global multiline, StepForm, StepClick, StepScrap */
     'use strict';
 
     var TYPES = {
@@ -17,12 +17,23 @@ var Site = (function() {
                 case TYPES.FORM:
                     return new StepForm(self, item);
                 case TYPES.CLICK:
-                    return null;
+                    return new StepClick(self, item);
                 case TYPES.SCRAP:
-                    return null;
+                    return new StepScrap(self, item);
             }
         });
     }
+
+    Site.getStepDefaults = function(type) {
+        switch (type) {
+            case TYPES.FORM:
+                return StepForm.getDefaults();
+            case TYPES.CLICK:
+                return StepClick.getDefaults();
+            case TYPES.SCRAP:
+                return StepScrap.getDefaults();
+        }
+    };
 
     Site.prototype._name = undefined;
     Site.prototype._url = undefined;

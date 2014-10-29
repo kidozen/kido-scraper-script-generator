@@ -81,15 +81,7 @@
             return $location.path('/');
         }
         $scope.site = KidoStorage.get($routeParams.name);
-        $scope.currentStep = {
-            type: $routeParams.type || 'form',
-            name: '',
-            selectors: [{
-                key: '',
-                value: ''
-            }],
-            submit: ''
-        };
+        $scope.currentStep = Site.getStepDefaults($routeParams.type || 'form');
         $scope.addSelector = function() {
             $scope.currentStep.selectors.push({
                 key: '',

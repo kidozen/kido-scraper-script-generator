@@ -14,8 +14,8 @@ var StepFormSubmit = (function() {
     };
 
     StepFormSubmit.prototype.toCasper = function() {
-        return 'this.click("{{submit}}");'.supplant({
-            submit: this._key
+        return 'this.click({{submit}});'.supplant({
+            submit: this._key.quote()
         });
     };
 

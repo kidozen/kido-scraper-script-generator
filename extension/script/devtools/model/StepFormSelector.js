@@ -19,8 +19,8 @@ var StepFormSelector = (function() {
     };
 
     StepFormSelector.prototype.toCasper = function() {
-        return 'document.querySelector("{{key}}").setAttribute("value", "{{value}}");'.supplant({
-            key: this._key,
+        return 'document.querySelector({{key}}).value = "{{value}}";'.supplant({
+            key: this._key.quote(),
             value: this._value
         });
     };

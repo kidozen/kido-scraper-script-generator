@@ -19,6 +19,18 @@ var StepForm = (function() {
     StepForm.prototype._selectors = undefined;
     StepForm.prototype._submit = undefined;
 
+    StepForm.getDefaults = function() {
+        return {
+            type: TYPE,
+            name: '',
+            selectors: [{
+                key: '',
+                value: ''
+            }],
+            submit: ''
+        };
+    };
+
     StepForm.prototype.toJson = function() {
         return {
             type: TYPE,
