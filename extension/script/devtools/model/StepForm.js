@@ -1,8 +1,6 @@
 var StepForm = (function() {
-    /* global multiline, StepFormSelector, StepFormSubmit */
+    /* global multiline, Site, StepFormSelector, StepClick */
     'use strict';
-
-    var TYPE = 'form';
 
     function StepForm(parent, step) {
         var self = this;
@@ -11,7 +9,7 @@ var StepForm = (function() {
         this._selectors = step.selectors.map(function(item) {
             return new StepFormSelector(self, item);
         });
-        this._submit = new StepFormSubmit(self, step.submit);
+        this._submit = new StepClick(self, step.submit);
     }
 
     StepForm.prototype._parent = undefined;
@@ -21,7 +19,7 @@ var StepForm = (function() {
 
     StepForm.getDefaults = function() {
         return {
-            type: TYPE,
+            type: Site.TYPES.FORM,
             name: '',
             selectors: [{
                 key: '',
@@ -33,12 +31,12 @@ var StepForm = (function() {
 
     StepForm.prototype.toJson = function() {
         return {
-            type: TYPE,
+            type: Site.TYPES.FORM,
             name: this._name,
             selectors: this._selectors.map(function(item) {
                 return item.toJson();
             }),
-            submit: this._submit.toJson()
+            submit: this._submit.toJson().key
         };
     };
 
@@ -48,9 +46,7 @@ var StepForm = (function() {
                 casper.thenEvaluate(function() {
                     {{selectors}}
                 });
-                casper.then(function() {
-                    {{submit}}
-                });
+                {{submit}}
             */
         }).supplant({
             selectors: this._selectors.map(function(item) {

@@ -13,7 +13,6 @@
         };
 
         factory.get = function(key) {
-            console.log('KidoStorage.get', key);
             if (key) {
                 return collection[key] ? collection[key].toJson() : undefined;
             }
@@ -46,11 +45,10 @@
             if (KidoStorage.get($scope.name)) {
                 return window.alert('name already in use');
             }
-            KidoStorage.store($scope.name, {
-                name: $scope.name,
-                url: $scope.url,
-                steps: []
-            });
+            var site = Site.getDefaults();
+            site.name = $scope.name;
+            site.url = $scope.url;
+            KidoStorage.store($scope.name, site);
             $location.path('/two/' + $scope.name);
         };
     })
@@ -81,12 +79,9 @@
             return $location.path('/');
         }
         $scope.site = KidoStorage.get($routeParams.name);
-        $scope.currentStep = Site.getStepDefaults($routeParams.type || 'form');
+        $scope.currentStep = Site.getDefaults($routeParams.type || Site.TYPES.FORM);
         $scope.addSelector = function() {
-            $scope.currentStep.selectors.push({
-                key: '',
-                value: ''
-            });
+            $scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
         };
         $scope.removeSelector = function(index) {
             $scope.currentStep.selectors.splice(index, 1);

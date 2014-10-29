@@ -1,12 +1,6 @@
 var Site = (function() {
-    /* global multiline, StepForm, StepClick, StepScrap */
+    /* global multiline, StepForm, StepFormSelector, StepClick, StepScrap */
     'use strict';
-
-    var TYPES = {
-        FORM: 'form',
-        CLICK: 'click',
-        SCRAP: 'scrap'
-    };
 
     function Site(site) {
         var self = this;
@@ -14,24 +8,41 @@ var Site = (function() {
         this._url = site.url;
         this._steps = site.steps.map(function(item) {
             switch (item.type) {
-                case TYPES.FORM:
+                case Site.TYPES.FORM:
                     return new StepForm(self, item);
-                case TYPES.CLICK:
+                case Site.TYPES.FORM_SELECTOR:
+                    return new StepFormSelector(self, item);
+                case Site.TYPES.CLICK:
                     return new StepClick(self, item);
-                case TYPES.SCRAP:
+                case Site.TYPES.SCRAP:
                     return new StepScrap(self, item);
             }
         });
     }
 
-    Site.getStepDefaults = function(type) {
+    Site.TYPES = {
+        FORM: 'form',
+        FORM_SELECTOR: 'form_selector',
+        CLICK: 'click',
+        SCRAP: 'scrap'
+    };
+
+    Site.getDefaults = function(type) {
         switch (type) {
-            case TYPES.FORM:
+            case Site.TYPES.FORM:
                 return StepForm.getDefaults();
-            case TYPES.CLICK:
+            case Site.TYPES.FORM_SELECTOR:
+                return StepFormSelector.getDefaults();
+            case Site.TYPES.CLICK:
                 return StepClick.getDefaults();
-            case TYPES.SCRAP:
+            case Site.TYPES.SCRAP:
                 return StepScrap.getDefaults();
+            default:
+                return {
+                    name: '',
+                    url: '',
+                    steps: []
+                };
         }
     };
 
