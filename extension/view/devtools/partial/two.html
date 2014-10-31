@@ -3,5 +3,5 @@
 <select ng-model="stepType" ng-options="t.id as t.name for t in types"></select>
 <button ng-click="addStep()">Add step</button>
 <ul>
-    <li ng-repeat="s in site.steps">{{ s.type }}</li>
+    <li ng-repeat="s in site.steps">{{ s.name }} ({{ s.type }})</li>
 </ul>

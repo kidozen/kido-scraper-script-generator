@@ -1,19 +1,16 @@
 var StepForm = (function() {
-    /* global multiline, Site, StepFormSelector, StepClick */
+    /* global multiline, Site, Step, StepFormSelector, StepClick */
     'use strict';
 
-    function StepForm(parent, step) {
-        var self = this;
-        this._parent = parent;
-        this._name = step.name;
+    function StepForm(step) {
+        Step.call(this, step);
         this._selectors = step.selectors.map(function(item) {
-            return new StepFormSelector(self, item);
+            return new StepFormSelector(item);
         });
-        this._submit = new StepClick(self, step.submit);
+        this._submit = new StepClick(step.submit);
     }
 
-    StepForm.prototype._parent = undefined;
-    StepForm.prototype._name = undefined;
+    StepForm.prototype = Object.create(Step.prototype);
     StepForm.prototype._selectors = undefined;
     StepForm.prototype._submit = undefined;
 
@@ -21,11 +18,8 @@ var StepForm = (function() {
         return {
             type: Site.TYPES.FORM,
             name: '',
-            selectors: [{
-                key: '',
-                value: ''
-            }],
-            submit: ''
+            selectors: [Site.getDefaults(Site.TYPES.FORM_SELECTOR)],
+            submit: Site.getDefaults(Site.TYPES.CLICK)
         };
     };
 
@@ -36,7 +30,7 @@ var StepForm = (function() {
             selectors: this._selectors.map(function(item) {
                 return item.toJson();
             }),
-            submit: this._submit.toJson().key
+            submit: this._submit.toJson()
         };
     };
 

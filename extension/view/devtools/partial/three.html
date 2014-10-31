@@ -1,14 +1,1 @@
-<h3>Add a new step: {{ currentStep.type }}</h3>
-<label>Step name</label>
-<input type="text" ng-model="currentStep.name"></input>
-<button ng-click="addSelector()">Add</button>
-<div ng-repeat="s in currentStep.selectors">
-    <label>Selector</label>
-    <input type="text" ng-model="s.key"></input>
-    <label>Value</label>
-    <input type="text" ng-model="s.value"></input>
-    <button ng-click="removeSelector($index)">Remove</button>
-</div>
-<label>Submit button</label>
-<input type="text" ng-model="currentStep.submit"></input>
-<button ng-click="submit()">Save</button>
+<ng-include src="template"></ng-include>

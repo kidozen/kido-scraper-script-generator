@@ -2,6 +2,7 @@
 <ul>
     <li ng-repeat="s in sites">
         <label>{{ s.name }}</label>
+        <button ng-click="open(s)">Open</button>
         <button ng-click="export(s)">Export</button>
     </li>
 </ul>

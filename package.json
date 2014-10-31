@@ -1,0 +1,28 @@
+{
+  "name": "kido-scraper-script-generator",
+  "version": "0.0.1",
+  "description": "KidoZen tool to build scripts for data extraction from websites",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kidozen/kido-scraper-script-generator.git"
+  },
+  "author": "KidoZen <development@kidozen.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kidozen/kido-scraper-script-generator/issues"
+  },
+  "homepage": "https://github.com/kidozen/kido-scraper-script-generator",
+  "devDependencies": {
+    "gulp": "^3.8.9",
+    "gulp-connect": "^2.0.6",
+    "gulp-plumber": "^0.6.6",
+    "gulp-shell": "^0.2.10"
+  }
+}

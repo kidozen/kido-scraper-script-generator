@@ -1,18 +1,19 @@
 var StepClick = (function() {
-    /* global multiline, Site */
+    /* global multiline, Site, Step */
     'use strict';
 
-    function StepClick(parent, key) {
-        this._parent = parent;
-        this._key = key;
+    function StepClick(step) {
+        Step.call(this, step);
+        this._key = step.key;
     }
 
-    StepClick.prototype._parent = undefined;
+    StepClick.prototype = Object.create(Step.prototype);
     StepClick.prototype._key = undefined;
 
     StepClick.getDefaults = function() {
         return {
             type: Site.TYPES.CLICK,
+            name: '',
             key: ''
         };
     };
@@ -20,6 +21,7 @@ var StepClick = (function() {
     StepClick.prototype.toJson = function() {
         return {
             type: Site.TYPES.CLICK,
+            name: this._name,
             key: this._key
         };
     };

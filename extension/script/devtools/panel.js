@@ -31,7 +31,11 @@
         $scope.addNewSite = function() {
             $location.path('/one');
         };
+        $scope.open = function(site) {
+            $location.path('/two/' + site.name);
+        };
         $scope.export = function(site) {
+            console.log(site);
             console.log(new Site(site).toCasper());
         };
     })
@@ -78,19 +82,59 @@
         if (!$routeParams.name) {
             return $location.path('/');
         }
+        var stepFormController = function() {
+            return {
+                addSelector: function() {
+                    $scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
+                },
+                removeSelector: function(index) {
+                    $scope.currentStep.selectors.splice(index, 1);
+                },
+                validate: function() {
+                    return true;
+                }
+            };
+        };
+        var stepClickController = function() {
+            return {
+                validate: function() {
+                    return true;
+                }
+            };
+        };
+        var stepScrapController = function() {
+            return {
+                validate: function() {
+                    return true;
+                }
+            };
+        };
         $scope.site = KidoStorage.get($routeParams.name);
-        $scope.currentStep = Site.getDefaults($routeParams.type || Site.TYPES.FORM);
-        $scope.addSelector = function() {
-            $scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
-        };
-        $scope.removeSelector = function(index) {
-            $scope.currentStep.selectors.splice(index, 1);
-        };
+        $scope.currentStep = Site.getDefaults($routeParams.type);
+        console.log($scope.currentStep);
         $scope.submit = function() {
-            $scope.site.steps.push($scope.currentStep);
-            KidoStorage.store($routeParams.name, $scope.site);
-            $location.path('/zero');
+            if ($scope.validate()) {
+                $scope.site.steps.push($scope.currentStep);
+                KidoStorage.store($routeParams.name, $scope.site);
+                $location.path('/zero');
+            }
         };
+        switch ($routeParams.type) {
+            case Site.TYPES.CLICK:
+                $scope.template = 'partial/step_click.html';
+                angular.extend($scope, stepClickController());
+                break;
+            case Site.TYPES.FORM:
+                $scope.template = 'partial/step_form.html';
+                angular.extend($scope, stepFormController());
+                break;
+            case Site.TYPES.SCRAP:
+                $scope.template = 'partial/step_scrap.html';
+                angular.extend($scope, stepScrapController());
+                break;
+            default:
+                window.alert('Invalid step type');
+        }
     })
 
     .config(function($routeProvider) {

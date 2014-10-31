@@ -1,20 +1,21 @@
 var StepFormSelector = (function() {
-    /* global Site */
+    /* global Site, Step */
     'use strict';
 
-    function StepFormSelector(parent, selector) {
-        this._parent = parent;
-        this._key = selector.key;
-        this._value = selector.value;
+    function StepFormSelector(step) {
+        Step.call(this, step);
+        this._key = step.key;
+        this._value = step.value;
     }
 
-    StepFormSelector.prototype._parent = undefined;
+    StepFormSelector.prototype = Object.create(Step.prototype);
     StepFormSelector.prototype._key = undefined;
     StepFormSelector.prototype._value = undefined;
 
     StepFormSelector.getDefaults = function() {
         return {
             type: Site.TYPES.FORM_SELECTOR,
+            name: '',
             key: '',
             value: ''
         };
@@ -23,6 +24,7 @@ var StepFormSelector = (function() {
     StepFormSelector.prototype.toJson = function() {
         return {
             type: Site.TYPES.FORM_SELECTOR,
+            name: this._name,
             key: this._key,
             value: this._value
         };
