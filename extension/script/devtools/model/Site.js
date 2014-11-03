@@ -3,6 +3,10 @@ var Site = (function() {
     'use strict';
 
     function Site(site) {
+        if (!site) throw 'The "site" argument is required';
+        if (!site.name) throw 'The "site.name" property is required';
+        if (!site.url) throw 'The "site.url" property is required';
+        if (!Array.isArray(site.steps)) throw 'The "site.steps" property must be an array';
         this._name = site.name;
         this._url = site.url;
         this._steps = site.steps.map(function(item) {

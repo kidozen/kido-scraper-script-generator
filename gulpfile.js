@@ -12,11 +12,11 @@ gulp.task('server', function() {
     });
 });
 
-gulp.task('integration-tests', function() {
+gulp.task('integration-tests', ['server'], function() {
     var tests = ['test/index.js'];
     var casperChild = spawn('casperjs', ['test'].concat(tests));
     casperChild.stdout.on('data', function(data) {
-        gutil.log('CasperJS:', data.toString().slice(0, -1));
+        gutil.log(data.toString().slice(0, -1));
     });
     casperChild.on('close', function(code) {
         if (code === 0) {
@@ -27,5 +27,3 @@ gulp.task('integration-tests', function() {
         process.exit(code);
     });
 });
-
-gulp.task('test', ['server', 'integration-tests']);

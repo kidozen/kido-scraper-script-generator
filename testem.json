@@ -1,0 +1,11 @@
+{
+    "framework": "mocha",
+    "src_files": [
+        "./extension/script/devtools/model/**/*.js",
+        "./test/unit/lib/*.js",
+        "./test/unit/*.js"
+    ],
+    "launch_in_dev": [
+        "PhantomJS"
+    ]
+}
