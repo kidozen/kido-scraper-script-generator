@@ -25,6 +25,6 @@
         "StepForm": true,
         "StepFormSelector": true,
         "StepScrap": true,
-        "StepSelector": true,
+        "StepSelector": true
     }
 }
