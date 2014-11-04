@@ -112,9 +112,9 @@ describe('StepClick', function() {
                         this.click("input#test");
                     });
                 */
-            }).killWhiteSpace();
+            }).clean();
             var step = new StepClick(options);
-            expect(step.toCasper().killWhiteSpace()).to.equal(casper);
+            expect(step.toCasper().clean()).to.equal(casper);
         });
 
     });

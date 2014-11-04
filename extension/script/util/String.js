@@ -1,7 +1,7 @@
-if (!String.prototype.killWhiteSpace) {
-    String.prototype.killWhiteSpace = function() {
+if (!String.prototype.clean) {
+    String.prototype.clean = function() {
         'use strict';
-        return this.replace(/\s/g, '');
+        return this.replace(/\r?\n|\r|\s/g, '');
     };
 }
 
