@@ -3,6 +3,8 @@ var StepClick = (function() {
     'use strict';
 
     function StepClick(step) {
+        if (!step) throw 'The "step" argument is required';
+        if (!step.key) throw 'The "step.key" property is required';
         Step.call(this, step);
         this._key = step.key;
     }
