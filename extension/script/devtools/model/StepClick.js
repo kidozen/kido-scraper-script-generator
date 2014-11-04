@@ -1,5 +1,4 @@
 var StepClick = (function() {
-    /* global multiline, Site, Step */
     'use strict';
 
     function StepClick(step) {

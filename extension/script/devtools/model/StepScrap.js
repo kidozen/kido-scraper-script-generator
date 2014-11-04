@@ -1,5 +1,4 @@
 var StepScrap = (function() {
-    /* global multiline, Site, Step */
     'use strict';
 
     function StepScrap(step) {

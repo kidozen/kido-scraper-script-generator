@@ -1,5 +1,3 @@
-/* jshint expr: true */
-/* global describe, it, chai, Site */
 var expect = chai.expect;
 
 describe('Site', function() {

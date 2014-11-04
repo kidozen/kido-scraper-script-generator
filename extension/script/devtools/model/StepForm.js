@@ -1,5 +1,4 @@
 var StepForm = (function() {
-    /* global multiline, Site, Step, StepFormSelector, StepClick */
     'use strict';
 
     function StepForm(step) {

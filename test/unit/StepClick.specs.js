@@ -1,5 +1,3 @@
-/* jshint expr: true */
-/* global describe, it, chai, multiline, Site, Step, StepClick */
 var expect = chai.expect;
 
 describe('StepClick', function() {

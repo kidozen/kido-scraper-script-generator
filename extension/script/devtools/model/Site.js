@@ -1,5 +1,4 @@
 var Site = (function() {
-    /* global multiline, StepForm, StepFormSelector, StepClick, StepScrap, StepSelector */
     'use strict';
 
     function Site(site) {

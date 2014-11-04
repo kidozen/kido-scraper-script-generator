@@ -1,5 +1,4 @@
 var StepFormSelector = (function() {
-    /* global Site, Step */
     'use strict';
 
     function StepFormSelector(step) {

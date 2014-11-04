@@ -1,5 +1,4 @@
 var StepSelector = (function() {
-    /* global Site, Step */
     'use strict';
 
     function StepSelector(step) {
