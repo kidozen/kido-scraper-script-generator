@@ -159,4 +159,74 @@ describe('Site', function() {
 
     });
 
+    var testSite = {
+        name: 'test site',
+        url: 'http://www.test.com/',
+        steps: [{
+            type: Site.TYPES.FORM,
+            name: 'Search',
+            selectors: [{
+                type: Site.TYPES.FORM_SELECTOR,
+                name: '',
+                key: 'input#query',
+                value: 'test value'
+            }],
+            submit: {
+                type: Site.TYPES.CLICK,
+                name: '',
+                key: 'button.ml-btn'
+            }
+        }]
+    };
+
+    describe('toJson', function() {
+
+        it('should convert to json', function() {
+            var site = new Site(testSite).toJson();
+            expect(site).to.have.property('name', testSite.name);
+            expect(site).to.have.property('url', testSite.url);
+            expect(site.steps)
+                .to.be.an('array')
+                .and.to.have.length(1);
+            site.steps.forEach(function(item, index) {
+                expect(item)
+                    .to.have.property('type')
+                    .that.equals(testSite.steps[index].type);
+                expect(item)
+                    .to.have.property('name')
+                    .that.equals(testSite.steps[index].name);
+            });
+        });
+
+    });
+
+    describe('toCasper', function() {
+
+        it('should convert to casper', function() {
+            var casper = multiline(function() {
+                /*
+                    var casper = require('casper').create({
+                        pageSettings: {
+                            loadImages: false,
+                            loadPlugins: false
+                        }
+                    });
+                    casper.start('http://www.test.com/');
+                    casper.thenEvaluate(function() {
+                        document.querySelector("input#query").value = "test value";
+                    });
+                    casper.then(function() {
+                        this.click("button.ml-btn");
+                    });
+                    casper.run(function() {
+                        this.exit();
+                    });
+                */
+            }).clean();
+            var site = new Site(testSite);
+            expect(site.toCasper().clean()).to.equal(casper);
+        });
+
+    });
+
 });
