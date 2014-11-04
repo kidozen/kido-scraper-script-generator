@@ -2,9 +2,14 @@ var StepScrap = (function() {
     'use strict';
 
     function StepScrap(step) {
+        if (!step) throw 'The "step" argument is required';
+        if (!step.container) throw 'The "step.container" property is required';
+        if (!Array.isArray(step.fields)) throw 'The "step.fields" property must be an array';
         Step.call(this, step);
         this._container = step.container;
-        this._fields = step.fields;
+        this._fields = step.fields.map(function(item) {
+            return new StepSelector(item);
+        });
     }
 
     StepScrap.prototype = Object.create(Step.prototype);
@@ -15,7 +20,8 @@ var StepScrap = (function() {
         return {
             type: Site.TYPES.SCRAP,
             name: '',
-            key: ''
+            container: '',
+            fields: [Site.getDefaults(Site.TYPES.SELECTOR)]
         };
     };
 
@@ -23,19 +29,23 @@ var StepScrap = (function() {
         return {
             type: Site.TYPES.SCRAP,
             name: this._name,
-            key: this._container
+            container: this._container,
+            fields: this._fields.map(function(item) {
+                return item.toJson();
+            })
         };
     };
 
     StepScrap.prototype.toCasper = function() {
+        // TODO
         return multiline(function() {
             /*
                 casper.then(function() {
-                    this.click({{key}});
+                    this.click({{container}});
                 });
             */
         }).supplant({
-            key: this._container.quote()
+            container: this._container.quote()
         });
     };
 

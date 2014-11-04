@@ -66,7 +66,12 @@ describe('Site', function() {
             expect(Site.getDefaults(Site.TYPES.SCRAP)).to.deep.equal({
                 type: Site.TYPES.SCRAP,
                 name: '',
-                key: ''
+                container: '',
+                fields: [{
+                    type: Site.TYPES.SELECTOR,
+                    name: '',
+                    key: ''
+                }]
             });
         });
 
