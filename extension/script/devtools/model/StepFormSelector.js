@@ -3,6 +3,9 @@ var StepFormSelector = (function() {
     'use strict';
 
     function StepFormSelector(step) {
+        if (!step) throw 'The "step" argument is required';
+        if (!step.key) throw 'The "step.key" property is required';
+        if (!step.value) throw 'The "step.value" property is required';
         Step.call(this, step);
         this._key = step.key;
         this._value = step.value;
