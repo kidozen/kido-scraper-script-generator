@@ -88,6 +88,17 @@ describe('StepFormSelector', function() {
             expect(func).to.throw('The "step.key" property is required');
         });
 
+        it('should throw with no value property', function() {
+            var func = function() {
+                return new StepFormSelector({
+                    type: Site.TYPES.FORM_SELECTOR,
+                    name: 'test form selector',
+                    key: 'input#test'
+                });
+            };
+            expect(func).to.throw('The "step.value" property is required');
+        });
+
         it('should not throw with no name property', function() {
             var func = function() {
                 return new StepFormSelector({
