@@ -12,7 +12,7 @@ describe('StepClick', function() {
     describe('static methods', function() {
 
         it('should provide defaults', function() {
-            expect(StepClick.getDefaults(Site.TYPES.CLICK)).to.deep.equal({
+            expect(StepClick.getDefaults()).to.deep.equal({
                 type: Site.TYPES.CLICK,
                 name: '',
                 key: ''
@@ -34,6 +34,7 @@ describe('StepClick', function() {
             expect(step).to.be.an.instanceof(StepClick);
             expect(step.toJson).to.exist;
             expect(step.toCasper).to.exist;
+            expect(step._type).to.be.equal(options.type);
             expect(step._name).to.be.equal(options.name);
             expect(step._key).to.be.equal(options.key);
         });
