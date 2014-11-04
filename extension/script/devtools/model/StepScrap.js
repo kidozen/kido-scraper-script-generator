@@ -37,15 +37,19 @@ var StepScrap = (function() {
     };
 
     StepScrap.prototype.toCasper = function() {
-        // TODO
         return multiline(function() {
             /*
                 casper.then(function() {
-                    this.click({{container}});
+                    var values = {};
+                    {{fields}}
+                    this.echo(JSON.stringify(values, null, 2));
                 });
             */
         }).supplant({
-            container: this._container.quote()
+            container: this._container.quote(),
+            fields: this._fields.map(function(item) {
+                return item.toCasper();
+            }).join('\n')
         });
     };
 

@@ -17,7 +17,8 @@ describe('StepScrap', function() {
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: '',
-                    key: ''
+                    key: '',
+                    attr: ''
                 }]
             });
         });
@@ -33,12 +34,14 @@ describe('StepScrap', function() {
                 container: 'li.list-test',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
-                    name: '',
-                    key: 'h4.brand'
+                    name: 'test-brand',
+                    key: 'h4.brand',
+                    attr: StepSelector.ATTRS.TEXT
                 }, {
                     type: Site.TYPES.SELECTOR,
-                    name: '',
-                    key: 'h5.price'
+                    name: 'test-price',
+                    key: 'h5.price',
+                    attr: StepSelector.ATTRS.TEXT
                 }]
             };
             var step = new StepScrap(options);
@@ -63,6 +66,9 @@ describe('StepScrap', function() {
                 expect(item)
                     .to.have.property('_type')
                     .that.equals(options.fields[index].type);
+                expect(item)
+                    .to.have.property('_name')
+                    .that.equals(options.fields[index].name);
                 expect(item)
                     .to.have.property('_key')
                     .that.equals(options.fields[index].key);
@@ -150,12 +156,14 @@ describe('StepScrap', function() {
                 container: 'li.list-test',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
-                    name: '',
-                    key: 'h4.brand'
+                    name: 'test-brand',
+                    key: 'h4.brand',
+                    attr: StepSelector.ATTRS.TEXT
                 }, {
                     type: Site.TYPES.SELECTOR,
-                    name: '',
-                    key: 'h5.price'
+                    name: 'test-price',
+                    key: 'h5.price',
+                    attr: StepSelector.ATTRS.TEXT
                 }]
             };
             var step = new StepScrap(options).toJson();
@@ -168,8 +176,14 @@ describe('StepScrap', function() {
                     .to.have.property('type')
                     .that.equals(options.fields[index].type);
                 expect(item)
+                    .to.have.property('name')
+                    .that.equals(options.fields[index].name);
+                expect(item)
                     .to.have.property('key')
                     .that.equals(options.fields[index].key);
+                expect(item)
+                    .to.have.property('attr')
+                    .that.equals(options.fields[index].attr);
             });
         });
 
@@ -184,18 +198,33 @@ describe('StepScrap', function() {
                 container: 'li.list-test',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
-                    name: '',
-                    key: 'h4.brand'
+                    name: 'test-brand',
+                    key: 'h4.brand',
+                    attr: StepSelector.ATTRS.TEXT
                 }, {
                     type: Site.TYPES.SELECTOR,
-                    name: '',
-                    key: 'h5.price'
+                    name: 'test-price',
+                    key: 'h5.price',
+                    attr: StepSelector.ATTRS.TEXT
                 }]
             };
             var casper = multiline(function() {
                 /*
-                    casper.then(function(){
-                        this.click("li.list-test");
+                    casper.then(function() {
+                        var values = {};
+                        values["test-brand"] = this.evaluate(function() {
+                            var selection = document.querySelectorAll("h4.brand");
+                            return [].map.call(selection, function(item) {
+                                return item.innerText;
+                            });
+                        });
+                        values["test-price"] = this.evaluate(function() {
+                            var selection = document.querySelectorAll("h5.price");
+                            return [].map.call(selection, function(item) {
+                                return item.innerText;
+                            });
+                        });
+                        this.echo(JSON.stringify(values, null, 2));
                     });
                 */
             }).clean();
