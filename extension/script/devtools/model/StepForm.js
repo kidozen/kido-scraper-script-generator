@@ -3,6 +3,9 @@ var StepForm = (function() {
     'use strict';
 
     function StepForm(step) {
+        if (!step) throw 'The "step" argument is required';
+        if (!Array.isArray(step.selectors)) throw 'The "step.selectors" property must be an array';
+        if (!step.submit) throw 'The "step.submit" property is required';
         Step.call(this, step);
         this._selectors = step.selectors.map(function(item) {
             return new StepFormSelector(item);
