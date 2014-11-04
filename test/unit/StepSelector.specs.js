@@ -13,7 +13,8 @@ describe('StepSelector', function() {
             expect(StepSelector.getDefaults()).to.deep.equal({
                 type: Site.TYPES.SELECTOR,
                 name: '',
-                key: ''
+                key: '',
+                attr: ''
             });
         });
 
@@ -25,7 +26,8 @@ describe('StepSelector', function() {
             var options = {
                 type: Site.TYPES.SELECTOR,
                 name: 'test selector',
-                key: 'h2#title-test'
+                key: 'h2#title-test',
+                attr: StepSelector.ATTRS.TEXT
             };
             var step = new StepSelector(options);
             expect(step).to.be.an.instanceof(Step);
@@ -57,14 +59,15 @@ describe('StepSelector', function() {
             var func = function() {
                 return new StepSelector({});
             };
-            expect(func).to.throw('The "step.key" property is required');
+            expect(func).to.throw('The "step.name" property is required');
         });
 
         it('should throw with no type property', function() {
             var func = function() {
                 return new StepSelector({
                     name: 'test selector',
-                    key: 'h2#title-test'
+                    key: 'h2#title-test',
+                    attr: StepSelector.ATTRS.TEXT
                 });
             };
             expect(func).to.throw('The "step.type" property is required');
@@ -74,20 +77,33 @@ describe('StepSelector', function() {
             var func = function() {
                 return new StepSelector({
                     type: Site.TYPES.SELECTOR,
-                    name: 'test selector'
+                    name: 'test selector',
+                    attr: StepSelector.ATTRS.TEXT
                 });
             };
             expect(func).to.throw('The "step.key" property is required');
         });
 
-        it('should not throw with no name property', function() {
+        it('should throw with no name property', function() {
             var func = function() {
                 return new StepSelector({
                     type: Site.TYPES.SELECTOR,
+                    key: 'h2#title-test',
+                    attr: StepSelector.ATTRS.TEXT
+                });
+            };
+            expect(func).to.throw('The "step.name" property is required');
+        });
+
+        it('should throw with no attr property', function() {
+            var func = function() {
+                return new StepSelector({
+                    type: Site.TYPES.SELECTOR,
+                    name: 'test selector',
                     key: 'h2#title-test'
                 });
             };
-            expect(func).to.be.ok;
+            expect(func).to.throw('The "step.attr" property is required');
         });
 
     });
@@ -98,12 +114,14 @@ describe('StepSelector', function() {
             var options = {
                 type: Site.TYPES.SELECTOR,
                 name: 'test selector',
-                key: 'h2#title-test'
+                key: 'h2#title-test',
+                attr: StepSelector.ATTRS.TEXT
             };
             var step = new StepSelector(options).toJson();
             expect(step).to.have.property('type', options.type);
             expect(step).to.have.property('name', options.name);
             expect(step).to.have.property('key', options.key);
+            expect(step).to.have.property('attr', options.attr);
         });
 
     });
@@ -114,11 +132,17 @@ describe('StepSelector', function() {
             var options = {
                 type: Site.TYPES.SELECTOR,
                 name: 'test selector',
-                key: 'h2#title-test'
+                key: 'h2#title-test',
+                attr: StepSelector.ATTRS.TEXT
             };
             var casper = multiline(function() {
                 /*
-                    document.querySelector("h2#title-test").value;
+                    values["test selector"] = this.evaluate(function() {
+                        var selection = document.querySelectorAll("h2#title-test");
+                        return [].map.call(selection, function(item) {
+                            return item.innerText;
+                        });
+                    });
                 */
             }).clean();
             var step = new StepSelector(options);

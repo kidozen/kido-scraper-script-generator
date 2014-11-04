@@ -70,7 +70,8 @@ describe('Site', function() {
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: '',
-                    key: ''
+                    key: '',
+                    attr: ''
                 }]
             });
         });
@@ -79,7 +80,8 @@ describe('Site', function() {
             expect(Site.getDefaults(Site.TYPES.SELECTOR)).to.deep.equal({
                 type: Site.TYPES.SELECTOR,
                 name: '',
-                key: ''
+                key: '',
+                attr: ''
             });
         });
 
