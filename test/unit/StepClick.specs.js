@@ -1,5 +1,5 @@
 /* jshint expr: true */
-/* global describe, it, chai, Site, Step, StepClick */
+/* global describe, it, chai, multiline, Site, Step, StepClick */
 var expect = chai.expect;
 
 describe('StepClick', function() {
@@ -80,6 +80,41 @@ describe('StepClick', function() {
                 });
             };
             expect(func).to.be.ok;
+        });
+
+    });
+
+    describe('toJson', function() {
+
+        it('should convert to json', function() {
+            var options = {
+                type: Site.TYPES.CLICK,
+                name: 'test click',
+                key: 'input#test'
+            };
+            var step = new StepClick(options);
+            expect(step.toJson()).to.deep.equal(options);
+        });
+
+    });
+
+    describe('toCasper', function() {
+
+        it('should convert to casper', function() {
+            var options = {
+                type: Site.TYPES.CLICK,
+                name: 'test click',
+                key: 'input#test'
+            };
+            var casper = multiline(function() {
+                /*
+                    casper.then(function() {
+                        this.click("input#test");
+                    });
+                */
+            }).killWhiteSpace();
+            var step = new StepClick(options);
+            expect(step.toCasper().killWhiteSpace()).to.equal(casper);
         });
 
     });

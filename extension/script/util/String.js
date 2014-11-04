@@ -1,3 +1,10 @@
+if (!String.prototype.killWhiteSpace) {
+    String.prototype.killWhiteSpace = function() {
+        'use strict';
+        return this.replace(/\s/g, '');
+    };
+}
+
 if (!String.prototype.supplant) {
     String.prototype.supplant = function(o) {
         'use strict';
