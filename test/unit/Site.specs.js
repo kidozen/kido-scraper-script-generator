@@ -85,6 +85,13 @@ describe('Site', function() {
             });
         });
 
+        it('should throw with invalid type', function() {
+            var func = function() {
+                return Site.getDefaults('invalid type');
+            };
+            expect(func).to.throw('The type is not valid');
+        });
+
     });
 
     describe('constructor', function() {

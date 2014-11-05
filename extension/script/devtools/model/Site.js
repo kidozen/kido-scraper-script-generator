@@ -44,12 +44,14 @@ var Site = (function() {
                 return StepScrap.getDefaults();
             case Site.TYPES.SELECTOR:
                 return StepSelector.getDefaults();
-            default:
+            case undefined:
                 return {
                     name: '',
                     url: '',
                     steps: []
                 };
+            default:
+                throw 'The type is not valid';
         }
     };
 
