@@ -236,7 +236,14 @@ describe('StepScrap', function() {
                                 return item.innerText;
                             });
                         });
-                        this.echo(JSON.stringify(values, null, 2));
+                        var result = [];
+                        Object.keys(values).forEach(function(key) {
+                            values[key].forEach(function(val, index) {
+                                result[index] = result[index] || {};
+                                result[index][key] = val;
+                            });
+                        });
+                        this.echo(JSON.stringify(result, null, 2));
                     });
                 */
             }).clean();

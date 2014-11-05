@@ -178,6 +178,21 @@ describe('Site', function() {
                 name: '',
                 key: 'button.ml-btn'
             }
+        }, {
+            type: Site.TYPES.SCRAP,
+            name: 'Scrap',
+            container: 'li.ch-carousel-item',
+            fields: [{
+                type: Site.TYPES.SELECTOR,
+                name: 'description',
+                key: 'h2.list-view-item-title',
+                attr: StepSelector.ATTRS.TEXT
+            }, {
+                type: Site.TYPES.SELECTOR,
+                name: 'price',
+                key: 'span.ch-price',
+                attr: StepSelector.ATTRS.TEXT
+            }]
         }]
     };
 
@@ -189,7 +204,7 @@ describe('Site', function() {
             expect(site).to.have.property('url', testSite.url);
             expect(site.steps)
                 .to.be.an('array')
-                .and.to.have.length(1);
+                .and.to.have.length(2);
             site.steps.forEach(function(item, index) {
                 expect(item)
                     .to.have.property('type')
@@ -219,6 +234,29 @@ describe('Site', function() {
                     });
                     casper.then(function() {
                         this.click("button.ml-btn");
+                    });
+                    casper.then(function() {
+                        var values = {};
+                        values["description"] = this.evaluate(function() {
+                            var selection = document.querySelectorAll("h2.list-view-item-title");
+                            return [].map.call(selection, function(item) {
+                                return item.innerText;
+                            });
+                        });
+                        values["price"] = this.evaluate(function() {
+                            var selection = document.querySelectorAll("span.ch-price");
+                            return [].map.call(selection, function(item) {
+                                return item.innerText;
+                            });
+                        });
+                        var result = [];
+                        Object.keys(values).forEach(function(key) {
+                            values[key].forEach(function(val, index) {
+                                result[index] = result[index] || {};
+                                result[index][key] = val;
+                            });
+                        });
+                        this.echo(JSON.stringify(result, null, 2));
                     });
                     casper.run(function() {
                         this.exit();
