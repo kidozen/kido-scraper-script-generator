@@ -20,9 +20,9 @@ gulp.task('integration-tests', ['server'], function() {
     });
     casperChild.on('close', function(code) {
         if (code === 0) {
-            console.error('Done with errors');
-        } else {
             console.log('Done with success');
+        } else {
+            console.error('Done with errors');
         }
         process.exit(code);
     });
