@@ -113,6 +113,21 @@ describe('StepForm', function() {
             expect(func).to.throw('The "step.type" property is required');
         });
 
+        it('should throw with invalid type property', function() {
+            var func = function() {
+                return new StepForm({
+                    type: 'invalid type',
+                    name: 'test form',
+                    selectors: [],
+                    submit: {
+                        type: Site.TYPES.CLICK,
+                        key: 'button.btn-test'
+                    }
+                });
+            };
+            expect(func).to.throw('The "step.type" property is not valid');
+        });
+
         it('should throw with no selectors property', function() {
             var func = function() {
                 return new StepForm({

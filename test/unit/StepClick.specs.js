@@ -61,6 +61,17 @@ describe('StepClick', function() {
             expect(func).to.throw('The "step.type" property is required');
         });
 
+        it('should throw with invalid type property', function() {
+            var func = function() {
+                return new StepClick({
+                    type: 'invalid type',
+                    name: 'test click',
+                    key: 'input#test'
+                });
+            };
+            expect(func).to.throw('The "step.type" property is not valid');
+        });
+
         it('should throw with no key property', function() {
             var func = function() {
                 return new StepClick({

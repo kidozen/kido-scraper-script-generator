@@ -6,6 +6,7 @@ var StepSelector = (function() {
         if (!step.name) throw 'The "step.name" property is required';
         if (!step.key) throw 'The "step.key" property is required';
         if (!step.attr) throw 'The "step.attr" property is required';
+        if (!StepSelector.ATTRS.hasOwnValue(step.attr)) throw 'The "step.attr" property is not valid';
         Step.call(this, step);
         this._key = step.key;
         this._attr = step.attr;

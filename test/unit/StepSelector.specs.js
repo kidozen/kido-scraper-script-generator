@@ -73,6 +73,18 @@ describe('StepSelector', function() {
             expect(func).to.throw('The "step.type" property is required');
         });
 
+        it('should throw with invalid type property', function() {
+            var func = function() {
+                return new StepSelector({
+                    type: 'invalid type',
+                    name: 'test selector',
+                    key: 'h2#title-test',
+                    attr: StepSelector.ATTRS.TEXT
+                });
+            };
+            expect(func).to.throw('The "step.type" property is not valid');
+        });
+
         it('should throw with no key property', function() {
             var func = function() {
                 return new StepSelector({
@@ -104,6 +116,18 @@ describe('StepSelector', function() {
                 });
             };
             expect(func).to.throw('The "step.attr" property is required');
+        });
+
+        it('should throw with invalid attr property', function() {
+            var func = function() {
+                return new StepSelector({
+                    type: Site.TYPES.SELECTOR,
+                    name: 'test selector',
+                    key: 'h2#title-test',
+                    attr: 'invalid attr'
+                });
+            };
+            expect(func).to.throw('The "step.attr" property is not valid');
         });
 
     });

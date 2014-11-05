@@ -77,6 +77,18 @@ describe('StepFormSelector', function() {
             expect(func).to.throw('The "step.type" property is required');
         });
 
+        it('should throw with invalid type property', function() {
+            var func = function() {
+                return new StepFormSelector({
+                    type: 'invalid type',
+                    name: 'test form selector',
+                    key: 'input#test',
+                    value: 'test value'
+                });
+            };
+            expect(func).to.throw('The "step.type" property is not valid');
+        });
+
         it('should throw with no key property', function() {
             var func = function() {
                 return new StepFormSelector({

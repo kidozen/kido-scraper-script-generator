@@ -100,6 +100,18 @@ describe('StepScrap', function() {
             expect(func).to.throw('The "step.type" property is required');
         });
 
+        it('should throw with invalid type property', function() {
+            var func = function() {
+                return new StepScrap({
+                    type: 'invalid type',
+                    name: 'test scrap',
+                    container: 'li.list-test',
+                    fields: []
+                });
+            };
+            expect(func).to.throw('The "step.type" property is not valid');
+        });
+
         it('should throw with no container property', function() {
             var func = function() {
                 return new StepScrap({
