@@ -1,5 +1,6 @@
 'use strict';
 var multiline = require('multiline');
+var Util = require('./Util');
 var Step = require('./Step');
 
 module.exports = (function() {
@@ -9,7 +10,7 @@ module.exports = (function() {
         if (!step.name) throw 'The "step.name" property is required';
         if (!step.key) throw 'The "step.key" property is required';
         if (!step.attr) throw 'The "step.attr" property is required';
-        if (!StepSelector.ATTRS.hasOwnValue(step.attr)) throw 'The "step.attr" property is not valid';
+        if (!Util.hasOwnValue.call(StepSelector.ATTRS, step.attr)) throw 'The "step.attr" property is not valid';
         this._key = step.key;
         this._attr = step.attr;
     }
@@ -42,7 +43,7 @@ module.exports = (function() {
 
     StepSelector.prototype.toCasper = function() {
         // TODO: select according to attr
-        return multiline(function() {
+        return Util.supplant.call(multiline(function() {
             /*
                 values[{{name}}] = this.evaluate(function() {
                     var selection = document.querySelectorAll({{key}});
@@ -51,9 +52,9 @@ module.exports = (function() {
                     });
                 });
             */
-        }).supplant({
-            name: this._name.quote(),
-            key: this._key.quote()
+        }), {
+            name: Util.quote.call(this._name),
+            key: Util.quote.call(this._key)
         });
     };
 

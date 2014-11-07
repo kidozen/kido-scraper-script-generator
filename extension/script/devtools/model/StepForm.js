@@ -1,5 +1,6 @@
 'use strict';
 var multiline = require('multiline');
+var Util = require('./Util');
 var Step = require('./Step');
 var StepClick = require('./StepClick');
 var StepFormSelector = require('./StepFormSelector');
@@ -41,14 +42,14 @@ module.exports = (function() {
     };
 
     StepForm.prototype.toCasper = function() {
-        return multiline(function() {
+        return Util.supplant.call(multiline(function() {
             /*
                 casper.thenEvaluate(function() {
                     {{selectors}}
                 });
                 {{submit}}
             */
-        }).supplant({
+        }), {
             selectors: this._selectors.map(function(item) {
                 return item.toCasper();
             }).join('\n'),

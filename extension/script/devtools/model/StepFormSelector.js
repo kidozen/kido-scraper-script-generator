@@ -1,4 +1,5 @@
 'use strict';
+var Util = require('./Util');
 var Step = require('./Step');
 
 module.exports = (function() {
@@ -34,8 +35,8 @@ module.exports = (function() {
     };
 
     StepFormSelector.prototype.toCasper = function() {
-        return 'document.querySelector({{key}}).value = "{{value}}";'.supplant({
-            key: this._key.quote(),
+        return Util.supplant.call('document.querySelector({{key}}).value = "{{value}}";', {
+            key: Util.quote.call(this._key),
             value: this._value
         });
     };

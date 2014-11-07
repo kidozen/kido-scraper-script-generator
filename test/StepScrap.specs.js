@@ -1,6 +1,7 @@
 'use strict';
 var expect = require('chai').expect;
 var multiline = require('multiline');
+var Util = require('../extension/script/devtools/model/Util');
 var Step = require('../extension/script/devtools/model/Step');
 var Site = require('../extension/script/devtools/model/Site');
 var StepScrap = require('../extension/script/devtools/model/StepScrap');
@@ -225,7 +226,7 @@ describe('StepScrap', function() {
                     attr: StepSelector.ATTRS.TEXT
                 }]
             };
-            var casper = multiline(function() {
+            var casper = Util.clean.call(multiline(function() {
                 /*
                     casper.then(function() {
                         var values = {};
@@ -251,9 +252,9 @@ describe('StepScrap', function() {
                         this.echo(JSON.stringify(result, null, 2));
                     });
                 */
-            }).clean();
+            }));
             var step = new StepScrap(Site, options);
-            expect(step.toCasper().clean()).to.equal(casper);
+            expect(Util.clean.call(step.toCasper())).to.equal(casper);
         });
 
     });

@@ -1,6 +1,7 @@
 'use strict';
 var expect = require('chai').expect;
 var multiline = require('multiline');
+var Util = require('../extension/script/devtools/model/Util');
 var Site = require('../extension/script/devtools/model/Site');
 var StepSelector = require('../extension/script/devtools/model/StepSelector');
 
@@ -230,7 +231,7 @@ describe('Site', function() {
     describe('toCasper', function() {
 
         it('should convert to casper', function() {
-            var casper = multiline(function() {
+            var casper = Util.clean.call(multiline(function() {
                 /*
                     var casper = require('casper').create({
                         pageSettings: {
@@ -272,9 +273,9 @@ describe('Site', function() {
                         this.exit();
                     });
                 */
-            }).clean();
+            }));
             var site = new Site(testSite);
-            expect(site.toCasper().clean()).to.equal(casper);
+            expect(Util.clean.call(site.toCasper())).to.equal(casper);
         });
 
     });

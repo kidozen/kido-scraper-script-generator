@@ -1,7 +1,6 @@
 'use strict';
-require('../../util/Object.js');
-require('../../util/String.js');
 var multiline = require('multiline');
+var Util = require('./Util');
 var StepClick = require('./StepClick');
 var StepForm = require('./StepForm');
 var StepFormSelector = require('./StepFormSelector');
@@ -79,7 +78,7 @@ module.exports = (function() {
     };
 
     Site.prototype.toCasper = function() {
-        var result = multiline(function() {
+        return Util.supplant.call(multiline(function() {
             /*
                 var casper = require('casper').create({
                     pageSettings: {
@@ -93,13 +92,12 @@ module.exports = (function() {
                     this.exit();
                 });
             */
-        }).supplant({
+        }), {
             url: this._url,
             steps: this._steps.map(function(item) {
                 return item.toCasper();
             }).join('\n')
         });
-        return result;
     };
 
     return Site;

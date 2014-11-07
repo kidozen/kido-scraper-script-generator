@@ -1,6 +1,7 @@
 'use strict';
 var expect = require('chai').expect;
 var multiline = require('multiline');
+var Util = require('../extension/script/devtools/model/Util');
 var Step = require('../extension/script/devtools/model/Step');
 var Site = require('../extension/script/devtools/model/Site');
 var StepForm = require('../extension/script/devtools/model/StepForm');
@@ -239,7 +240,7 @@ describe('StepForm', function() {
                     key: 'button.btn-test'
                 }
             };
-            var casper = multiline(function() {
+            var casper = Util.clean.call(multiline(function() {
                 /*
                     casper.thenEvaluate(function() {
                         document.querySelector("input#test").value = "test value";
@@ -249,9 +250,9 @@ describe('StepForm', function() {
                         this.click("button.btn-test");
                     });
                 */
-            }).clean();
+            }));
             var step = new StepForm(Site, options);
-            expect(step.toCasper().clean()).to.equal(casper);
+            expect(Util.clean.call(step.toCasper())).to.equal(casper);
         });
 
     });

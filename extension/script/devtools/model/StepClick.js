@@ -1,5 +1,6 @@
 'use strict';
 var multiline = require('multiline');
+var Util = require('./Util');
 var Step = require('./Step');
 
 module.exports = (function() {
@@ -30,14 +31,14 @@ module.exports = (function() {
     };
 
     StepClick.prototype.toCasper = function() {
-        return multiline(function() {
+        return Util.supplant.call(multiline(function() {
             /*
                 casper.then(function() {
                     this.click({{key}});
                 });
             */
-        }).supplant({
-            key: this._key.quote()
+        }), {
+            key: Util.quote.call(this._key)
         });
     };
 

@@ -1,6 +1,7 @@
 'use strict';
 var expect = require('chai').expect;
 var multiline = require('multiline');
+var Util = require('../extension/script/devtools/model/Util');
 var Step = require('../extension/script/devtools/model/Step');
 var Site = require('../extension/script/devtools/model/Site');
 var StepClick = require('../extension/script/devtools/model/StepClick');
@@ -120,15 +121,15 @@ describe('StepClick', function() {
                 name: 'test click',
                 key: 'input#test'
             };
-            var casper = multiline(function() {
+            var casper = Util.clean.call(multiline(function() {
                 /*
                     casper.then(function() {
                         this.click("input#test");
                     });
                 */
-            }).clean();
+            }));
             var step = new StepClick(Site, options);
-            expect(step.toCasper().clean()).to.equal(casper);
+            expect(Util.clean.call(step.toCasper())).to.equal(casper);
         });
 
     });

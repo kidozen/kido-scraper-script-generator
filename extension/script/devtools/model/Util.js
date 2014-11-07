@@ -1,13 +1,26 @@
-if (!String.prototype.clean) {
-    String.prototype.clean = function() {
-        'use strict';
+'use strict';
+
+module.exports = (function() {
+
+    var Util = {};
+
+    Util.hasOwnValue = function(val) {
+        if (typeof this !== 'object') throw 'Must be called like: Util.hasOwnValue.call(object, value)';
+        for (var prop in this) {
+            if (this.hasOwnProperty(prop) && this[prop] === val) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    Util.clean = function() {
+        if (typeof this !== 'string') throw 'Must be called like: Util.clean.call("string")';
         return this.replace(/\r?\n|\r|\s/g, '');
     };
-}
 
-if (!String.prototype.supplant) {
-    String.prototype.supplant = function(o) {
-        'use strict';
+    Util.supplant = function(o) {
+        if (typeof this !== 'string') throw 'Must be called like: Util.supplant.call("string", { ... })';
         return this.replace(/{{([^{}]*)}}/g,
             function(a, b) {
                 var r = o[b];
@@ -16,11 +29,9 @@ if (!String.prototype.supplant) {
             }
         );
     };
-}
 
-if (!String.prototype.quote) {
-    String.prototype.quote = (function() {
-        'use strict';
+    Util.quote = function() {
+        if (typeof this !== 'string') throw 'Must be called like: Util.quote.call("string")';
         var escp_regex = /[\\"]/g,
             escp_callback = '\\$&',
             ctrl_map = {
@@ -45,16 +56,16 @@ if (!String.prototype.quote) {
                 return '\\u' + (char_code < 4096 ? '0' : '') + char_code;
             },
             stringify = typeof JSON !== 'undefined' && JSON.stringify;
-        return function() {
-            var self = this; // promote compression
-            if (self === null) throw new TypeError('can\'t convert ' + self + ' to object');
-            if (stringify) return stringify(self);
-            return '"' + self
-                .replace(escp_regex, escp_callback)
-                .replace(ctrl_regex, ctrl_callback)
-                .replace(xhex_regex, xhex_callback)
-                .replace(uhex_regex, uhex_callback) + '"';
-        };
-    }());
-    String.quote = Function.call.bind(''.quote);
-}
+        var self = this;
+        if (self === null) throw new TypeError('can\'t convert ' + self + ' to object');
+        if (stringify) return stringify(self);
+        return '"' + self
+            .replace(escp_regex, escp_callback)
+            .replace(ctrl_regex, ctrl_callback)
+            .replace(xhex_regex, xhex_callback)
+            .replace(uhex_regex, uhex_callback) + '"';
+    };
+
+    return Util;
+
+})();

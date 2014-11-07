@@ -1,5 +1,6 @@
 'use strict';
 var multiline = require('multiline');
+var Util = require('./Util');
 var Step = require('./Step');
 var StepSelector = require('./StepSelector');
 
@@ -40,7 +41,7 @@ module.exports = (function() {
     };
 
     StepScrap.prototype.toCasper = function() {
-        return multiline(function() {
+        return Util.supplant.call(multiline(function() {
             /*
                 casper.then(function() {
                     var values = {};
@@ -55,8 +56,8 @@ module.exports = (function() {
                     this.echo(JSON.stringify(result, null, 2));
                 });
             */
-        }).supplant({
-            container: this._container.quote(),
+        }), {
+            container: Util.quote.call(this._container),
             fields: this._fields.map(function(item) {
                 return item.toCasper();
             }).join('\n')
