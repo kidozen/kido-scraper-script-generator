@@ -159,9 +159,9 @@ describe('StepFormSelector', function() {
                 /*
                     document.querySelector("input#test").value = "test value";
                 */
-            })._clean();
+            }).clean();
             var step = new StepFormSelector(Site, options);
-            expect(step.toCasper()._clean()).to.equal(casper);
+            expect(step.toCasper().clean()).to.equal(casper);
         });
 
     });

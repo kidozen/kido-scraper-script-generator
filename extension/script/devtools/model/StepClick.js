@@ -36,8 +36,8 @@ module.exports = (function() {
                     this.click({{key}});
                 });
             */
-        })._supplant({
-            key: this._key._quote()
+        }).supplant({
+            key: this._key.quote()
         });
     };
 

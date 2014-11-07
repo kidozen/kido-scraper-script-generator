@@ -249,9 +249,9 @@ describe('StepForm', function() {
                         this.click("button.btn-test");
                     });
                 */
-            })._clean();
+            }).clean();
             var step = new StepForm(Site, options);
-            expect(step.toCasper()._clean()).to.equal(casper);
+            expect(step.toCasper().clean()).to.equal(casper);
         });
 
     });

@@ -251,9 +251,9 @@ describe('StepScrap', function() {
                         this.echo(JSON.stringify(result, null, 2));
                     });
                 */
-            })._clean();
+            }).clean();
             var step = new StepScrap(Site, options);
-            expect(step.toCasper()._clean()).to.equal(casper);
+            expect(step.toCasper().clean()).to.equal(casper);
         });
 
     });

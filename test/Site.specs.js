@@ -272,9 +272,9 @@ describe('Site', function() {
                         this.exit();
                     });
                 */
-            })._clean();
+            }).clean();
             var site = new Site(testSite);
-            expect(site.toCasper()._clean()).to.equal(casper);
+            expect(site.toCasper().clean()).to.equal(casper);
         });
 
     });
