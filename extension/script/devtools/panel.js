@@ -1,9 +1,10 @@
-/* global window, angular, Site */
-(function(angular) {
-    'use strict';
+/* global window, console, angular */
+'use strict';
+require('angular');
+require('angular-route');
+var Site = require('./model/Site');
 
-    angular.module('KidoScrape', ['ngRoute'])
-
+angular.module('KidoScrapper', ['ngRoute'])
     .factory('KidoStorage', function() {
         var collection = {};
         var factory = {};
@@ -25,7 +26,6 @@
 
         return factory;
     })
-
     .controller('ZeroController', function($scope, $location, KidoStorage) {
         $scope.sites = KidoStorage.get() || [];
         $scope.addNewSite = function() {
@@ -39,7 +39,6 @@
             console.log(new Site(site).toCasper());
         };
     })
-
     .controller('OneController', function($scope, $location, KidoStorage) {
         $scope.create = function() {
             $scope.name = $scope.name ? $scope.name.toLowerCase() : '';
@@ -56,7 +55,6 @@
             $location.path('/two/' + $scope.name);
         };
     })
-
     .controller('TwoController', function($scope, $routeParams, $location, KidoStorage) {
         if (!$routeParams.name) {
             return $location.path('/');
@@ -77,7 +75,6 @@
             $location.path('/three/' + $routeParams.name + '/' + $scope.stepType);
         };
     })
-
     .controller('ThreeController', function($scope, $routeParams, $location, KidoStorage) {
         if (!$routeParams.name) {
             return $location.path('/');
@@ -136,7 +133,6 @@
                 window.alert('Invalid step type');
         }
     })
-
     .config(function($routeProvider) {
         $routeProvider
             .when('/zero', {
@@ -159,7 +155,4 @@
                 redirectTo: '/zero'
             });
     })
-
     .run();
-
-})(angular);

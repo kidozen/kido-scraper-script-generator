@@ -1,2 +1,2 @@
 /* global chrome */
-chrome.devtools.panels.create("Kido Scraper", "", "view/devtools/panel.html");
+chrome.devtools.panels.create("Kido Scrapper", "", "view/devtools/panel.html");

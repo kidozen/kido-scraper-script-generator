@@ -3,8 +3,7 @@
     "noarg": true,
     "forin": true,
     "noempty": true,
-    "node": false,
-    "browser": true,
+    "node": true,
     "eqeqeq": true,
     "undef": true,
     "bitwise": true,
@@ -16,15 +15,5 @@
     "latedef": true,
     "newcap": true,
     "nonew": true,
-    "nonbsp": true,
-    "globals": {
-        "multiline": true,
-        "Site": true,
-        "Step": true,
-        "StepClick": true,
-        "StepForm": true,
-        "StepFormSelector": true,
-        "StepScrap": true,
-        "StepSelector": true
-    }
+    "nonbsp": true
 }

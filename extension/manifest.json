@@ -1,14 +1,14 @@
 {
     "manifest_version": 2,
     "version": "0.0.1",
-    "name": "Kido Scraper Script Generator",
-    "short_name": "Kido Scraper",
+    "name": "Kido Scrapper Script Generator",
+    "short_name": "Kido Scrapper",
     "description": "KidoZen tool to build scripts for data extraction from websites",
     "permissions": ["<all_urls>", "tabs", "notifications", "storage", "unlimitedStorage", "downloads"],
     "icons": {},
     "browser_action": {
         "default_icon": {},
-        "default_title": "Kido Scraper",
+        "default_title": "Kido Scrapper",
         "default_popup": "view/popup.html"
     },
     "options_page": "view/options.html",
@@ -21,8 +21,7 @@
     "content_scripts": [{
         "matches": ["*://*/*"],
         "js": [
-            "lib/angular.min.js",
-            "lib/angular-route.min.js"
+            "bundle.js"
         ],
         "css": []
     }]

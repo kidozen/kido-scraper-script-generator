@@ -23,7 +23,6 @@
         "before": true,
         "beforeEach": true,
         "after": true,
-        "afterEach": true,
-        "chai": true
+        "afterEach": true
     }
 }
