@@ -1,11 +1,12 @@
-var StepFormSelector = (function() {
-    'use strict';
+'use strict';
+var Step = require('./Step');
 
-    function StepFormSelector(step) {
-        if (!step) throw 'The "step" argument is required';
+module.exports = (function() {
+
+    function StepFormSelector(Site, step) {
+        Step.call(this, Site, step);
         if (!step.key) throw 'The "step.key" property is required';
         if (!step.value) throw 'The "step.value" property is required';
-        Step.call(this, step);
         this._key = step.key;
         this._value = step.value;
     }
@@ -14,7 +15,7 @@ var StepFormSelector = (function() {
     StepFormSelector.prototype._key = undefined;
     StepFormSelector.prototype._value = undefined;
 
-    StepFormSelector.getDefaults = function() {
+    StepFormSelector.getDefaults = function(Site) {
         return {
             type: Site.TYPES.FORM_SELECTOR,
             name: '',
@@ -25,7 +26,7 @@ var StepFormSelector = (function() {
 
     StepFormSelector.prototype.toJson = function() {
         return {
-            type: Site.TYPES.FORM_SELECTOR,
+            type: this._Site.TYPES.FORM_SELECTOR,
             name: this._name,
             key: this._key,
             value: this._value

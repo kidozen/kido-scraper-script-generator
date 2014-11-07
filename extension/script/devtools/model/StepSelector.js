@@ -1,13 +1,15 @@
-var StepSelector = (function() {
-    'use strict';
+'use strict';
+var multiline = require('multiline');
+var Step = require('./Step');
 
-    function StepSelector(step) {
-        if (!step) throw 'The "step" argument is required';
+module.exports = (function() {
+
+    function StepSelector(Site, step) {
+        Step.call(this, Site, step);
         if (!step.name) throw 'The "step.name" property is required';
         if (!step.key) throw 'The "step.key" property is required';
         if (!step.attr) throw 'The "step.attr" property is required';
         if (!StepSelector.ATTRS.hasOwnValue(step.attr)) throw 'The "step.attr" property is not valid';
-        Step.call(this, step);
         this._key = step.key;
         this._attr = step.attr;
     }
@@ -20,7 +22,7 @@ var StepSelector = (function() {
     StepSelector.prototype._key = undefined;
     StepSelector.prototype._attr = undefined;
 
-    StepSelector.getDefaults = function() {
+    StepSelector.getDefaults = function(Site) {
         return {
             type: Site.TYPES.SELECTOR,
             name: '',
@@ -31,7 +33,7 @@ var StepSelector = (function() {
 
     StepSelector.prototype.toJson = function() {
         return {
-            type: Site.TYPES.SELECTOR,
+            type: this._Site.TYPES.SELECTOR,
             name: this._name,
             key: this._key,
             attr: this._attr

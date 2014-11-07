@@ -1,5 +1,14 @@
-var Site = (function() {
-    'use strict';
+'use strict';
+require('../../util/Object.js');
+require('../../util/String.js');
+var multiline = require('multiline');
+var StepClick = require('./StepClick');
+var StepForm = require('./StepForm');
+var StepFormSelector = require('./StepFormSelector');
+var StepScrap = require('./StepScrap');
+var StepSelector = require('./StepSelector');
+
+module.exports = (function() {
 
     function Site(site) {
         if (!site) throw 'The "site" argument is required';
@@ -11,15 +20,15 @@ var Site = (function() {
         this._steps = site.steps.map(function(item) {
             switch (item.type) {
                 case Site.TYPES.CLICK:
-                    return new StepClick(item);
+                    return new StepClick(Site, item);
                 case Site.TYPES.FORM:
-                    return new StepForm(item);
+                    return new StepForm(Site, item);
                 case Site.TYPES.FORM_SELECTOR:
-                    return new StepFormSelector(item);
+                    return new StepFormSelector(Site, item);
                 case Site.TYPES.SCRAP:
-                    return new StepScrap(item);
+                    return new StepScrap(Site, item);
                 case Site.TYPES.SELECTOR:
-                    return new StepSelector(item);
+                    return new StepSelector(Site, item);
             }
         });
     }
@@ -35,15 +44,15 @@ var Site = (function() {
     Site.getDefaults = function(type) {
         switch (type) {
             case Site.TYPES.CLICK:
-                return StepClick.getDefaults();
+                return StepClick.getDefaults(Site);
             case Site.TYPES.FORM:
-                return StepForm.getDefaults();
+                return StepForm.getDefaults(Site);
             case Site.TYPES.FORM_SELECTOR:
-                return StepFormSelector.getDefaults();
+                return StepFormSelector.getDefaults(Site);
             case Site.TYPES.SCRAP:
-                return StepScrap.getDefaults();
+                return StepScrap.getDefaults(Site);
             case Site.TYPES.SELECTOR:
-                return StepSelector.getDefaults();
+                return StepSelector.getDefaults(Site);
             case undefined:
                 return {
                     name: '',

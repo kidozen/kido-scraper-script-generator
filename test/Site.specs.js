@@ -1,7 +1,10 @@
-var expect = chai.expect;
+'use strict';
+var expect = require('chai').expect;
+var multiline = require('multiline');
+var Site = require('../extension/script/devtools/model/Site');
+var StepSelector = require('../extension/script/devtools/model/StepSelector');
 
 describe('Site', function() {
-    'use strict';
 
     it('should exist', function() {
         expect(Site).to.exist;

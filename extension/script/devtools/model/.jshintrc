@@ -1,0 +1,19 @@
+{
+    "strict": true,
+    "noarg": true,
+    "forin": true,
+    "noempty": true,
+    "node": true,
+    "eqeqeq": true,
+    "undef": true,
+    "bitwise": true,
+    "unused": true,
+    "immed": true,
+    "noarg": true,
+    "indent": 4,
+    "noempty": true,
+    "latedef": true,
+    "newcap": true,
+    "nonew": true,
+    "nonbsp": true
+}

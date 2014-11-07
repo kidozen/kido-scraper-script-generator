@@ -1,7 +1,11 @@
-var expect = chai.expect;
+'use strict';
+var expect = require('chai').expect;
+var multiline = require('multiline');
+var Step = require('../extension/script/devtools/model/Step');
+var Site = require('../extension/script/devtools/model/Site');
+var StepClick = require('../extension/script/devtools/model/StepClick');
 
 describe('StepClick', function() {
-    'use strict';
 
     it('should exist', function() {
         expect(StepClick).to.exist;
@@ -10,7 +14,7 @@ describe('StepClick', function() {
     describe('static methods', function() {
 
         it('should provide defaults', function() {
-            expect(StepClick.getDefaults()).to.deep.equal({
+            expect(StepClick.getDefaults(Site)).to.deep.equal({
                 type: Site.TYPES.CLICK,
                 name: '',
                 key: ''
@@ -27,7 +31,7 @@ describe('StepClick', function() {
                 name: 'test click',
                 key: 'input#test'
             };
-            var step = new StepClick(options);
+            var step = new StepClick(Site, options);
             expect(step).to.be.an.instanceof(Step);
             expect(step).to.be.an.instanceof(StepClick);
             expect(step.toJson).to.exist;
@@ -39,21 +43,21 @@ describe('StepClick', function() {
 
         it('should throw with no arguments', function() {
             var func = function() {
-                return new StepClick();
+                return new StepClick(Site);
             };
             expect(func).to.throw('The "step" argument is required');
         });
 
         it('should throw with empty object', function() {
             var func = function() {
-                return new StepClick({});
+                return new StepClick(Site, {});
             };
-            expect(func).to.throw('The "step.key" property is required');
+            expect(func).to.throw('The "step.type" property is required');
         });
 
         it('should throw with no type property', function() {
             var func = function() {
-                return new StepClick({
+                return new StepClick(Site, {
                     name: 'test click',
                     key: 'input#test'
                 });
@@ -63,7 +67,7 @@ describe('StepClick', function() {
 
         it('should throw with invalid type property', function() {
             var func = function() {
-                return new StepClick({
+                return new StepClick(Site, {
                     type: 'invalid type',
                     name: 'test click',
                     key: 'input#test'
@@ -74,7 +78,7 @@ describe('StepClick', function() {
 
         it('should throw with no key property', function() {
             var func = function() {
-                return new StepClick({
+                return new StepClick(Site, {
                     type: Site.TYPES.CLICK,
                     name: 'test click'
                 });
@@ -84,7 +88,7 @@ describe('StepClick', function() {
 
         it('should not throw with no name property', function() {
             var func = function() {
-                return new StepClick({
+                return new StepClick(Site, {
                     type: Site.TYPES.CLICK,
                     key: 'input#test'
                 });
@@ -102,7 +106,7 @@ describe('StepClick', function() {
                 name: 'test click',
                 key: 'input#test'
             };
-            var step = new StepClick(options);
+            var step = new StepClick(Site, options);
             expect(step.toJson()).to.deep.equal(options);
         });
 
@@ -123,7 +127,7 @@ describe('StepClick', function() {
                     });
                 */
             }).clean();
-            var step = new StepClick(options);
+            var step = new StepClick(Site, options);
             expect(step.toCasper().clean()).to.equal(casper);
         });
 

@@ -1,7 +1,11 @@
-var expect = chai.expect;
+'use strict';
+var expect = require('chai').expect;
+var multiline = require('multiline');
+var Step = require('../extension/script/devtools/model/Step');
+var Site = require('../extension/script/devtools/model/Site');
+var StepSelector = require('../extension/script/devtools/model/StepSelector');
 
 describe('StepSelector', function() {
-    'use strict';
 
     it('should exist', function() {
         expect(StepSelector).to.exist;
@@ -10,7 +14,7 @@ describe('StepSelector', function() {
     describe('static methods', function() {
 
         it('should provide defaults', function() {
-            expect(StepSelector.getDefaults()).to.deep.equal({
+            expect(StepSelector.getDefaults(Site)).to.deep.equal({
                 type: Site.TYPES.SELECTOR,
                 name: '',
                 key: '',
@@ -29,7 +33,7 @@ describe('StepSelector', function() {
                 key: 'h2#title-test',
                 attr: StepSelector.ATTRS.TEXT
             };
-            var step = new StepSelector(options);
+            var step = new StepSelector(Site, options);
             expect(step).to.be.an.instanceof(Step);
             expect(step).to.be.an.instanceof(StepSelector);
             expect(step.toJson).to.exist;
@@ -50,21 +54,21 @@ describe('StepSelector', function() {
 
         it('should throw with no arguments', function() {
             var func = function() {
-                return new StepSelector();
+                return new StepSelector(Site);
             };
             expect(func).to.throw('The "step" argument is required');
         });
 
         it('should throw with empty object', function() {
             var func = function() {
-                return new StepSelector({});
+                return new StepSelector(Site, {});
             };
-            expect(func).to.throw('The "step.name" property is required');
+            expect(func).to.throw('The "step.type" property is required');
         });
 
         it('should throw with no type property', function() {
             var func = function() {
-                return new StepSelector({
+                return new StepSelector(Site, {
                     name: 'test selector',
                     key: 'h2#title-test',
                     attr: StepSelector.ATTRS.TEXT
@@ -75,7 +79,7 @@ describe('StepSelector', function() {
 
         it('should throw with invalid type property', function() {
             var func = function() {
-                return new StepSelector({
+                return new StepSelector(Site, {
                     type: 'invalid type',
                     name: 'test selector',
                     key: 'h2#title-test',
@@ -87,7 +91,7 @@ describe('StepSelector', function() {
 
         it('should throw with no key property', function() {
             var func = function() {
-                return new StepSelector({
+                return new StepSelector(Site, {
                     type: Site.TYPES.SELECTOR,
                     name: 'test selector',
                     attr: StepSelector.ATTRS.TEXT
@@ -98,7 +102,7 @@ describe('StepSelector', function() {
 
         it('should throw with no name property', function() {
             var func = function() {
-                return new StepSelector({
+                return new StepSelector(Site, {
                     type: Site.TYPES.SELECTOR,
                     key: 'h2#title-test',
                     attr: StepSelector.ATTRS.TEXT
@@ -109,7 +113,7 @@ describe('StepSelector', function() {
 
         it('should throw with no attr property', function() {
             var func = function() {
-                return new StepSelector({
+                return new StepSelector(Site, {
                     type: Site.TYPES.SELECTOR,
                     name: 'test selector',
                     key: 'h2#title-test'
@@ -120,7 +124,7 @@ describe('StepSelector', function() {
 
         it('should throw with invalid attr property', function() {
             var func = function() {
-                return new StepSelector({
+                return new StepSelector(Site, {
                     type: Site.TYPES.SELECTOR,
                     name: 'test selector',
                     key: 'h2#title-test',
@@ -141,7 +145,7 @@ describe('StepSelector', function() {
                 key: 'h2#title-test',
                 attr: StepSelector.ATTRS.TEXT
             };
-            var step = new StepSelector(options).toJson();
+            var step = new StepSelector(Site, options).toJson();
             expect(step).to.have.property('type', options.type);
             expect(step).to.have.property('name', options.name);
             expect(step).to.have.property('key', options.key);
@@ -169,7 +173,7 @@ describe('StepSelector', function() {
                     });
                 */
             }).clean();
-            var step = new StepSelector(options);
+            var step = new StepSelector(Site, options);
             expect(step.toCasper().clean()).to.equal(casper);
         });
 

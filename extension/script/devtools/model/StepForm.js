@@ -1,22 +1,26 @@
-var StepForm = (function() {
-    'use strict';
+'use strict';
+var multiline = require('multiline');
+var Step = require('./Step');
+var StepClick = require('./StepClick');
+var StepFormSelector = require('./StepFormSelector');
 
-    function StepForm(step) {
-        if (!step) throw 'The "step" argument is required';
+module.exports = (function() {
+
+    function StepForm(Site, step) {
+        Step.call(this, Site, step);
         if (!Array.isArray(step.selectors)) throw 'The "step.selectors" property must be an array';
         if (!step.submit) throw 'The "step.submit" property is required';
-        Step.call(this, step);
         this._selectors = step.selectors.map(function(item) {
-            return new StepFormSelector(item);
+            return new StepFormSelector(Site, item);
         });
-        this._submit = new StepClick(step.submit);
+        this._submit = new StepClick(Site, step.submit);
     }
 
     StepForm.prototype = Object.create(Step.prototype);
     StepForm.prototype._selectors = undefined;
     StepForm.prototype._submit = undefined;
 
-    StepForm.getDefaults = function() {
+    StepForm.getDefaults = function(Site) {
         return {
             type: Site.TYPES.FORM,
             name: '',
@@ -27,7 +31,7 @@ var StepForm = (function() {
 
     StepForm.prototype.toJson = function() {
         return {
-            type: Site.TYPES.FORM,
+            type: this._Site.TYPES.FORM,
             name: this._name,
             selectors: this._selectors.map(function(item) {
                 return item.toJson();

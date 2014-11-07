@@ -1,14 +1,17 @@
-var StepScrap = (function() {
-    'use strict';
+'use strict';
+var multiline = require('multiline');
+var Step = require('./Step');
+var StepSelector = require('./StepSelector');
 
-    function StepScrap(step) {
-        if (!step) throw 'The "step" argument is required';
+module.exports = (function() {
+
+    function StepScrap(Site, step) {
+        Step.call(this, Site, step);
         if (!step.container) throw 'The "step.container" property is required';
         if (!Array.isArray(step.fields)) throw 'The "step.fields" property must be an array';
-        Step.call(this, step);
         this._container = step.container;
         this._fields = step.fields.map(function(item) {
-            return new StepSelector(item);
+            return new StepSelector(Site, item);
         });
     }
 
@@ -16,7 +19,7 @@ var StepScrap = (function() {
     StepScrap.prototype._container = undefined;
     StepScrap.prototype._fields = [];
 
-    StepScrap.getDefaults = function() {
+    StepScrap.getDefaults = function(Site) {
         return {
             type: Site.TYPES.SCRAP,
             name: '',
@@ -27,7 +30,7 @@ var StepScrap = (function() {
 
     StepScrap.prototype.toJson = function() {
         return {
-            type: Site.TYPES.SCRAP,
+            type: this._Site.TYPES.SCRAP,
             name: this._name,
             container: this._container,
             fields: this._fields.map(function(item) {

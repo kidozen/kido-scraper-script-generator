@@ -1,7 +1,12 @@
-var expect = chai.expect;
+'use strict';
+var expect = require('chai').expect;
+var multiline = require('multiline');
+var Step = require('../extension/script/devtools/model/Step');
+var Site = require('../extension/script/devtools/model/Site');
+var StepScrap = require('../extension/script/devtools/model/StepScrap');
+var StepSelector = require('../extension/script/devtools/model/StepSelector');
 
 describe('StepScrap', function() {
-    'use strict';
 
     it('should exist', function() {
         expect(StepScrap).to.exist;
@@ -10,7 +15,7 @@ describe('StepScrap', function() {
     describe('static methods', function() {
 
         it('should provide defaults', function() {
-            expect(StepScrap.getDefaults()).to.deep.equal({
+            expect(StepScrap.getDefaults(Site)).to.deep.equal({
                 type: Site.TYPES.SCRAP,
                 name: '',
                 container: '',
@@ -44,7 +49,7 @@ describe('StepScrap', function() {
                     attr: StepSelector.ATTRS.TEXT
                 }]
             };
-            var step = new StepScrap(options);
+            var step = new StepScrap(Site, options);
             expect(step).to.be.an.instanceof(Step);
             expect(step).to.be.an.instanceof(StepScrap);
             expect(step.toJson).to.exist;
@@ -77,21 +82,21 @@ describe('StepScrap', function() {
 
         it('should throw with no arguments', function() {
             var func = function() {
-                return new StepScrap();
+                return new StepScrap(Site);
             };
             expect(func).to.throw('The "step" argument is required');
         });
 
         it('should throw with empty object', function() {
             var func = function() {
-                return new StepScrap({});
+                return new StepScrap(Site, {});
             };
-            expect(func).to.throw('The "step.container" property is required');
+            expect(func).to.throw('The "step.type" property is required');
         });
 
         it('should throw with no type property', function() {
             var func = function() {
-                return new StepScrap({
+                return new StepScrap(Site, {
                     name: 'test scrap',
                     container: 'li.list-test',
                     fields: []
@@ -102,7 +107,7 @@ describe('StepScrap', function() {
 
         it('should throw with invalid type property', function() {
             var func = function() {
-                return new StepScrap({
+                return new StepScrap(Site, {
                     type: 'invalid type',
                     name: 'test scrap',
                     container: 'li.list-test',
@@ -114,7 +119,7 @@ describe('StepScrap', function() {
 
         it('should throw with no container property', function() {
             var func = function() {
-                return new StepScrap({
+                return new StepScrap(Site, {
                     type: Site.TYPES.SCRAP,
                     name: 'test scrap',
                     fields: []
@@ -125,7 +130,7 @@ describe('StepScrap', function() {
 
         it('should not throw with no name property', function() {
             var func = function() {
-                return new StepScrap({
+                return new StepScrap(Site, {
                     type: Site.TYPES.SCRAP,
                     container: 'li.list-test',
                     fields: []
@@ -136,7 +141,7 @@ describe('StepScrap', function() {
 
         it('should throw with no fields property', function() {
             var func = function() {
-                return new StepScrap({
+                return new StepScrap(Site, {
                     type: Site.TYPES.SCRAP,
                     name: 'test scrap',
                     container: 'li.list-test'
@@ -147,7 +152,7 @@ describe('StepScrap', function() {
 
         it('should throw if the fields property is not an array', function() {
             var func = function() {
-                return new StepScrap({
+                return new StepScrap(Site, {
                     type: Site.TYPES.SCRAP,
                     name: 'test scrap',
                     container: 'li.list-test',
@@ -178,7 +183,7 @@ describe('StepScrap', function() {
                     attr: StepSelector.ATTRS.TEXT
                 }]
             };
-            var step = new StepScrap(options).toJson();
+            var step = new StepScrap(Site, options).toJson();
             expect(step).to.have.property('type', options.type);
             expect(step).to.have.property('name', options.name);
             expect(step).to.have.property('container', options.container);
@@ -247,7 +252,7 @@ describe('StepScrap', function() {
                     });
                 */
             }).clean();
-            var step = new StepScrap(options);
+            var step = new StepScrap(Site, options);
             expect(step.toCasper().clean()).to.equal(casper);
         });
 

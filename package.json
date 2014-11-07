@@ -7,7 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "gulp test"
+    "server": "gulp server",
+    "start": "mochify --watch",
+    "test": "mochify"
   },
   "repository": {
     "type": "git",
@@ -20,8 +22,11 @@
   },
   "homepage": "https://github.com/kidozen/kido-scraper-script-generator",
   "devDependencies": {
+    "chai": "^1.9.2",
     "gulp": "^3.8.9",
-    "gulp-connect": "^2.0.6",
-    "gulp-util": "^3.0.1"
+    "gulp-connect": "^2.0.6"
+  },
+  "dependencies": {
+    "multiline": "^1.0.1"
   }
 }

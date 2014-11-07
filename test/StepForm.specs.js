@@ -1,7 +1,11 @@
-var expect = chai.expect;
+'use strict';
+var expect = require('chai').expect;
+var multiline = require('multiline');
+var Step = require('../extension/script/devtools/model/Step');
+var Site = require('../extension/script/devtools/model/Site');
+var StepForm = require('../extension/script/devtools/model/StepForm');
 
 describe('StepForm', function() {
-    'use strict';
 
     it('should exist', function() {
         expect(StepForm).to.exist;
@@ -10,7 +14,7 @@ describe('StepForm', function() {
     describe('static methods', function() {
 
         it('should provide defaults', function() {
-            expect(StepForm.getDefaults()).to.deep.equal({
+            expect(StepForm.getDefaults(Site)).to.deep.equal({
                 type: Site.TYPES.FORM,
                 name: '',
                 selectors: [{
@@ -49,7 +53,7 @@ describe('StepForm', function() {
                     key: 'button.btn-test'
                 }
             };
-            var step = new StepForm(options);
+            var step = new StepForm(Site, options);
             expect(step).to.be.an.instanceof(Step);
             expect(step).to.be.an.instanceof(StepForm);
             expect(step.toJson).to.exist;
@@ -87,21 +91,21 @@ describe('StepForm', function() {
 
         it('should throw with no arguments', function() {
             var func = function() {
-                return new StepForm();
+                return new StepForm(Site);
             };
             expect(func).to.throw('The "step" argument is required');
         });
 
         it('should throw with empty object', function() {
             var func = function() {
-                return new StepForm({});
+                return new StepForm(Site, {});
             };
-            expect(func).to.throw('The "step.selectors" property must be an array');
+            expect(func).to.throw('The "step.type" property is required');
         });
 
         it('should throw with no type property', function() {
             var func = function() {
-                return new StepForm({
+                return new StepForm(Site, {
                     name: 'test form',
                     selectors: [],
                     submit: {
@@ -115,7 +119,7 @@ describe('StepForm', function() {
 
         it('should throw with invalid type property', function() {
             var func = function() {
-                return new StepForm({
+                return new StepForm(Site, {
                     type: 'invalid type',
                     name: 'test form',
                     selectors: [],
@@ -130,7 +134,7 @@ describe('StepForm', function() {
 
         it('should throw with no selectors property', function() {
             var func = function() {
-                return new StepForm({
+                return new StepForm(Site, {
                     type: Site.TYPES.FORM,
                     name: 'test form',
                     submit: {
@@ -144,7 +148,7 @@ describe('StepForm', function() {
 
         it('should throw if the selectors property is not an array', function() {
             var func = function() {
-                return new StepForm({
+                return new StepForm(Site, {
                     type: Site.TYPES.FORM,
                     name: 'test form',
                     selectors: {},
@@ -159,7 +163,7 @@ describe('StepForm', function() {
 
         it('should not throw with no name property', function() {
             var func = function() {
-                return new StepForm({
+                return new StepForm(Site, {
                     type: Site.TYPES.FORM,
                     selectors: [],
                     submit: {
@@ -193,7 +197,7 @@ describe('StepForm', function() {
                     key: 'button.btn-test'
                 }
             };
-            var step = new StepForm(options).toJson();
+            var step = new StepForm(Site, options).toJson();
             expect(step).to.have.property('type', options.type);
             expect(step).to.have.property('name', options.name);
             expect(step).to.have.property('submit');
@@ -246,7 +250,7 @@ describe('StepForm', function() {
                     });
                 */
             }).clean();
-            var step = new StepForm(options);
+            var step = new StepForm(Site, options);
             expect(step.toCasper().clean()).to.equal(casper);
         });
 

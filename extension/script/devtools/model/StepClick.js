@@ -1,17 +1,19 @@
-var StepClick = (function() {
-    'use strict';
+'use strict';
+var multiline = require('multiline');
+var Step = require('./Step');
 
-    function StepClick(step) {
-        if (!step) throw 'The "step" argument is required';
+module.exports = (function() {
+
+    function StepClick(Site, step) {
+        Step.call(this, Site, step);
         if (!step.key) throw 'The "step.key" property is required';
-        Step.call(this, step);
         this._key = step.key;
     }
 
     StepClick.prototype = Object.create(Step.prototype);
     StepClick.prototype._key = undefined;
 
-    StepClick.getDefaults = function() {
+    StepClick.getDefaults = function(Site) {
         return {
             type: Site.TYPES.CLICK,
             name: '',
@@ -21,7 +23,7 @@ var StepClick = (function() {
 
     StepClick.prototype.toJson = function() {
         return {
-            type: Site.TYPES.CLICK,
+            type: this._Site.TYPES.CLICK,
             name: this._name,
             key: this._key
         };
