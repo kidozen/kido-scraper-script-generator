@@ -172,9 +172,9 @@ describe('StepSelector', function() {
                         });
                     });
                 */
-            }).clean();
+            })._clean();
             var step = new StepSelector(Site, options);
-            expect(step.toCasper().clean()).to.equal(casper);
+            expect(step.toCasper()._clean()).to.equal(casper);
         });
 
     });

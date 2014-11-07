@@ -9,7 +9,7 @@ module.exports = (function() {
         if (!step.name) throw 'The "step.name" property is required';
         if (!step.key) throw 'The "step.key" property is required';
         if (!step.attr) throw 'The "step.attr" property is required';
-        if (!StepSelector.ATTRS.hasOwnValue(step.attr)) throw 'The "step.attr" property is not valid';
+        if (!StepSelector.ATTRS._hasOwnValue(step.attr)) throw 'The "step.attr" property is not valid';
         this._key = step.key;
         this._attr = step.attr;
     }
@@ -51,9 +51,9 @@ module.exports = (function() {
                     });
                 });
             */
-        }).supplant({
-            name: this._name.quote(),
-            key: this._key.quote()
+        })._supplant({
+            name: this._name._quote(),
+            key: this._key._quote()
         });
     };
 

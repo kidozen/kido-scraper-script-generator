@@ -126,9 +126,9 @@ describe('StepClick', function() {
                         this.click("input#test");
                     });
                 */
-            }).clean();
+            })._clean();
             var step = new StepClick(Site, options);
-            expect(step.toCasper().clean()).to.equal(casper);
+            expect(step.toCasper()._clean()).to.equal(casper);
         });
 
     });

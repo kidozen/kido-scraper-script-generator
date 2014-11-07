@@ -55,8 +55,8 @@ module.exports = (function() {
                     this.echo(JSON.stringify(result, null, 2));
                 });
             */
-        }).supplant({
-            container: this._container.quote(),
+        })._supplant({
+            container: this._container._quote(),
             fields: this._fields.map(function(item) {
                 return item.toCasper();
             }).join('\n')

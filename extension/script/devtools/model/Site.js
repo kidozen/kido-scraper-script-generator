@@ -93,7 +93,7 @@ module.exports = (function() {
                     this.exit();
                 });
             */
-        }).supplant({
+        })._supplant({
             url: this._url,
             steps: this._steps.map(function(item) {
                 return item.toCasper();

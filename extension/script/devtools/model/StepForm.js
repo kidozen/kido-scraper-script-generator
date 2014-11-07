@@ -48,7 +48,7 @@ module.exports = (function() {
                 });
                 {{submit}}
             */
-        }).supplant({
+        })._supplant({
             selectors: this._selectors.map(function(item) {
                 return item.toCasper();
             }).join('\n'),

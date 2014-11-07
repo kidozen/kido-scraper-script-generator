@@ -1,12 +1,12 @@
-if (!String.prototype.clean) {
-    String.prototype.clean = function() {
+if (!String.prototype._clean) {
+    String.prototype._clean = function() {
         'use strict';
         return this.replace(/\r?\n|\r|\s/g, '');
     };
 }
 
-if (!String.prototype.supplant) {
-    String.prototype.supplant = function(o) {
+if (!String.prototype._supplant) {
+    String.prototype._supplant = function(o) {
         'use strict';
         return this.replace(/{{([^{}]*)}}/g,
             function(a, b) {
@@ -18,8 +18,8 @@ if (!String.prototype.supplant) {
     };
 }
 
-if (!String.prototype.quote) {
-    String.prototype.quote = (function() {
+if (!String.prototype._quote) {
+    String.prototype._quote = (function() {
         'use strict';
         var escp_regex = /[\\"]/g,
             escp_callback = '\\$&',
@@ -56,5 +56,5 @@ if (!String.prototype.quote) {
                 .replace(uhex_regex, uhex_callback) + '"';
         };
     }());
-    String.quote = Function.call.bind(''.quote);
+    String._quote = Function.call.bind(''._quote);
 }
