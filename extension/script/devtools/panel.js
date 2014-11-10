@@ -69,6 +69,7 @@ angular.module('KidoScrapper', ['ngRoute'])
             id: Site.TYPES.SCRAP,
             name: 'Scrap'
         }];
+        $scope.stepType = $scope.types[0].id;
         $scope.site = KidoStorage.get($routeParams.name);
         $scope.site.steps = $scope.site.steps || [];
         $scope.addStep = function() {
@@ -76,7 +77,7 @@ angular.module('KidoScrapper', ['ngRoute'])
         };
     })
     .controller('ThreeController', function($scope, $routeParams, $location, KidoStorage) {
-        if (!$routeParams.name) {
+        if (!$routeParams.name || !$routeParams.type) {
             return $location.path('/');
         }
         $scope.site = KidoStorage.get($routeParams.name);
