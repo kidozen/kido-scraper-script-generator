@@ -40,27 +40,46 @@ module.exports = (function() {
         SELECTOR: 'selector'
     };
 
-    Site.getDefaults = function(type) {
+    Site.getConstructor = function(type) {
         switch (type) {
             case Site.TYPES.CLICK:
-                return StepClick.getDefaults(Site);
+                return StepClick;
             case Site.TYPES.FORM:
-                return StepForm.getDefaults(Site);
+                return StepForm;
             case Site.TYPES.FORM_SELECTOR:
-                return StepFormSelector.getDefaults(Site);
+                return StepFormSelector;
             case Site.TYPES.SCRAP:
-                return StepScrap.getDefaults(Site);
+                return StepScrap;
             case Site.TYPES.SELECTOR:
-                return StepSelector.getDefaults(Site);
+                return StepSelector;
             case undefined:
-                return {
-                    name: '',
-                    url: '',
-                    steps: []
-                };
+                return Site;
             default:
                 throw 'The type is not valid';
         }
+    };
+
+    Site.getDefaults = function(type) {
+        if (type !== undefined) {
+            return Site.getConstructor(type).getDefaults(Site);
+        }
+        return {
+            name: '',
+            url: '',
+            steps: []
+        };
+    };
+
+    Site.validateStep = function(step) {
+        if (!step) throw 'The "step" argument is required';
+        if (!step.type) throw 'The "step.type" property is required';
+        var Constructor = Site.getConstructor(step.type);
+        try {
+            step = new Constructor(Site, step);
+        } catch (exception) {
+            throw exception.toString();
+        }
+        return true;
     };
 
     Site.prototype._name = undefined;

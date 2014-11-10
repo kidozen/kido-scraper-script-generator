@@ -22,6 +22,21 @@ describe('Site', function() {
             expect(Site.TYPES.SELECTOR).to.be.equal('selector');
         });
 
+        it('should provide constructors', function() {
+            expect(Site.getConstructor).to.exist;
+            var func;
+            Object.keys(Site.TYPES).forEach(function(type) {
+                func = function() {
+                    return Site.getConstructor(Site.TYPES[type]);
+                };
+                expect(func).to.not.throw('The type is not valid');
+            });
+            func = function() {
+                return Site.getConstructor('invalid type');
+            };
+            expect(func).to.throw('The type is not valid');
+        });
+
         it('should provide defaults for site', function() {
             expect(Site.getDefaults).to.exist;
             expect(Site.getDefaults()).to.deep.equal({
@@ -93,6 +108,28 @@ describe('Site', function() {
                 return Site.getDefaults('invalid type');
             };
             expect(func).to.throw('The type is not valid');
+        });
+
+        it('should validate step', function() {
+            expect(Site.validateStep).to.exist;
+            var func = function() {
+                return Site.validateStep();
+            };
+            expect(func).to.throw('The "step" argument is required');
+            func = function() {
+                return Site.validateStep({});
+            };
+            expect(func).to.throw('The "step.type" property is required');
+            func = function() {
+                return Site.validateStep({
+                    type: 'invalid type'
+                });
+            };
+            expect(func).to.throw('The type is not valid');
+            expect(Site.validateStep({
+                type: Site.TYPES.CLICK,
+                key: 'button.btn-test'
+            })).to.be.true;
         });
 
     });
