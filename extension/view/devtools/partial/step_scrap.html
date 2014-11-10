@@ -1,1 +1,12 @@
-<h3>Add a new step: {{ currentStep.type }}</h3>
+<label>Step name</label>
+<input type="text" ng-model="currentStep.name"></input>
+<button ng-click="addField()">Add</button>
+<div ng-repeat="f in currentStep.fields">
+    <label>Name</label>
+    <input type="text" ng-model="f.name"></input>
+    <label>Key</label>
+    <input type="text" ng-model="f.key"></input>
+    <label>Attribute</label>
+    <select ng-model="f.attr" ng-options="a.id as a.name for a in attrs"></select>
+    <button ng-click="removeField($index)">Remove</button>
+</div>

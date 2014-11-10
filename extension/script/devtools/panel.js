@@ -60,13 +60,13 @@ angular.module('KidoScrapper', ['ngRoute'])
             return $location.path('/');
         }
         $scope.types = [{
-            id: 'form',
+            id: Site.TYPES.FORM,
             name: 'Form'
         }, {
-            id: 'click',
+            id: Site.TYPES.CLICK,
             name: 'Click'
         }, {
-            id: 'scrap',
+            id: Site.TYPES.SCRAP,
             name: 'Scrap'
         }];
         $scope.site = KidoStorage.get($routeParams.name);
@@ -79,59 +79,74 @@ angular.module('KidoScrapper', ['ngRoute'])
         if (!$routeParams.name) {
             return $location.path('/');
         }
-        var stepFormController = function() {
-            return {
-                addSelector: function() {
-                    $scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
-                },
-                removeSelector: function(index) {
-                    $scope.currentStep.selectors.splice(index, 1);
-                },
-                validate: function() {
-                    return true;
-                }
-            };
-        };
-        var stepClickController = function() {
-            return {
-                validate: function() {
-                    return true;
-                }
-            };
-        };
-        var stepScrapController = function() {
-            return {
-                validate: function() {
-                    return true;
-                }
-            };
-        };
         $scope.site = KidoStorage.get($routeParams.name);
         $scope.currentStep = Site.getDefaults($routeParams.type);
-        console.log($scope.currentStep);
+        $scope.isForm = $scope.currentStep.type === Site.TYPES.FORM;
+        $scope.isClick = $scope.currentStep.type === Site.TYPES.CLICK;
+        $scope.isScrap = $scope.currentStep.type === Site.TYPES.SCRAP;
         $scope.submit = function() {
-            if ($scope.validate()) {
-                $scope.site.steps.push($scope.currentStep);
-                KidoStorage.store($routeParams.name, $scope.site);
-                $location.path('/zero');
+            try {
+                Site.validateStep($scope.currentStep);
+            } catch (exception) {
+                return window.alert(exception.toString());
+            }
+            $scope.site.steps.push($scope.currentStep);
+            KidoStorage.store($routeParams.name, $scope.site);
+            $location.path('/zero');
+        };
+    })
+    .directive('stepClick', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                currentStep: '='
+            },
+            templateUrl: 'partial/step_click.html',
+            link: function(scope) {
+                if (!scope.currentStep) throw 'stepClick directive needs a currentStep to work with';
             }
         };
-        switch ($routeParams.type) {
-            case Site.TYPES.CLICK:
-                $scope.template = 'partial/step_click.html';
-                angular.extend($scope, stepClickController());
-                break;
-            case Site.TYPES.FORM:
-                $scope.template = 'partial/step_form.html';
-                angular.extend($scope, stepFormController());
-                break;
-            case Site.TYPES.SCRAP:
-                $scope.template = 'partial/step_scrap.html';
-                angular.extend($scope, stepScrapController());
-                break;
-            default:
-                window.alert('Invalid step type');
-        }
+    })
+    .directive('stepForm', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                currentStep: '='
+            },
+            templateUrl: 'partial/step_form.html',
+            link: function(scope) {
+                if (!scope.currentStep) throw 'stepForm directive needs a currentStep to work with';
+                scope.addSelector = function() {
+                    scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
+                };
+                scope.removeSelector = function(index) {
+                    scope.currentStep.selectors.splice(index, 1);
+                };
+            }
+        };
+    })
+    .directive('stepScrap', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                currentStep: '='
+            },
+            templateUrl: 'partial/step_scrap.html',
+            link: function(scope) {
+                if (!scope.currentStep) throw 'stepScrap directive needs a currentStep to work with';
+                var ATTRS = Site.getConstructor(Site.TYPES.SELECTOR).ATTRS;
+                scope.attrs = [{
+                    id: ATTRS.TEXT,
+                    name: 'Text'
+                }];
+                scope.addField = function() {
+                    scope.currentStep.fields.push(Site.getDefaults(Site.TYPES.SELECTOR));
+                };
+                scope.removeField = function(index) {
+                    scope.currentStep.fields.splice(index, 1);
+                };
+            }
+        };
     })
     .config(function($routeProvider) {
         $routeProvider

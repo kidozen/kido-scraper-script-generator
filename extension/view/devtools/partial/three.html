@@ -1,1 +1,5 @@
-<ng-include src="template"></ng-include>
+<h3>Add a new step: {{ currentStep.type }}</h3>
+<step-form current-step="currentStep" ng-show="isForm"></step-form>
+<step-click current-step="currentStep" ng-show="isClick"></step-click>
+<step-scrap current-step="currentStep" ng-show="isScrap"></step-scrap>
+<button ng-click="submit()">Save</button>
