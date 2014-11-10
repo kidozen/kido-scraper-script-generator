@@ -8,23 +8,19 @@ module.exports = (function() {
 
     function StepScrap(Site, step) {
         Step.call(this, Site, step);
-        if (!step.container) throw 'The "step.container" property is required';
         if (!Array.isArray(step.fields)) throw 'The "step.fields" property must be an array';
-        this._container = step.container;
         this._fields = step.fields.map(function(item) {
             return new StepSelector(Site, item);
         });
     }
 
     StepScrap.prototype = Object.create(Step.prototype);
-    StepScrap.prototype._container = undefined;
     StepScrap.prototype._fields = [];
 
     StepScrap.getDefaults = function(Site) {
         return {
             type: Site.TYPES.SCRAP,
             name: '',
-            container: '',
             fields: [Site.getDefaults(Site.TYPES.SELECTOR)]
         };
     };
@@ -33,7 +29,6 @@ module.exports = (function() {
         return {
             type: this._Site.TYPES.SCRAP,
             name: this._name,
-            container: this._container,
             fields: this._fields.map(function(item) {
                 return item.toJson();
             })
@@ -57,7 +52,6 @@ module.exports = (function() {
                 });
             */
         }), {
-            container: Util.quote.call(this._container),
             fields: this._fields.map(function(item) {
                 return item.toCasper();
             }).join('\n')

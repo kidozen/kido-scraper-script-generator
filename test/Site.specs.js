@@ -70,7 +70,6 @@ describe('Site', function() {
             expect(Site.getDefaults(Site.TYPES.SCRAP)).to.deep.equal({
                 type: Site.TYPES.SCRAP,
                 name: '',
-                container: '',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: '',
@@ -192,7 +191,6 @@ describe('Site', function() {
         }, {
             type: Site.TYPES.SCRAP,
             name: 'Scrap',
-            container: 'li.ch-carousel-item',
             fields: [{
                 type: Site.TYPES.SELECTOR,
                 name: 'description',

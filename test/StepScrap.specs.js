@@ -19,7 +19,6 @@ describe('StepScrap', function() {
             expect(StepScrap.getDefaults(Site)).to.deep.equal({
                 type: Site.TYPES.SCRAP,
                 name: '',
-                container: '',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: '',
@@ -37,7 +36,6 @@ describe('StepScrap', function() {
             var options = {
                 type: Site.TYPES.SCRAP,
                 name: 'test scrap',
-                container: 'li.list-test',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: 'test-brand',
@@ -63,10 +61,6 @@ describe('StepScrap', function() {
                 .to.have.property('_name')
                 .that.is.a('string')
                 .that.equals(options.name);
-            expect(step)
-                .to.have.property('_container')
-                .that.is.a('string')
-                .that.equals(options.container);
             expect(step._fields).to.be.an('array');
             step._fields.forEach(function(item, index) {
                 expect(item)
@@ -99,7 +93,6 @@ describe('StepScrap', function() {
             var func = function() {
                 return new StepScrap(Site, {
                     name: 'test scrap',
-                    container: 'li.list-test',
                     fields: []
                 });
             };
@@ -111,29 +104,16 @@ describe('StepScrap', function() {
                 return new StepScrap(Site, {
                     type: 'invalid type',
                     name: 'test scrap',
-                    container: 'li.list-test',
                     fields: []
                 });
             };
             expect(func).to.throw('The "step.type" property is not valid');
         });
 
-        it('should throw with no container property', function() {
-            var func = function() {
-                return new StepScrap(Site, {
-                    type: Site.TYPES.SCRAP,
-                    name: 'test scrap',
-                    fields: []
-                });
-            };
-            expect(func).to.throw('The "step.container" property is required');
-        });
-
         it('should not throw with no name property', function() {
             var func = function() {
                 return new StepScrap(Site, {
                     type: Site.TYPES.SCRAP,
-                    container: 'li.list-test',
                     fields: []
                 });
             };
@@ -144,8 +124,7 @@ describe('StepScrap', function() {
             var func = function() {
                 return new StepScrap(Site, {
                     type: Site.TYPES.SCRAP,
-                    name: 'test scrap',
-                    container: 'li.list-test'
+                    name: 'test scrap'
                 });
             };
             expect(func).to.throw('The "step.fields" property must be an array');
@@ -156,7 +135,6 @@ describe('StepScrap', function() {
                 return new StepScrap(Site, {
                     type: Site.TYPES.SCRAP,
                     name: 'test scrap',
-                    container: 'li.list-test',
                     fields: {}
                 });
             };
@@ -171,7 +149,6 @@ describe('StepScrap', function() {
             var options = {
                 type: Site.TYPES.SCRAP,
                 name: 'test scrap',
-                container: 'li.list-test',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: 'test-brand',
@@ -187,7 +164,6 @@ describe('StepScrap', function() {
             var step = new StepScrap(Site, options).toJson();
             expect(step).to.have.property('type', options.type);
             expect(step).to.have.property('name', options.name);
-            expect(step).to.have.property('container', options.container);
             expect(step.fields).to.be.an('array');
             step.fields.forEach(function(item, index) {
                 expect(item)
@@ -213,7 +189,6 @@ describe('StepScrap', function() {
             var options = {
                 type: Site.TYPES.SCRAP,
                 name: 'test scrap',
-                container: 'li.list-test',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: 'test-brand',
