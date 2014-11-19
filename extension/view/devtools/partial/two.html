@@ -1,7 +1,41 @@
-<h3>{{ site.name }}</h3>
-<h4>{{ site.url }}</h4>
-<select ng-model="stepType" ng-options="t.id as t.name for t in types"></select>
-<button ng-click="addStep()">Add step</button>
-<ul>
-    <li ng-repeat="s in site.steps">{{ s.name }} ({{ s.type }})</li>
-</ul>
+<ol class="breadcrumb">
+  <li>Scrapper Generator</a></li>
+  <li><a href="#/zero">My Projects</a></li>
+  <li class="active">{{ site.name }}</li>
+</ol>
+<div class="row">
+	<div class="col-md-6">
+		<button ng-click="addCompleteForm()" class="btn btn-primary">
+			<span class="fui-plus"></span>
+			Complete Form</button>
+		<button ng-click="addClickEvent()" class="btn btn-primary">
+			<span class="fui-plus"></span>
+			Click Event</button>
+		<button ng-click="addScrap()" class="btn btn-danger">
+			<span class="fui-upload"></span>
+			Scrap Data</button>
+		<table class="table" style="margin:10px">
+		    <tr ng-repeat="s in site.steps">
+		    	<td>
+		    		{{ s.name }} ({{ s.type }})
+		    	</td>
+		    </tr>
+		</table>
+		<p>Once you have the necessary steps to arrive to the page where
+			the data is, and how to scrap the data, you can proceed to
+			export the configuration in JSON and Casper script format.
+		</p>
+
+		<a class="btn btn-primary" href="#/export/{{site.name}}">Export</a>
+	</div>
+	<div class="col-md-6">
+		<div class="tile" style="text-align:left">
+			<h6>Complete Form</h6>
+			<small>Use the "Complete Form Step" to add values to a form and then either
+				use enter or a button to submit the data</small>
+			<h6>Click Event</h6>
+			<small>Use the "Click" step to trigger a click event on any element of the
+				page.</small>
+		</div>
+	</div>
+</div>

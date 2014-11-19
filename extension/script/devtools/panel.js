@@ -1,4 +1,4 @@
-/* global window, console, angular */
+/* global $, window, console, angular */
 'use strict';
 require('angular');
 require('angular-route');
@@ -39,7 +39,7 @@ angular.module('KidoScrapper', ['ngRoute'])
             console.log(new Site(site).toCasper());
         };
     })
-    .controller('OneController', function($scope, $location, KidoStorage) {
+    .controller('OneController', function ($scope, $location, KidoStorage) {
         $scope.create = function() {
             $scope.name = $scope.name ? $scope.name.toLowerCase() : '';
             if (!$scope.name || !$scope.url) {
@@ -53,6 +53,11 @@ angular.module('KidoScrapper', ['ngRoute'])
             site.url = $scope.url;
             KidoStorage.store($scope.name, site);
             $location.path('/two/' + $scope.name);
+        };
+        $scope.cancel = function() {
+            $scope.name = '';
+            $scope.url = '';
+            return $location.path('/');
         };
     })
     .controller('TwoController', function($scope, $routeParams, $location, KidoStorage) {
@@ -72,8 +77,20 @@ angular.module('KidoScrapper', ['ngRoute'])
         $scope.stepType = $scope.types[0].id;
         $scope.site = KidoStorage.get($routeParams.name);
         $scope.site.steps = $scope.site.steps || [];
+        function _addStep(type) {
+            $location.path('/three/' + $routeParams.name + '/' + type);
+        }
         $scope.addStep = function() {
-            $location.path('/three/' + $routeParams.name + '/' + $scope.stepType);
+            _addStep($scope.stepType);
+        };
+        $scope.addCompleteForm = function () {
+            _addStep(Site.TYPES.FORM);
+        };
+        $scope.addClickEvent = function () {
+            _addStep(Site.TYPES.CLICK);
+        };
+        $scope.addScrap = function () {
+            _addStep(Site.TYPES.SCRAP);
         };
     })
     .controller('ThreeController', function($scope, $routeParams, $location, KidoStorage) {
@@ -93,7 +110,27 @@ angular.module('KidoScrapper', ['ngRoute'])
             }
             $scope.site.steps.push($scope.currentStep);
             KidoStorage.store($routeParams.name, $scope.site);
-            $location.path('/zero');
+            $location.path('/two/' + $scope.site.name);
+        };
+        $scope.cancel = function () {
+            $location.path('/two/' + $scope.site.name);
+        };
+    })
+    .controller('ExportController', function ($scope, $routeParams, $location, KidoStorage) {
+        if (!$routeParams.name) {
+            return $location.path('/');
+        }
+        $scope.site = KidoStorage.get($routeParams.name);
+        $scope.json = JSON.stringify($scope.site, 0, 4);
+        $scope.script = new Site($scope.site).toCasper();
+        $scope.scriptVisible = true;
+        $scope.showJson = function () {
+            $scope.jsonVisible = true;
+            $scope.scriptVisible = false;
+        };
+        $scope.showScript = function () {
+            $scope.jsonVisible = false;
+            $scope.scriptVisible = true;
         };
     })
     .directive('stepClick', function() {
@@ -149,6 +186,14 @@ angular.module('KidoScrapper', ['ngRoute'])
             }
         };
     })
+    .directive('select2', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, el) {
+                $(el).select2();
+            }
+        };
+    })
     .config(function($routeProvider) {
         $routeProvider
             .when('/zero', {
@@ -166,6 +211,10 @@ angular.module('KidoScrapper', ['ngRoute'])
             .when('/three/:name/:type', {
                 templateUrl: 'partial/three.html',
                 controller: 'ThreeController'
+            })
+            .when('/export/:name', {
+                templateUrl: 'partial/export.html',
+                controller: 'ExportController'
             })
             .otherwise({
                 redirectTo: '/zero'

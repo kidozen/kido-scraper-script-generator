@@ -1,9 +1,15 @@
-<h2>My Sites</h2>
-<ul>
-    <li ng-repeat="s in sites">
-        <label>{{ s.name }}</label>
-        <button ng-click="open(s)">Open</button>
-        <button ng-click="export(s)">Export</button>
-    </li>
-</ul>
-<button ng-click="addNewSite()">Add new site</button>
+<ol class="breadcrumb">
+  <li>Scrapper Generator</a></li>
+  <li class="active"><a href="#/zero">My Projects</a></li>
+</ol>
+<a ng-click="addNewSite()" class="btn btn-primary">
+	<span class="fui-plus"></span>
+	Add New Project</a>
+
+<table class="table">
+    <tr ng-repeat="s in sites">
+    	<td ng-click="open(s)">
+	        <a><label>{{ s.name }}</label></a>
+        </td>
+    </tr>
+</table>

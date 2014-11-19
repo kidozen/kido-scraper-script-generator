@@ -98,19 +98,19 @@ module.exports = (function() {
 
     Site.prototype.toCasper = function() {
         return Util.supplant.call(multiline(function() {
-            /*
-                var casper = require('casper').create({
-                    pageSettings: {
-                        loadImages: false,
-                        loadPlugins: false
-                    }
-                });
-                casper.start('{{url}}');
-                {{steps}}
-                casper.run(function() {
-                    this.exit();
-                });
-            */
+/*
+    var casper = require('casper').create({
+        pageSettings: {
+            loadImages: false,
+            loadPlugins: false
+        }
+    });
+    casper.start('{{url}}');
+    {{steps}}
+    casper.run(function() {
+        this.exit();
+    });
+*/
         }), {
             url: this._url,
             steps: this._steps.map(function(item) {

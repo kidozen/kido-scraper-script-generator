@@ -2,11 +2,59 @@
 <html>
 
 <head>
-    <script type="text/javascript" src="../../bundle.js"></script>
+  <!-- Bootstrap -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Loading Bootstrap -->
+  <link href="../../flat-ui/css/vendor/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Loading Flat UI -->
+  <link href="../../flat-ui/css/flat-ui.min.css" rel="stylesheet">
+
+  <style>
+  .form-horizontal .form-inline .form-group {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+  }
+
+   .select2-drop.select2-display-none.select2-with-searchbox.select2-drop-active {
+    margin-top: 0px !important;
+    /*border-top: 1px solid #eee;*/
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-left: 2px solid #bdc3c7;
+    border-right: 2px solid #bdc3c7;
+    border-bottom: 2px solid #bdc3c7;
+   }
+   .select2-container.select2-container-active.select2-dropdown-open > a{
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-top: 2px solid #bdc3c7;
+    border-left: 2px solid #bdc3c7;
+    border-right: 2px solid #bdc3c7;
+   }
+  .select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted > div {
+    border-radius: 0px !important;
+    background: inherit !important;
+  }
+  </style>
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <!-- end of Bootstrap -->
 </head>
 
-<body ng-app="KidoScrapper">
+<body ng-app="KidoScrapper" class="container-fluid">
+
     <div ng-view></div>
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="../../flat-ui/js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../../flat-ui/js/flat-ui.min.js"></script>
+    <script type="text/javascript" src="../../bundle.js"></script>
 </body>
 
 </html>

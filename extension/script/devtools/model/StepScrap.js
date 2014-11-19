@@ -20,7 +20,7 @@ module.exports = (function() {
     StepScrap.getDefaults = function(Site) {
         return {
             type: Site.TYPES.SCRAP,
-            name: '',
+            name: 'Scrap',
             fields: [Site.getDefaults(Site.TYPES.SELECTOR)]
         };
     };
@@ -37,20 +37,20 @@ module.exports = (function() {
 
     StepScrap.prototype.toCasper = function() {
         return Util.supplant.call(multiline(function() {
-            /*
-                casper.then(function() {
-                    var values = {};
-                    {{fields}}
-                    var result = [];
-                    Object.keys(values).forEach(function(key) {
-                        values[key].forEach(function(val, index) {
-                            result[index] = result[index] || {};
-                            result[index][key] = val;
-                        });
-                    });
-                    this.echo(JSON.stringify(result, null, 2));
-                });
-            */
+/*
+    casper.then(function() {
+        var values = {};
+{{fields}}
+        var result = [];
+        Object.keys(values).forEach(function(key) {
+            values[key].forEach(function(val, index) {
+                result[index] = result[index] || {};
+                result[index][key] = val;
+            });
+        });
+        this.echo(JSON.stringify(result, null, 2));
+    });
+*/
         }), {
             fields: this._fields.map(function(item) {
                 return item.toCasper();

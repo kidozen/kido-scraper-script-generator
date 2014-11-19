@@ -43,12 +43,12 @@ module.exports = (function() {
 
     StepForm.prototype.toCasper = function() {
         return Util.supplant.call(multiline(function() {
-            /*
-                casper.thenEvaluate(function() {
-                    {{selectors}}
-                });
-                {{submit}}
-            */
+/*
+    casper.thenEvaluate(function() {
+        {{selectors}}
+    });
+{{submit}}
+*/
         }), {
             selectors: this._selectors.map(function(item) {
                 return item.toCasper();

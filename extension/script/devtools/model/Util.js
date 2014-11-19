@@ -24,7 +24,7 @@ module.exports = (function() {
         return this.replace(/{{([^{}]*)}}/g,
             function(a, b) {
                 var r = o[b];
-                if (!r) return b;
+                if (!r) return '';
                 return typeof r === 'string' || typeof r === 'number' ? r : r.toString();
             }
         );
