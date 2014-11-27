@@ -2,14 +2,28 @@
   <li>Scrapper Generator</a></li>
   <li class="active"><a href="#/zero">My Projects</a></li>
 </ol>
-<a ng-click="addNewSite()" class="btn btn-primary">
-	<span class="fui-plus"></span>
-	Add New Project</a>
+<div class="row">
+	<div class="col-md-8">
+		<a ng-click="addNewSite()" class="btn btn-primary">
+			<span class="fui-plus"></span>
+			Add New Project</a>
 
-<table class="table">
-    <tr ng-repeat="s in sites">
-    	<td ng-click="open(s)">
-	        <a><label>{{ s.name }}</label></a>
-        </td>
-    </tr>
-</table>
+		<table class="table">
+		    <tr ng-repeat="s in sites">
+		    	<td ng-click="open(s)">
+			        <a><label>{{ s.name }}</label></a>
+		        </td>
+		    </tr>
+		</table>
+	</div>
+	<div class="col-md-4">
+		<div class="tile">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="(ie: https://your-company.kidocloud.com)" />
+				<hr>
+				<button ng-click="configure()" class="btn">Configure</button>
+			</div>
+		</div>
+	</div>
+</div>
+<pre>{{chrome}}</pre>

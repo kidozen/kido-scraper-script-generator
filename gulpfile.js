@@ -6,7 +6,6 @@ var connect = require('gulp-connect');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 
-var srcFiles = glob.sync('./extension/script/devtools/**/*.js');
 
 gulp.task('browserify', function() {
     return browserify('./extension/script/devtools/panel.js')
@@ -15,7 +14,8 @@ gulp.task('browserify', function() {
         .pipe(gulp.dest('./extension/'));
 });
 
-gulp.task('browserify-watch', function() {
+gulp.task('browserify-watch', ['browserify'], function() {
+	var srcFiles = glob.sync('./extension/script/devtools/**/*.js');
     gulp.watch(srcFiles, ['browserify']);
 });
 

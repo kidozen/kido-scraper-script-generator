@@ -1,4 +1,4 @@
-/* global $, window, console, angular */
+/* global $, chrome, window, console, angular */
 'use strict';
 require('angular');
 require('angular-route');
@@ -28,15 +28,42 @@ angular.module('KidoScrapper', ['ngRoute'])
     })
     .controller('ZeroController', function($scope, $location, KidoStorage) {
         $scope.sites = KidoStorage.get() || [];
+        $scope.appcenter = '';
+        $scope.chrome = {foo:'adsfa'};
+        console.log('loading zero controller');
         $scope.addNewSite = function() {
             $location.path('/one');
         };
         $scope.open = function(site) {
             $location.path('/two/' + site.name);
         };
-        $scope.export = function(site) {
-            console.log(site);
-            console.log(new Site(site).toCasper());
+        $scope.configure = function () {
+            alert('alert');
+            var tab,
+                count   = 0,
+                timeout = 60,
+                prefix  = 'Success payload=';
+
+            chrome.tabs.create({url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"}, function (t) {
+                tab = t;
+            });
+            function poll() {
+                if ((tab && tab.title || '').indexOf(prefix) === 0) {
+                    var token = tab.title.substr(prefix.length);
+                    saveToken(token);
+                    return;
+                }
+                if (count > timeout) {
+                    alert('fail!');
+                    return;
+                }
+                count++;
+                setInterval(poll, 1000);
+            }
+            poll();
+            function saveToken(token) {
+                console.log(token);
+            }
         };
     })
     .controller('OneController', function ($scope, $location, KidoStorage) {
@@ -91,6 +118,9 @@ angular.module('KidoScrapper', ['ngRoute'])
         };
         $scope.addScrap = function () {
             _addStep(Site.TYPES.SCRAP);
+        };
+        $scope.export = function (site) {
+            $location.path('/export/' + site.name);
         };
     })
     .controller('ThreeController', function($scope, $routeParams, $location, KidoStorage) {

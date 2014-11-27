@@ -11,6 +11,9 @@ kido-scraper-script-generator
 	Redirect to Site details (instead of Sites list). Done.
 	Add Cancel button logic. Done.
 	Validation in form
+- Site Details
+	Edit step
+	Delete Step
 - Add new Step 'scrap':
 	remove button throws error
 		TypeError: Cannot read property 'steps' of undefined
