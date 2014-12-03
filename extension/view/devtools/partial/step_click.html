@@ -1,6 +1,16 @@
-  <div class="form-group">
+<div class="form-group">
     <label for="name" class="col-md-2 control-label">Element</label>
+
     <div class="col-md-10">
-      <input ng-model="currentStep.key" class="form-control" placeholder="CSS Selector">
+        <div class="form-inline" role="form">
+            <button ng-click="selectSelector()" class="btn btn-info btn-sm">
+                Point it & Click it!
+            </button>
+            <div class="form-group">
+                <div class="input-group">
+                    <input ng-model="currentStep.key" class="form-control" placeholder="CSS Selector">
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+</div>

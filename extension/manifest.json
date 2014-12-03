@@ -1,28 +1,46 @@
 {
     "manifest_version": 2,
     "version": "0.0.1",
-    "name": "Kido Scrapper Script Generator",
-    "short_name": "Kido Scrapper",
+    "name": "Kido Scraper Script Generator",
+    "short_name": "Kido Scraper",
     "description": "KidoZen tool to build scripts for data extraction from websites",
     "permissions": ["<all_urls>", "tabs", "notifications", "storage", "unlimitedStorage", "downloads"],
     "icons": {},
     "browser_action": {
         "default_icon": {},
-        "default_title": "Kido Scrapper",
+        "default_title": "Kido Scraper",
         "default_popup": "view/popup.html"
     },
     "options_page": "view/options.html",
     "devtools_page": "view/devtools/init.html",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "background": {
-        "scripts": []
+        "scripts": [
+            "assets/jquery-2.0.3.js",
+            "script/devtools/ContentScript.js",
+            "script/devtools/ContentSelector.js",
+            "script/devtools/CssSelector.js",
+            "script/devtools/BackgroundScript.js",
+            "script/background_page/background_script.js"
+        ]
     },
     "web_accessible_resources": [],
-    "content_scripts": [{
-        "matches": ["*://*/*"],
-        "js": [
-            "bundle.js"
-        ],
-        "css": []
-    }]
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": [
+                "assets/jquery-2.0.3.js",
+                "script/devtools/ContentScript.js",
+                "script/devtools/ContentSelector.js",
+                "script/devtools/CssSelector.js",
+                "script/devtools/ElementQuery.js",
+                "script/devtools/BackgroundScript.js",
+                "script/content_script/content_script.js",
+                "bundle.js"
+            ],
+            "css": [
+                "script/content_script/content_script.css"
+            ]
+        }
+    ]
 }

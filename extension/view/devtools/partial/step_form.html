@@ -1,32 +1,48 @@
 <div class="form-group">
-  <label class="col-md-2 control-label">Fields</label>
-  <div class="col-md-10">
-    <button ng-click="addSelector()" class="btn btn-primary btn-sm">
-      <span class="fui-plus"></span>
-      Add Field</button>
-    <div ng-repeat="s in currentStep.selectors">
-      <div class="form-inline" role="form">
-        <div class="form-group">
-          <div class="input-group">
-            <label class="sr-only" for="selector">CSS Selector</label>
-            <input ng-model="s.key" class="form-control" placeholder="CSS Selector">
-          </div>
+    <label class="col-md-2 control-label">Fields</label>
+
+    <div class="col-md-10">
+        <button ng-click="addSelector()" class="btn btn-primary btn-sm">
+            <span class="fui-plus"></span>
+            Add Field
+        </button>
+        <div ng-repeat="s in currentStep.selectors">
+            <div class="form-inline" role="form">
+                <button ng-click="selectSelector($index)" class="btn btn-info btn-sm">
+                    Point it & Click it!
+                </button>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="sr-only" for="selector">CSS Selector</label>
+                        <input ng-model="s.key" class="form-control" placeholder="CSS Selector">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="value">Value</label>
+                    <input ng-model="s.value" class="form-control" placeholder="Enter Value">
+                </div>
+                <button ng-click="removeSelector($index)" class="btn btn-danger btn-sm">
+                    <span class="fui-cross"></span>
+                    Remove
+                </button>
+            </div>
         </div>
-        <div class="form-group">
-          <label class="sr-only" for="value">Value</label>
-          <input ng-model="s.value" class="form-control" placeholder="Enter Value">
-        </div>
-        <button ng-click="removeSelector($index)" class="btn btn-danger btn-sm">
-          <span class="fui-cross"></span>
-          Remove</button>
-      </div>
     </div>
-  </div>
-</div>
-<div class="form-group">
-  <label for="name" class="col-md-2 control-label">Submit Button</label>
-  <div class="col-md-10">
-    <input ng-model="currentStep.submit.key" class="form-control" placeholder="CSS Selector">
-  </div>
 </div>
 
+<div class="form-group">
+    <label for="name" class="col-md-2 control-label">Submit Button</label>
+
+    <div class="col-md-10">
+        <div class="form-inline" role="form">
+            <button ng-click="selectSelector(-1)" class="btn btn-info btn-sm">
+                Point it & Click it!
+            </button>
+            <div class="form-group">
+                <div class="input-group">
+                    <input ng-model="currentStep.submit.key" class="form-control" placeholder="CSS Selector">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

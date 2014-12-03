@@ -6,6 +6,7 @@ var Site = require('./model/Site');
 
 angular.module('KidoScrapper', ['ngRoute'])
     .factory('KidoStorage', function() {
+        console.log("Creating KidoStorage...");
         var collection = {};
         var factory = {};
 
@@ -26,10 +27,15 @@ angular.module('KidoScrapper', ['ngRoute'])
 
         return factory;
     })
+    .service('RunInCurrentTabContext', function() {
+        // This enables the Chrome extension to work also as a simple web app (for testing)
+        var haveToProxyCallsToInspectedPage = chrome && chrome.devtools;
+
+        return getContentScript(haveToProxyCallsToInspectedPage ? "DevTools" : "ContentScript");
+    })
     .controller('ZeroController', function($scope, $location, KidoStorage) {
         $scope.sites = KidoStorage.get() || [];
         $scope.appcenter = '';
-        $scope.chrome = {foo:'adsfa'};
         console.log('loading zero controller');
         $scope.addNewSite = function() {
             $location.path('/one');
@@ -38,15 +44,17 @@ angular.module('KidoScrapper', ['ngRoute'])
             $location.path('/two/' + site.name);
         };
         $scope.configure = function () {
-            alert('alert');
             var tab,
                 count   = 0,
                 timeout = 60,
                 prefix  = 'Success payload=';
 
-            chrome.tabs.create({url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"}, function (t) {
-                tab = t;
-            });
+            if (chrome && chrome.tabs) {
+                console.log("Chrome tabs are present!");
+                chrome.tabs.create({url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"}, function (t) {
+                    tab = t;
+                });
+            }
             function poll() {
                 if ((tab && tab.title || '').indexOf(prefix) === 0) {
                     var token = tab.title.substr(prefix.length);
@@ -60,10 +68,12 @@ angular.module('KidoScrapper', ['ngRoute'])
                 count++;
                 setInterval(poll, 1000);
             }
-            poll();
+
             function saveToken(token) {
                 console.log(token);
             }
+
+            if (chrome && chrome.tabs) { poll() };
         };
     })
     .controller('OneController', function ($scope, $location, KidoStorage) {
@@ -163,7 +173,7 @@ angular.module('KidoScrapper', ['ngRoute'])
             $scope.scriptVisible = true;
         };
     })
-    .directive('stepClick', function() {
+    .directive('stepClick', function(RunInCurrentTabContext) {
         return {
             restrict: 'E',
             scope: {
@@ -172,10 +182,23 @@ angular.module('KidoScrapper', ['ngRoute'])
             templateUrl: 'partial/step_click.html',
             link: function(scope) {
                 if (!scope.currentStep) throw 'stepClick directive needs a currentStep to work with';
+
+                scope.selectSelector = function() {
+                    console.log("Selecting selector for click!");
+                    var deferredSelector = RunInCurrentTabContext.selectSelector({
+                        parentCSSSelector: "",
+                        allowedElements: "*"
+                    });
+                    deferredSelector.done(function(retrievedCssSelector) {
+                        scope.$apply(function () {
+                            scope.currentStep.key = retrievedCssSelector.CSSSelector;
+                        });
+                    });
+                };
             }
         };
     })
-    .directive('stepForm', function() {
+    .directive('stepForm', function(RunInCurrentTabContext) {
         return {
             restrict: 'E',
             scope: {
@@ -184,8 +207,24 @@ angular.module('KidoScrapper', ['ngRoute'])
             templateUrl: 'partial/step_form.html',
             link: function(scope) {
                 if (!scope.currentStep) throw 'stepForm directive needs a currentStep to work with';
+
                 scope.addSelector = function() {
                     scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
+                };
+                scope.selectSelector = function(index) {
+                    var deferredSelector = RunInCurrentTabContext.selectSelector({
+                        parentCSSSelector: "",
+                        allowedElements: "*"
+                    });
+                    deferredSelector.done(function(retrievedCssSelector) {
+                        scope.$apply(function () {
+                            if (index === -1) {
+                                scope.currentStep.submit.key = retrievedCssSelector.CSSSelector;
+                            } else {
+                                scope.currentStep.selectors[index].key = retrievedCssSelector.CSSSelector;
+                            }
+                        });
+                    });
                 };
                 scope.removeSelector = function(index) {
                     scope.currentStep.selectors.splice(index, 1);
