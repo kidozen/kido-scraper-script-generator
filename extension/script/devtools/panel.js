@@ -36,7 +36,7 @@ angular.module('KidoScraper', ['ngRoute'])
     .controller('ZeroController', function($scope, $location, KidoStorage) {
         $scope.sites = KidoStorage.get() || [];
         $scope.appcenter = '';
-        console.log('loading zero controller');
+        console.log('Loading Zero Controller...');
         $scope.addNewSite = function() {
             $location.path('/one');
         };
@@ -76,7 +76,25 @@ angular.module('KidoScraper', ['ngRoute'])
             if (chrome && chrome.tabs) { poll() };
         };
     })
-    .controller('OneController', function ($scope, $location, KidoStorage) {
+    .controller('OneController', function ($scope, $location, KidoStorage, RunInCurrentTabContext) {
+        RunInCurrentTabContext
+            .getCurrentPageDetails()
+            .done(function (currentPageDetails) {
+                if (currentPageDetails) {
+                    var updateNameAndUrlWithCurrentPageData = function () {
+                        $scope.name = currentPageDetails.title;
+                        $scope.url = currentPageDetails.url;
+                    };
+                    var runningAsAnExtension = chrome && chrome.devtools;
+
+                    if (runningAsAnExtension) {
+                        $scope.$apply(updateNameAndUrlWithCurrentPageData);
+                    } else {
+                        updateNameAndUrlWithCurrentPageData();
+                    }
+                }
+            });
+
         $scope.create = function() {
             $scope.name = $scope.name ? $scope.name.toLowerCase() : '';
             if (!$scope.name || !$scope.url) {

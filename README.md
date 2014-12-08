@@ -18,12 +18,10 @@ kido-scraper-script-generator
 
 #To-Do:
 
-- Should the help be on the left hand side? (Western) Readers usually  go from left to right.
-- On "New Site" --> use current site name and URL.
-- New Site: "Go" button to navigate to URL.
+- **\[DONE\]** On "New Site" --> use current site name and URL.
+- (Nice to have) New Site: "Go" button to navigate to URL.
 - Add new Step 'form':
-	- Submit button: what if there's no button ?
-		* Enter
+	- (Nice to have) Submit button: what if there's no button? Put a checkbox for sending an "enter"?
 	- **\[DONE\]** Redirect to Site details (instead of Sites list).
 	- **\[DONE\]** Add Cancel button logic.
 	- Validation in form

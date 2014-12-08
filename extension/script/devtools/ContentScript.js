@@ -3,6 +3,15 @@
  */
 var ContentScript = {
 
+	getCurrentPageDetails: function() {
+
+		var deferredResponse = $.Deferred();
+		var href = $(location).attr('href');
+		var title = $(document).attr('title');
+		deferredResponse.resolve({title: title, url:href});
+		return deferredResponse.promise();
+	},
+
 	/**
 	 * Fetch
 	 * @param request.CSSSelector	css selector as string
