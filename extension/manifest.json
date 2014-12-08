@@ -5,7 +5,13 @@
     "short_name": "Kido Scraper",
     "description": "KidoZen tool to build scripts for data extraction from websites",
     "permissions": ["<all_urls>", "tabs", "notifications", "storage", "unlimitedStorage", "downloads"],
-    "icons": {},
+    "icons": {
+        "16": "assets/images/icon16.png",
+        "19": "assets/images/icon19.png",
+        "38": "assets/images/icon38.png",
+        "48": "assets/images/icon48.png",
+        "128": "assets/images/icon128.png"
+    },
     "browser_action": {
         "default_icon": {},
         "default_title": "Kido Scraper",
