@@ -18,7 +18,7 @@ describe('Site', function() {
             expect(Site.TYPES.CLICK).to.be.equal('click');
             expect(Site.TYPES.FORM).to.be.equal('form');
             expect(Site.TYPES.FORM_SELECTOR).to.be.equal('form_selector');
-            expect(Site.TYPES.SCRAP).to.be.equal('scrap');
+            expect(Site.TYPES.SCRAPE).to.be.equal('scrape');
             expect(Site.TYPES.SELECTOR).to.be.equal('selector');
         });
 
@@ -81,9 +81,9 @@ describe('Site', function() {
             });
         });
 
-        it('should provide defaults for scrap', function() {
-            expect(Site.getDefaults(Site.TYPES.SCRAP)).to.deep.equal({
-                type: Site.TYPES.SCRAP,
+        it('should provide defaults for scrape', function() {
+            expect(Site.getDefaults(Site.TYPES.SCRAPE)).to.deep.equal({
+                type: Site.TYPES.SCRAPE,
                 name: '',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
@@ -226,8 +226,8 @@ describe('Site', function() {
                 key: 'button.ml-btn'
             }
         }, {
-            type: Site.TYPES.SCRAP,
-            name: 'Scrap',
+            type: Site.TYPES.SCRAPE,
+            name: 'Scrape',
             fields: [{
                 type: Site.TYPES.SELECTOR,
                 name: 'description',

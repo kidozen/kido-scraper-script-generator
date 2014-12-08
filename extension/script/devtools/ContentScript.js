@@ -77,8 +77,6 @@ var ContentScript = {
  * @returns ContentScript
  */
 var getContentScript = function(location) {
-	console.log("Inside getContentScript for location " + location);
-
 	var contentScript;
 
 	// Handle calls from different places

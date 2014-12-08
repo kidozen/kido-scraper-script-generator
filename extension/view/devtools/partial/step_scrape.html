@@ -1,0 +1,38 @@
+<div class="form-group">
+    <label class="col-md-2 control-label">Fields</label>
+
+    <div class="col-md-10">
+        <button ng-click="addField()" class="btn btn-primary btn-sm">
+            <span class="fui-plus"></span>
+            Add Field
+        </button>
+        <div ng-repeat="f in currentStep.fields">
+            <div class="form-inline" role="form">
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="sr-only" for="selector">Name</label>
+                        <input ng-model="f.name" class="form-control" placeholder="Field Name">
+                    </div>
+                </div>
+                <button ng-click="selectSelector($index)" class="btn btn-info btn-sm">
+                    Point it & Click it!
+                </button>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="sr-only" for="selector">CSS Selector</label>
+                        <input ng-model="f.key" class="form-control" placeholder="CSS Selector">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="value">Attribute</label>
+                    <select class="form-control select select-primary" select2 ng-model="f.attr"
+                            ng-options="a.id as a.name for a in attrs"></select>
+                </div>
+                <button ng-click="removeField($index)" class="btn btn-danger btn-sm">
+                    <span class="fui-cross"></span>
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

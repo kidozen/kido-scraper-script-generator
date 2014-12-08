@@ -24,15 +24,15 @@ kido-scraper-script-generator
 - Add new Step 'form':
 	- Submit button: what if there's no button ?
 		* Enter
-	- Redirect to Site details (instead of Sites list). Done.
-	- Add Cancel button logic. Done.
+	- **\[DONE\]** Redirect to Site details (instead of Sites list).
+	- **\[DONE\]** Add Cancel button logic.
 	- Validation in form
 - Site Details
 	- Edit step
 	- Delete Step
 - Add new Step 'scrape':
-	- remove button throws error: `TypeError: Cannot read property 'steps' of undefined`
+	- If the user attempts to scrape without having specified steps first, an error is thrown: `TypeError: Cannot read property 'steps' of undefined`
 	- add more attributes
 - Export
-	- Display code in a \<pre\>. Done.
+	- **\[DONE\]** Display code in a \<pre\>.
 - Reuse the navigation header (breadcrumb) somehow.

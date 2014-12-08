@@ -4,20 +4,20 @@ var multiline = require('multiline');
 var Util = require('../extension/script/devtools/model/Util');
 var Step = require('../extension/script/devtools/model/Step');
 var Site = require('../extension/script/devtools/model/Site');
-var StepScrap = require('../extension/script/devtools/model/StepScrap');
+var StepScrape = require('../extension/script/devtools/model/StepScrape');
 var StepSelector = require('../extension/script/devtools/model/StepSelector');
 
-describe('StepScrap', function() {
+describe('StepScrape', function() {
 
     it('should exist', function() {
-        expect(StepScrap).to.exist;
+        expect(StepScrape).to.exist;
     });
 
     describe('static methods', function() {
 
         it('should provide defaults', function() {
-            expect(StepScrap.getDefaults(Site)).to.deep.equal({
-                type: Site.TYPES.SCRAP,
+            expect(StepScrape.getDefaults(Site)).to.deep.equal({
+                type: Site.TYPES.SCRAPE,
                 name: '',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
@@ -34,8 +34,8 @@ describe('StepScrap', function() {
 
         it('should create an instance', function() {
             var options = {
-                type: Site.TYPES.SCRAP,
-                name: 'test scrap',
+                type: Site.TYPES.SCRAPE,
+                name: 'test scrape',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: 'test-brand',
@@ -48,9 +48,9 @@ describe('StepScrap', function() {
                     attr: StepSelector.ATTRS.TEXT
                 }]
             };
-            var step = new StepScrap(Site, options);
+            var step = new StepScrape(Site, options);
             expect(step).to.be.an.instanceof(Step);
-            expect(step).to.be.an.instanceof(StepScrap);
+            expect(step).to.be.an.instanceof(StepScrape);
             expect(step.toJson).to.exist;
             expect(step.toCasper).to.exist;
             expect(step)
@@ -77,22 +77,22 @@ describe('StepScrap', function() {
 
         it('should throw with no arguments', function() {
             var func = function() {
-                return new StepScrap(Site);
+                return new StepScrape(Site);
             };
             expect(func).to.throw('The "step" argument is required');
         });
 
         it('should throw with empty object', function() {
             var func = function() {
-                return new StepScrap(Site, {});
+                return new StepScrape(Site, {});
             };
             expect(func).to.throw('The "step.type" property is required');
         });
 
         it('should throw with no type property', function() {
             var func = function() {
-                return new StepScrap(Site, {
-                    name: 'test scrap',
+                return new StepScrape(Site, {
+                    name: 'test scrape',
                     fields: []
                 });
             };
@@ -101,9 +101,9 @@ describe('StepScrap', function() {
 
         it('should throw with invalid type property', function() {
             var func = function() {
-                return new StepScrap(Site, {
+                return new StepScrape(Site, {
                     type: 'invalid type',
-                    name: 'test scrap',
+                    name: 'test scrape',
                     fields: []
                 });
             };
@@ -112,8 +112,8 @@ describe('StepScrap', function() {
 
         it('should not throw with no name property', function() {
             var func = function() {
-                return new StepScrap(Site, {
-                    type: Site.TYPES.SCRAP,
+                return new StepScrape(Site, {
+                    type: Site.TYPES.SCRAPE,
                     fields: []
                 });
             };
@@ -122,9 +122,9 @@ describe('StepScrap', function() {
 
         it('should throw with no fields property', function() {
             var func = function() {
-                return new StepScrap(Site, {
-                    type: Site.TYPES.SCRAP,
-                    name: 'test scrap'
+                return new StepScrape(Site, {
+                    type: Site.TYPES.SCRAPE,
+                    name: 'test scrape'
                 });
             };
             expect(func).to.throw('The "step.fields" property must be an array');
@@ -132,9 +132,9 @@ describe('StepScrap', function() {
 
         it('should throw if the fields property is not an array', function() {
             var func = function() {
-                return new StepScrap(Site, {
-                    type: Site.TYPES.SCRAP,
-                    name: 'test scrap',
+                return new StepScrape(Site, {
+                    type: Site.TYPES.SCRAPE,
+                    name: 'test scrape',
                     fields: {}
                 });
             };
@@ -147,8 +147,8 @@ describe('StepScrap', function() {
 
         it('should convert to json', function() {
             var options = {
-                type: Site.TYPES.SCRAP,
-                name: 'test scrap',
+                type: Site.TYPES.SCRAPE,
+                name: 'test scrape',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: 'test-brand',
@@ -161,7 +161,7 @@ describe('StepScrap', function() {
                     attr: StepSelector.ATTRS.TEXT
                 }]
             };
-            var step = new StepScrap(Site, options).toJson();
+            var step = new StepScrape(Site, options).toJson();
             expect(step).to.have.property('type', options.type);
             expect(step).to.have.property('name', options.name);
             expect(step.fields).to.be.an('array');
@@ -187,8 +187,8 @@ describe('StepScrap', function() {
 
         it('should convert to casper', function() {
             var options = {
-                type: Site.TYPES.SCRAP,
-                name: 'test scrap',
+                type: Site.TYPES.SCRAPE,
+                name: 'test scrape',
                 fields: [{
                     type: Site.TYPES.SELECTOR,
                     name: 'test-brand',
@@ -228,7 +228,7 @@ describe('StepScrap', function() {
                     });
                 */
             }));
-            var step = new StepScrap(Site, options);
+            var step = new StepScrape(Site, options);
             expect(Util.clean.call(step.toCasper())).to.equal(casper);
         });
 

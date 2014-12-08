@@ -4,7 +4,7 @@ var Util = require('./Util');
 var StepClick = require('./StepClick');
 var StepForm = require('./StepForm');
 var StepFormSelector = require('./StepFormSelector');
-var StepScrap = require('./StepScrap');
+var StepScrape = require('./StepScrape');
 var StepSelector = require('./StepSelector');
 
 module.exports = (function() {
@@ -24,8 +24,8 @@ module.exports = (function() {
                     return new StepForm(Site, item);
                 case Site.TYPES.FORM_SELECTOR:
                     return new StepFormSelector(Site, item);
-                case Site.TYPES.SCRAP:
-                    return new StepScrap(Site, item);
+                case Site.TYPES.SCRAPE:
+                    return new StepScrape(Site, item);
                 case Site.TYPES.SELECTOR:
                     return new StepSelector(Site, item);
             }
@@ -36,7 +36,7 @@ module.exports = (function() {
         CLICK: 'click',
         FORM: 'form',
         FORM_SELECTOR: 'form_selector',
-        SCRAP: 'scrap',
+        SCRAPE: 'scrape',
         SELECTOR: 'selector'
     };
 
@@ -48,8 +48,8 @@ module.exports = (function() {
                 return StepForm;
             case Site.TYPES.FORM_SELECTOR:
                 return StepFormSelector;
-            case Site.TYPES.SCRAP:
-                return StepScrap;
+            case Site.TYPES.SCRAPE:
+                return StepScrape;
             case Site.TYPES.SELECTOR:
                 return StepSelector;
             case undefined:

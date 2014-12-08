@@ -4,7 +4,7 @@ require('angular');
 require('angular-route');
 var Site = require('./model/Site');
 
-angular.module('KidoScrapper', ['ngRoute'])
+angular.module('KidoScraper', ['ngRoute'])
     .factory('KidoStorage', function() {
         console.log("Creating KidoStorage...");
         var collection = {};
@@ -108,7 +108,7 @@ angular.module('KidoScrapper', ['ngRoute'])
             id: Site.TYPES.CLICK,
             name: 'Click'
         }, {
-            id: Site.TYPES.SCRAP,
+            id: Site.TYPES.SCRAPE,
             name: 'Scrap'
         }];
         $scope.stepType = $scope.types[0].id;
@@ -126,8 +126,8 @@ angular.module('KidoScrapper', ['ngRoute'])
         $scope.addClickEvent = function () {
             _addStep(Site.TYPES.CLICK);
         };
-        $scope.addScrap = function () {
-            _addStep(Site.TYPES.SCRAP);
+        $scope.addScrape = function () {
+            _addStep(Site.TYPES.SCRAPE);
         };
         $scope.export = function (site) {
             $location.path('/export/' + site.name);
@@ -141,7 +141,7 @@ angular.module('KidoScrapper', ['ngRoute'])
         $scope.currentStep = Site.getDefaults($routeParams.type);
         $scope.isForm = $scope.currentStep.type === Site.TYPES.FORM;
         $scope.isClick = $scope.currentStep.type === Site.TYPES.CLICK;
-        $scope.isScrap = $scope.currentStep.type === Site.TYPES.SCRAP;
+        $scope.isScrape = $scope.currentStep.type === Site.TYPES.SCRAPE;
         $scope.submit = function() {
             try {
                 Site.validateStep($scope.currentStep);
@@ -184,16 +184,13 @@ angular.module('KidoScrapper', ['ngRoute'])
                 if (!scope.currentStep) throw 'stepClick directive needs a currentStep to work with';
 
                 scope.selectSelector = function() {
-                    console.log("Selecting selector for click!");
-                    var deferredSelector = RunInCurrentTabContext.selectSelector({
-                        parentCSSSelector: "",
-                        allowedElements: "*"
-                    });
-                    deferredSelector.done(function(retrievedCssSelector) {
-                        scope.$apply(function () {
-                            scope.currentStep.key = retrievedCssSelector.CSSSelector;
+                    RunInCurrentTabContext
+                        .selectSelector({parentCSSSelector: "", allowedElements: "*"})
+                        .done(function (retrievedCssSelector) {
+                            scope.$apply(function () {
+                                scope.currentStep.key = retrievedCssSelector.CSSSelector;
+                            });
                         });
-                    });
                 };
             }
         };
@@ -212,19 +209,17 @@ angular.module('KidoScrapper', ['ngRoute'])
                     scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
                 };
                 scope.selectSelector = function(index) {
-                    var deferredSelector = RunInCurrentTabContext.selectSelector({
-                        parentCSSSelector: "",
-                        allowedElements: "*"
-                    });
-                    deferredSelector.done(function(retrievedCssSelector) {
-                        scope.$apply(function () {
-                            if (index === -1) {
-                                scope.currentStep.submit.key = retrievedCssSelector.CSSSelector;
-                            } else {
-                                scope.currentStep.selectors[index].key = retrievedCssSelector.CSSSelector;
-                            }
+                    RunInCurrentTabContext
+                        .selectSelector({parentCSSSelector: "", allowedElements: "*"})
+                        .done(function (retrievedCssSelector) {
+                            scope.$apply(function () {
+                                if (index === -1) {
+                                    scope.currentStep.submit.key = retrievedCssSelector.CSSSelector;
+                                } else {
+                                    scope.currentStep.selectors[index].key = retrievedCssSelector.CSSSelector;
+                                }
+                            });
                         });
-                    });
                 };
                 scope.removeSelector = function(index) {
                     scope.currentStep.selectors.splice(index, 1);
@@ -232,15 +227,15 @@ angular.module('KidoScrapper', ['ngRoute'])
             }
         };
     })
-    .directive('stepScrap', function() {
+    .directive('stepScrape', function(RunInCurrentTabContext) {
         return {
             restrict: 'E',
             scope: {
                 currentStep: '='
             },
-            templateUrl: 'partial/step_scrap.html',
+            templateUrl: 'partial/step_scrape.html',
             link: function(scope) {
-                if (!scope.currentStep) throw 'stepScrap directive needs a currentStep to work with';
+                if (!scope.currentStep) throw 'stepScrape directive needs a currentStep to work with';
                 var ATTRS = Site.getConstructor(Site.TYPES.SELECTOR).ATTRS;
                 scope.attrs = [{
                     id: ATTRS.TEXT,
@@ -248,6 +243,19 @@ angular.module('KidoScrapper', ['ngRoute'])
                 }];
                 scope.addField = function() {
                     scope.currentStep.fields.push(Site.getDefaults(Site.TYPES.SELECTOR));
+                };
+                scope.selectSelector = function(index) {
+                    console.log("Selecting selector for index " + index);
+                    console.log(JSON.stringify(scope.currentStep.fields));
+                    RunInCurrentTabContext
+                        .selectSelector({parentCSSSelector: "", allowedElements: "*"})
+                        .done(
+                            function (retrievedCssSelector) {
+                                scope.$apply(function () {
+                                    scope.currentStep.fields[index].key = retrievedCssSelector.CSSSelector;
+                                });
+                            }
+                        );
                 };
                 scope.removeField = function(index) {
                     scope.currentStep.fields.splice(index, 1);

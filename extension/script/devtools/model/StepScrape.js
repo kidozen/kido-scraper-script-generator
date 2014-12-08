@@ -6,7 +6,7 @@ var StepSelector = require('./StepSelector');
 
 module.exports = (function() {
 
-    function StepScrap(Site, step) {
+    function StepScrape(Site, step) {
         Step.call(this, Site, step);
         if (!Array.isArray(step.fields)) throw 'The "step.fields" property must be an array';
         this._fields = step.fields.map(function(item) {
@@ -14,20 +14,20 @@ module.exports = (function() {
         });
     }
 
-    StepScrap.prototype = Object.create(Step.prototype);
-    StepScrap.prototype._fields = [];
+    StepScrape.prototype = Object.create(Step.prototype);
+    StepScrape.prototype._fields = [];
 
-    StepScrap.getDefaults = function(Site) {
+    StepScrape.getDefaults = function(Site) {
         return {
-            type: Site.TYPES.SCRAP,
-            name: 'Scrap',
+            type: Site.TYPES.SCRAPE,
+            name: 'Scrape',
             fields: [Site.getDefaults(Site.TYPES.SELECTOR)]
         };
     };
 
-    StepScrap.prototype.toJson = function() {
+    StepScrape.prototype.toJson = function() {
         return {
-            type: this._Site.TYPES.SCRAP,
+            type: this._Site.TYPES.SCRAPE,
             name: this._name,
             fields: this._fields.map(function(item) {
                 return item.toJson();
@@ -35,7 +35,7 @@ module.exports = (function() {
         };
     };
 
-    StepScrap.prototype.toCasper = function() {
+    StepScrape.prototype.toCasper = function() {
         return Util.supplant.call(multiline(function() {
 /*
     casper.then(function() {
@@ -58,6 +58,6 @@ module.exports = (function() {
         });
     };
 
-    return StepScrap;
+    return StepScrape;
 
 })();
