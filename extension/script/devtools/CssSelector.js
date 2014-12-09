@@ -9,7 +9,7 @@ var CssSelector = function (options) {
 	this.enableResultStripping = true;
 	this.enableSmartTableSelector = false;
 	this.ignoredClasses = [];
-    this.allowMultipleSelectors = false;
+	this.allowMultipleSelectors = false;
 	this.query = function (selector) {
 		return me.parent.querySelectorAll(selector);
 	};
