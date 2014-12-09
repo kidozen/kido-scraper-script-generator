@@ -3,26 +3,49 @@
 require('angular');
 require('angular-route');
 var Site = require('./model/Site');
+var ChromeSyncStorage = require('./storage/ChromeSyncStorage');
+var InMemoryStorage = require('./storage/InMemoryStorage');
+
+//alert('hola');
+//chrome.storage.sync.clear(function() {
+//    alert('Storage cleared');
+//});
+//
+//chrome.storage.sync.set({'key': 'value'}, function() {
+//    alert('Dummy item set');
+//
+//    chrome.storage.sync.get('key', function (item) {
+//        alert("dummy item: " + item);
+//    });
+//});
+//
+//chrome.storage.sync.get('key', function (item) {
+//    alert("dummy item (from outside): " + item);
+//});
 
 angular.module('KidoScraper', ['ngRoute'])
     .factory('KidoStorage', function() {
         console.log("Creating KidoStorage...");
-        var collection = {};
+
+        var storage;
         var factory = {};
 
+        if (chrome && chrome.storage) {
+            alert("Running as an extension...");
+            storage = new ChromeSyncStorage();
+        } else {
+            alert("Running as a regular web app (for testing)...");
+            storage = new InMemoryStorage();
+        }
         factory.store = function(key, value) {
-            collection[key] = new Site(value);
+            alert("Storing " + key + "/" + value);
+            storage.store(key, new Site(value));
         };
 
-        factory.get = function(key) {
-            if (key) {
-                return collection[key] ? collection[key].toJson() : undefined;
-            }
-            return Object
-                .keys(collection)
-                .map(function(item) {
-                    return collection[item].toJson();
-                });
+        factory.get = function(cb, key) {
+            alert("Callback " + cb);
+            alert("Key " + key);
+            return storage.get(cb, key);
         };
 
         return factory;
@@ -33,48 +56,66 @@ angular.module('KidoScraper', ['ngRoute'])
 
         return getContentScript(haveToProxyCallsToInspectedPage ? "DevTools" : "ContentScript");
     })
-    .controller('ZeroController', function($scope, $location, KidoStorage) {
-        $scope.sites = KidoStorage.get() || [];
-        $scope.appcenter = '';
-        console.log('Loading Zero Controller...');
-        $scope.addNewSite = function() {
-            $location.path('/one');
-        };
-        $scope.open = function(site) {
-            $location.path('/two/' + site.name);
-        };
-        $scope.configure = function () {
-            var tab,
-                count   = 0,
-                timeout = 60,
-                prefix  = 'Success payload=';
+    .controller('ZeroController', function ($scope, $location, KidoStorage) {
+        alert("About to call get all");
 
-            if (chrome && chrome.tabs) {
-                console.log("Chrome tabs are present!");
-                chrome.tabs.create({url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"}, function (t) {
-                    tab = t;
-                });
-            }
-            function poll() {
-                if ((tab && tab.title || '').indexOf(prefix) === 0) {
-                    var token = tab.title.substr(prefix.length);
-                    saveToken(token);
-                    return;
-                }
-                if (count > timeout) {
-                    alert('fail!');
-                    return;
-                }
-                count++;
-                setInterval(poll, 1000);
-            }
+        KidoStorage.get(function (allSites) {
+            alert("Returned with all these sites! " + allSites);
 
-            function saveToken(token) {
-                console.log(token);
-            }
+            var updateVariables = function () {
+                $scope.sites = allSites;
+                $scope.appcenter = '';
+                alert('Loading Zero Controller...');
+                $scope.addNewSite = function () {
+                    $location.path('/one');
+                };
+                $scope.open = function (site) {
+                    $location.path('/two/' + site.name);
+                };
+                $scope.configure = function () {
+                    var tab,
+                        count = 0,
+                        timeout = 60,
+                        prefix = 'Success payload=';
 
-            if (chrome && chrome.tabs) { poll() };
-        };
+                    if (chrome && chrome.tabs) {
+                        alert("Chrome tabs are present!");
+                        chrome.tabs.create({url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"}, function (t) {
+                            tab = t;
+                        });
+                    }
+                    function poll() {
+                        if ((tab && tab.title || '').indexOf(prefix) === 0) {
+                            var token = tab.title.substr(prefix.length);
+                            saveToken(token);
+                            return;
+                        }
+                        if (count > timeout) {
+                            alert('fail!');
+                            return;
+                        }
+                        count++;
+                        setInterval(poll, 1000);
+                    }
+
+                    function saveToken(token) {
+                        alert(token);
+                    }
+
+                    if (chrome && chrome.tabs) {
+                        poll()
+                    }
+                };
+            };
+
+            var runningAsAnExtension = chrome && chrome.devtools;
+
+            if (runningAsAnExtension) {
+                $scope.$apply(updateVariables);
+            } else {
+                updateVariables();
+            }
+        });
     })
     .controller('OneController', function ($scope, $location, KidoStorage, RunInCurrentTabContext) {
         RunInCurrentTabContext
@@ -100,14 +141,16 @@ angular.module('KidoScraper', ['ngRoute'])
             if (!$scope.name || !$scope.url) {
                 return window.alert('name and url are required');
             }
-            if (KidoStorage.get($scope.name)) {
-                return window.alert('name already in use');
-            }
-            var site = Site.getDefaults();
-            site.name = $scope.name;
-            site.url = $scope.url;
-            KidoStorage.store($scope.name, site);
-            $location.path('/two/' + $scope.name);
+            KidoStorage.get(function(value) {
+                if (value) {
+                    return window.alert('name already in use');
+                }
+                var site = Site.getDefaults();
+                site.name = $scope.name;
+                site.url = $scope.url;
+                KidoStorage.store($scope.name, site);
+                $location.path('/two/' + $scope.name);
+            }, $scope.name);
         };
         $scope.cancel = function() {
             $scope.name = '';
@@ -130,66 +173,73 @@ angular.module('KidoScraper', ['ngRoute'])
             name: 'Scrap'
         }];
         $scope.stepType = $scope.types[0].id;
-        $scope.site = KidoStorage.get($routeParams.name);
-        $scope.site.steps = $scope.site.steps || [];
-        function _addStep(type) {
-            $location.path('/three/' + $routeParams.name + '/' + type);
-        }
-        $scope.addStep = function() {
-            _addStep($scope.stepType);
-        };
-        $scope.addCompleteForm = function () {
-            _addStep(Site.TYPES.FORM);
-        };
-        $scope.addClickEvent = function () {
-            _addStep(Site.TYPES.CLICK);
-        };
-        $scope.addScrape = function () {
-            _addStep(Site.TYPES.SCRAPE);
-        };
-        $scope.export = function (site) {
-            $location.path('/export/' + site.name);
-        };
+        KidoStorage.get(function(aSite) {
+            $scope.site = aSite;
+            $scope.site.steps = $scope.site.steps || [];
+
+            function _addStep(type) {
+                $location.path('/three/' + $routeParams.name + '/' + type);
+            }
+            $scope.addStep = function() {
+                _addStep($scope.stepType);
+            };
+            $scope.addCompleteForm = function () {
+                _addStep(Site.TYPES.FORM);
+            };
+            $scope.addClickEvent = function () {
+                _addStep(Site.TYPES.CLICK);
+            };
+            $scope.addScrape = function () {
+                _addStep(Site.TYPES.SCRAPE);
+            };
+            $scope.export = function (site) {
+                $location.path('/export/' + site.name);
+            };
+        }, $routeParams.name);
     })
     .controller('ThreeController', function($scope, $routeParams, $location, KidoStorage) {
         if (!$routeParams.name || !$routeParams.type) {
             return $location.path('/');
         }
-        $scope.site = KidoStorage.get($routeParams.name);
-        $scope.currentStep = Site.getDefaults($routeParams.type);
-        $scope.isForm = $scope.currentStep.type === Site.TYPES.FORM;
-        $scope.isClick = $scope.currentStep.type === Site.TYPES.CLICK;
-        $scope.isScrape = $scope.currentStep.type === Site.TYPES.SCRAPE;
-        $scope.submit = function() {
-            try {
-                Site.validateStep($scope.currentStep);
-            } catch (exception) {
-                return window.alert(exception.toString());
-            }
-            $scope.site.steps.push($scope.currentStep);
-            KidoStorage.store($routeParams.name, $scope.site);
-            $location.path('/two/' + $scope.site.name);
-        };
-        $scope.cancel = function () {
-            $location.path('/two/' + $scope.site.name);
-        };
+        KidoStorage.get(function(aSite) {
+            $scope.site = aSite;
+            $scope.currentStep = Site.getDefaults($routeParams.type);
+            $scope.isForm = $scope.currentStep.type === Site.TYPES.FORM;
+            $scope.isClick = $scope.currentStep.type === Site.TYPES.CLICK;
+            $scope.isScrape = $scope.currentStep.type === Site.TYPES.SCRAPE;
+            $scope.submit = function() {
+                try {
+                    Site.validateStep($scope.currentStep);
+                } catch (exception) {
+                    return window.alert(exception.toString());
+                }
+                $scope.site.steps.push($scope.currentStep);
+                KidoStorage.store($routeParams.name, $scope.site);
+                $location.path('/two/' + $scope.site.name);
+            };
+            $scope.cancel = function () {
+                $location.path('/two/' + $scope.site.name);
+            };
+        }, $routeParams.name);
     })
     .controller('ExportController', function ($scope, $routeParams, $location, KidoStorage) {
         if (!$routeParams.name) {
             return $location.path('/');
         }
-        $scope.site = KidoStorage.get($routeParams.name);
-        $scope.json = JSON.stringify($scope.site, 0, 4);
-        $scope.script = new Site($scope.site).toCasper();
-        $scope.scriptVisible = true;
-        $scope.showJson = function () {
-            $scope.jsonVisible = true;
-            $scope.scriptVisible = false;
-        };
-        $scope.showScript = function () {
-            $scope.jsonVisible = false;
+        KidoStorage.get(function(aSite) {
+            $scope.site = aSite;
+            $scope.json = JSON.stringify($scope.site, 0, 4);
+            $scope.script = new Site($scope.site).toCasper();
             $scope.scriptVisible = true;
-        };
+            $scope.showJson = function () {
+                $scope.jsonVisible = true;
+                $scope.scriptVisible = false;
+            };
+            $scope.showScript = function () {
+                $scope.jsonVisible = false;
+                $scope.scriptVisible = true;
+            };
+        }, $routeParams.name);
     })
     .directive('stepClick', function(RunInCurrentTabContext) {
         return {
@@ -263,17 +313,15 @@ angular.module('KidoScraper', ['ngRoute'])
                     scope.currentStep.fields.push(Site.getDefaults(Site.TYPES.SELECTOR));
                 };
                 scope.selectSelector = function(index) {
-                    console.log("Selecting selector for index " + index);
-                    console.log(JSON.stringify(scope.currentStep.fields));
                     RunInCurrentTabContext
                         .selectSelector({parentCSSSelector: "", allowedElements: "*"})
                         .done(
-                            function (retrievedCssSelector) {
-                                scope.$apply(function () {
-                                    scope.currentStep.fields[index].key = retrievedCssSelector.CSSSelector;
-                                });
-                            }
-                        );
+                        function (retrievedCssSelector) {
+                            scope.$apply(function () {
+                                scope.currentStep.fields[index].key = retrievedCssSelector.CSSSelector;
+                            });
+                        }
+                    );
                 };
                 scope.removeField = function(index) {
                     scope.currentStep.fields.splice(index, 1);
