@@ -289,7 +289,10 @@ angular.module('KidoScraper', ['ngRoute'])
             }
         };
     })
-    .config(function($routeProvider) {
+    .config(function($routeProvider, $compileProvider) {
+        $compileProvider
+            .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);
+
         $routeProvider
             .when('/zero', {
                 templateUrl: 'partial/zero.html',
