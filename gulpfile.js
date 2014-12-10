@@ -6,9 +6,20 @@ var connect = require('gulp-connect');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 
+var basePath = './extension/script/devtools';
 
 gulp.task('browserify', function() {
-    return browserify('./extension/script/devtools/panel.js')
+    // The order here is important!
+    return browserify([basePath + '/panel.js',
+                       basePath + '/controllers/ZeroController.js',
+                       basePath + '/controllers/OneController.js',
+                       basePath + '/controllers/TwoController.js',
+                       basePath + '/controllers/ThreeController.js',
+                       basePath + '/controllers/ExportController.js',
+                       basePath + '/directives/StepClickDirective.js',
+                       basePath + '/directives/StepFormDirective.js',
+                       basePath + '/directives/StepScrapeDirective.js',
+                       basePath + '/directives/Select2Directive.js'])
         .bundle()
         .pipe(source('bundle.js'))
         .pipe(gulp.dest('./extension/'));
