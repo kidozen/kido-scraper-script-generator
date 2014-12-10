@@ -8,14 +8,14 @@
         </button>
         <div ng-repeat="s in currentStep.selectors">
             <div class="form-inline" role="form">
-                <button ng-click="selectSelector($index)" class="btn btn-info btn-sm">
-                    Point it & Click it!
-                </button>
                 <div class="form-group">
-                    <div class="input-group">
-                        <label class="sr-only" for="selector">CSS Selector</label>
-                        <input ng-model="s.key" class="form-control" placeholder="CSS Selector">
-                    </div>
+                    <button ng-click="selectSelector($index)" class="btn btn-info btn-sm">
+                        Select it!
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="selector">CSS Selector</label>
+                    <input ng-model="s.key" class="form-control" placeholder="CSS Selector">
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="value">Value</label>
@@ -36,13 +36,9 @@
     <div class="col-md-10">
         <div class="form-inline" role="form">
             <button ng-click="selectSelector(-1)" class="btn btn-info btn-sm">
-                Point it & Click it!
+                Select it!
             </button>
-            <div class="form-group">
-                <div class="input-group">
-                    <input ng-model="currentStep.submit.key" class="form-control" placeholder="CSS Selector">
-                </div>
-            </div>
+            <input ng-model="currentStep.submit.key" class="form-control" placeholder="CSS Selector" style="width:92.6%;float:right">
         </div>
     </div>
 </div>
