@@ -1,11 +1,46 @@
+var prefix = 'Success payload=';
+var auth_key_in_storage = 'token';
+
 /**
  * ContentScript that can be called from anywhere within the extension
  */
 var BackgroundScript = {
 
-	dummy: function() {
+	getAuthToken: function () {
+		var deferredResponse = $.Deferred();
 
-		return $.Deferred().resolve("dummy").promise();
+		chrome.storage.sync.get(auth_key_in_storage, function(token) {
+			if (token && token[auth_key_in_storage]) {
+				deferredResponse.resolve(token);
+				return;
+			} else {
+				chrome.tabs.create(
+					{url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"},
+					function (t) {
+						var authTokenGrabber = function(tabId, changeInfo, tab) {
+							if (tabId === t.id) {
+								if ((tab && tab.title || '').indexOf(prefix) === 0) {
+									var token = tab.title.substr(prefix.length);
+									deferredResponse.resolve(token);
+									var saveObject = {};
+									saveObject[auth_key_in_storage] = token;
+									chrome.storage.sync.set(saveObject, function () {
+										if (chrome.runtime.lasterror) {
+											console.error(chrome.runtime.lasterror.message);
+										}
+									});
+									chrome.tabs.onUpdated.removeListener(authTokenGrabber);
+									chrome.tabs.remove(tab.id);
+									return;
+								}
+							}
+						};
+						chrome.tabs.onUpdated.addListener(authTokenGrabber);
+					}
+				);
+			}
+		});
+		return deferredResponse.promise();
 	},
 
 	/**
