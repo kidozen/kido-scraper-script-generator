@@ -2,10 +2,14 @@
 'use strict';
 require('angular');
 require('angular-route');
-require('./modules/storage');
-var Site = require('./model/Site');
+require('./modules/kidoStorage');
+require('./modules/auth');
 
-angular.module('KidoScraper', ['ngRoute', 'storage'])
+// TODO Get rid of this
+Function.prototype.toJSON = function() { return "<function>" };
+
+//TODO Could we require modules only on the places where we actually use them?
+angular.module('KidoScraper', ['ngRoute', 'kidoStorage', 'auth'])
     .config(function ($routeProvider, $compileProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);

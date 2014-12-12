@@ -4,13 +4,13 @@ var Site = require('../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ExportController', function ($scope, $routeParams, $location, KidoStorage) {
+    angular.module('KidoScraper').controller('ExportController', function ($scope, $routeParams, $location, kidoStorage) {
         console.log('Loading Export Controller...');
 
         if (!$routeParams.name) {
             return $location.path('/');
         }
-        $scope.site = KidoStorage.get($routeParams.name);
+        $scope.site = kidoStorage.get($routeParams.name);
         $scope.json = JSON.stringify($scope.site, 0, 4);
         $scope.script = new Site($scope.site).toCasper();
         $scope.scriptVisible = true;

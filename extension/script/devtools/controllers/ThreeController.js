@@ -4,13 +4,13 @@ var Site = require('../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ThreeController', function ($scope, $routeParams, $location, KidoStorage) {
+    angular.module('KidoScraper').controller('ThreeController', function ($scope, $routeParams, $location, kidoStorage) {
         console.log('Loading Three Controller...');
 
         if (!$routeParams.name || !$routeParams.type) {
             return $location.path('/');
         }
-        $scope.site = KidoStorage.get($routeParams.name);
+        $scope.site = kidoStorage.get($routeParams.name);
         $scope.currentStep = Site.getDefaults($routeParams.type);
         $scope.isForm = $scope.currentStep.type === Site.TYPES.FORM;
         $scope.isClick = $scope.currentStep.type === Site.TYPES.CLICK;
@@ -22,7 +22,7 @@ module.exports = (function () {
                 return window.alert(exception.toString());
             }
             $scope.site.steps.push($scope.currentStep);
-            KidoStorage.store($routeParams.name, $scope.site);
+            kidoStorage.store($routeParams.name, $scope.site);
             $location.path('/two/' + $scope.site.name);
         };
         $scope.cancel = function () {

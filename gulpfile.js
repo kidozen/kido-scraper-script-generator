@@ -12,7 +12,7 @@ gulp.task('browserify', function() {
     // The order here is important!
     return browserify([basePath + '/panel.js',
                        basePath + '/services/RunInCurrentTabContext.js',
-                       basePath + '/services/RunInBackgroundScript.js',
+                       basePath + '/services/RuntimeEnvironment.js',
                        basePath + '/controllers/ZeroController.js',
                        basePath + '/controllers/OneController.js',
                        basePath + '/controllers/TwoController.js',

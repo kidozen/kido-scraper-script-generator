@@ -3,124 +3,124 @@
  */
 var ContentScript = {
 
-	getCurrentPageDetails: function() {
+    getCurrentPageDetails: function () {
 
-		var deferredResponse = $.Deferred();
-		var href = $(location).attr('href');
-		var title = $(document).attr('title');
-		deferredResponse.resolve({title: title, url:href});
-		return deferredResponse.promise();
-	},
+        var deferredResponse = $.Deferred();
+        var href = $(location).attr('href');
+        var title = $(document).attr('title');
+        deferredResponse.resolve({title: title, url: href});
+        return deferredResponse.promise();
+    },
 
-	/**
-	 * Fetch
-	 * @param request.CSSSelector	css selector as string
-	 * @returns $.Deferred()
-	 */
-	getHTML: function(request) {
+    /**
+     * Fetch
+     * @param request.CSSSelector    css selector as string
+     * @returns $.Deferred()
+     */
+    getHTML: function (request) {
 
-		var deferredHTML = $.Deferred();
-		var html = $(request.CSSSelector).clone().wrap('<p>').parent().html();
-		deferredHTML.resolve(html);
-		return deferredHTML.promise();
-	},
+        var deferredHTML = $.Deferred();
+        var html = $(request.CSSSelector).clone().wrap('<p>').parent().html();
+        deferredHTML.resolve(html);
+        return deferredHTML.promise();
+    },
 
-	/**
-	 * Removes current content selector if is in use within the page
-	 * @returns $.Deferred()
-	 */
-	removeCurrentContentSelector: function() {
+    /**
+     * Removes current content selector if is in use within the page
+     * @returns $.Deferred()
+     */
+    removeCurrentContentSelector: function () {
 
-		var deferredResponse = $.Deferred();
-		var contentSelector = window.cs;
-		if(contentSelector === undefined) {
-			deferredResponse.resolve();
-		}
-		else {
-			contentSelector.removeGUI();
-			window.cs = undefined;
-			deferredResponse.resolve();
-		}
+        var deferredResponse = $.Deferred();
+        var contentSelector = window.cs;
+        if (contentSelector === undefined) {
+            deferredResponse.resolve();
+        } else {
+            contentSelector.removeGUI();
+            window.cs = undefined;
+            deferredResponse.resolve();
+        }
 
-		return deferredResponse.promise();
-	},
+        return deferredResponse.promise();
+    },
 
-	/**
-	 * Select elements within the page
-	 * @param request.parentCSSSelector
-	 * @param request.allowedElements
-	 */
-	selectSelector: function(request) {
+    /**
+     * Select elements within the page
+     * @param request.parentCSSSelector
+     * @param request.allowedElements
+     */
+    selectSelector: function (request) {
 
-		var deferredResponse = $.Deferred();
+        var deferredResponse = $.Deferred();
 
-		this.removeCurrentContentSelector().done(function() {
+        this.removeCurrentContentSelector().done(function () {
 
-			var contentSelector = new ContentSelector({
-				parentCSSSelector: request.parentCSSSelector,
-				allowedElements: request.allowedElements
-			});
-			window.cs = contentSelector;
+            var contentSelector = new ContentSelector({
+                parentCSSSelector: request.parentCSSSelector,
+                allowedElements: request.allowedElements
+            });
+            window.cs = contentSelector;
 
-			var deferredCSSSelector = contentSelector.getCSSSelector();
-			deferredCSSSelector.done(function(response) {
-				this.removeCurrentContentSelector().done(function(){
-					deferredResponse.resolve(response);
-					window.cs = undefined;
-				}.bind(this));
-			}.bind(this)).fail(function(message) {
-				deferredResponse.reject(message);
-				window.cs = undefined;
-			}.bind(this));
+            var deferredCSSSelector = contentSelector.getCSSSelector();
+            deferredCSSSelector.done(function (response) {
+                this.removeCurrentContentSelector().done(function () {
+                    deferredResponse.resolve(response);
+                    window.cs = undefined;
+                }.bind(this));
+            }.bind(this)).fail(function (message) {
+                deferredResponse.reject(message);
+                window.cs = undefined;
+            }.bind(this));
 
-		}.bind(this));
+        }.bind(this));
 
-		return deferredResponse.promise();
-	}
+        return deferredResponse.promise();
+    }
 };
 
 /**
  *
- * @param location	configure from where the content script is being accessed (ContentScript, BackgroundPage, DevTools)
- * @param backgroundScript	BackgroundScript client
+ * @param location    configure from where the content script is being accessed (ContentScript, BackgroundPage, DevTools)
  * @returns ContentScript
  */
-var getContentScript = function(location) {
-	var contentScript;
+var getContentScript = function (location) {
+    var contentScript;
 
-	// Handle calls from different places
-	if(location === "ContentScript") {
-		contentScript = ContentScript;
-		contentScript.backgroundScript = getBackgroundScript("ContentScript");
-		return contentScript;
-	}
-	else if(location === "BackgroundScript" || location === "DevTools") {
+    // Handle calls from different places
+    if (location === "ContentScript") {
+        contentScript = ContentScript;
+        contentScript.backgroundScript = getBackgroundScript("ContentScript");
+        return contentScript;
+    } else if (location === "BackgroundScript" || location === "DevTools") {
 
-		var backgroundScript = getBackgroundScript(location);
+        var backgroundScript = getBackgroundScript(location);
 
-		// if called within background script proxy calls to content script
-		contentScript = {};
-			Object.keys(ContentScript).forEach(function(attr) {
-			if(typeof ContentScript[attr] === 'function') {
-				contentScript[attr] = function(request) {
+        // if called within background script proxy calls to content script
+        contentScript = {};
+        Object.keys(ContentScript).forEach(function (attr) {
+            if (typeof ContentScript[attr] === 'function') {
+                console.log("backgroundScript is: " + backgroundScript);
+                contentScript[attr] = proxyInvocationOfFunctionUsing(attr, backgroundScript);
+            } else {
+                contentScript[attr] = ContentScript[attr];
+            }
+        });
+        contentScript.backgroundScript = backgroundScript;
+        return contentScript;
+    } else {
+        throw "Invalid ContentScript initialization - " + location;
+    }
+};
 
-					var reqToContentScript = {
-						contentScriptCall: true,
-						fn: attr,
-						request: request
-					};
-
-					return backgroundScript.executeContentScript(reqToContentScript);
-				};
-			}
-			else {
-				contentScript[attr] = ContentScript[attr];
-			}
-		});
-		contentScript.backgroundScript = backgroundScript;
-		return contentScript;
-	}
-	else {
-		throw "Invalid ContentScript initialization - " + location;
-	}
+var proxyInvocationOfFunctionUsing = function (aFunction, backgroundScript) {
+    // if called within background script proxy calls to content script
+    alert("[Content Script] Context is: " + JSON.stringify(backgroundScript, null, 2));
+    return function (request) {
+        var reqToContentScript = {
+            contentScriptCall: true,
+            fn: aFunction,
+            request: request
+        };
+        return backgroundScript.executeContentScript(reqToContentScript);
+    };
 };

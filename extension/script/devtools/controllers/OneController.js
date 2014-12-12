@@ -4,7 +4,7 @@ var Site = require('../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('OneController', function ($scope, $location, KidoStorage, RunInCurrentTabContext) {
+    angular.module('KidoScraper').controller('OneController', function ($scope, $location, kidoStorage, RunInCurrentTabContext) {
         console.log('Loading One Controller...');
         RunInCurrentTabContext
             .getCurrentPageDetails()
@@ -29,13 +29,13 @@ module.exports = (function () {
             if (!$scope.name || !$scope.url) {
                 return window.alert('name and url are required');
             }
-            if (KidoStorage.get($scope.name)) {
+            if (kidoStorage.get($scope.name)) {
                 return window.alert('name already in use');
             }
             var site = Site.getDefaults();
             site.name = $scope.name;
             site.url = $scope.url;
-            KidoStorage.store($scope.name, site);
+            kidoStorage.store($scope.name, site);
             $location.path('/two/' + $scope.name);
         };
         $scope.cancel = function () {

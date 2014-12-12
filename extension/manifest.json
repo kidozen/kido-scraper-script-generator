@@ -23,10 +23,15 @@
     "background": {
         "scripts": [
             "assets/jquery-2.0.3.js",
+            "assets/angular.js",
             "script/devtools/ContentScript.js",
             "script/devtools/ContentSelector.js",
             "script/devtools/CssSelector.js",
             "script/devtools/BackgroundScript.js",
+            "script/devtools/modules/inMemoryStorage.js",
+            "script/devtools/modules/chromeStorage.js",
+            "script/devtools/modules/kidoStorage.js",
+            "script/devtools/modules/auth.js",
             "script/background_page/background_script.js"
         ]
     },

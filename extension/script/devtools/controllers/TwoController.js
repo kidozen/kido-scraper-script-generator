@@ -4,7 +4,7 @@ var Site = require('../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('TwoController', function ($scope, $routeParams, $location, KidoStorage) {
+    angular.module('KidoScraper').controller('TwoController', function ($scope, $routeParams, $location, kidoStorage) {
         console.log('Loading Two Controller...');
 
         if (!$routeParams.name) {
@@ -21,7 +21,7 @@ module.exports = (function () {
             name: 'Scrap'
         }];
         $scope.stepType = $scope.types[0].id;
-        $scope.site = KidoStorage.get($routeParams.name);
+        $scope.site = kidoStorage.get($routeParams.name);
         $scope.site.steps = $scope.site.steps || [];
         function _addStep(type) {
             $location.path('/three/' + $routeParams.name + '/' + type);
