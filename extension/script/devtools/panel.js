@@ -2,10 +2,13 @@
 'use strict';
 require('angular');
 require('angular-route');
-require('./modules/storage');
 var Site = require('./model/Site');
 
-angular.module('KidoScraper', ['ngRoute', 'storage'])
+// TODO Get rid of this
+Function.prototype.toJSON = function() { return "<function>" };
+
+angular.module('KidoScraper', ['ngRoute'])
+    .constant('runningAsAnExtension', chrome && (chrome.devtools || chrome.tabs))
     .config(function ($routeProvider, $compileProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);

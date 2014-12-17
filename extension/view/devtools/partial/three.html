@@ -1,29 +1,30 @@
 <ol class="breadcrumb">
-  <li>Scraper Generator</a></li>
-  <li><a href="#/zero">My Projects</a></li>
-  <li><a href="#/two/{{site.name}}">{{site.name}}</a></li>
-  <li class="active">{{ currentStep.type }}</li>
+    <li>Scraper Generator</a></li>
+    <li><a href="#/zero">My Projects</a></li>
+    <li><a href="#/two/{{site.name}}">{{site.name}}</a></li>
+    <li class="active">{{ currentStep.type }}</li>
 </ol>
 <div class="row">
-  <div class="col-md-10">
-    <div class="form-horizontal">
-      <div class="form-group">
-        <label for="name" class="col-md-2 control-label">Name</label>
-        <div class="col-md-10">
-          <input ng-model="currentStep.name" class="form-control" placeholder="Name">
+    <div class="col-md-10">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="name" class="col-md-2 control-label">Name</label>
+
+                <div class="col-md-10">
+                    <input ng-model="currentStep.name" class="form-control" placeholder="Name">
+                </div>
+            </div>
+
+            <step-form current-step="currentStep" ng-show="isForm"></step-form>
+            <step-click current-step="currentStep" ng-show="isClick"></step-click>
+            <step-scrape current-step="currentStep" ng-show="isScrape"></step-scrape>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-click="submit()" class="btn btn-primary">Save</button>
+                    <button ng-click="cancel()" class="btn">Cancel</button>
+                </div>
+            </div>
         </div>
-      </div>
-
-			<step-form  current-step="currentStep" ng-show="isForm" ></step-form>
-			<step-click current-step="currentStep" ng-show="isClick"></step-click>
-			<step-scrape current-step="currentStep" ng-show="isScrape"></step-scrape>
-
-      <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-          <button ng-click="submit()" class="btn btn-primary">Save</button>
-          <button ng-click="cancel()" class="btn">Cancel</button>
-          </div>
-      </div>
     </div>
-  </div>
 </div>

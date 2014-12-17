@@ -3,30 +3,28 @@ require('angular');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ZeroController', function ($scope, $location, KidoStorage, RunInBackgroundScript) {
+    angular.module('KidoScraper').controller('ZeroController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Zero Controller...');
-        $scope.sites = KidoStorage.get() || [];
-        $scope.appcenter = '';
-        $scope.addNewSite = function () {
-            $location.path('/one');
-        };
-        $scope.open = function (site) {
-            $location.path('/two/' + site.name);
-        };
-        $scope.configure = function () {
-            RunInBackgroundScript.getAuthToken().done(function (token) {
+        RunInBackgroundScript.getFromLocalStorage(null).done(function(allSites) {
+            AngularScope.apply($scope,  function () {
+                $scope.sites = allSites;
+                $scope.appcenter = '';
 
-                var doSomethingWithToken = function () {
-                    alert("From ZeroController, token: " + token);
+                $scope.addNewSite = function () {
+                    $location.path('/one');
                 };
-                var runningAsAnExtension = chrome && chrome.devtools;
+                $scope.open = function (site) {
+                    $location.path('/two/' + site.name);
+                };
+                $scope.configure = function () {
+                    RunInBackgroundScript.getAuthToken().done(function (token) {
 
-                if (runningAsAnExtension) {
-                    $scope.$apply(doSomethingWithToken);
-                } else {
-                    doSomethingWithToken();
-                }
+                        AngularScope.apply($scope, function () {
+                            alert("Retrieved token: " + token);
+                        });
+                    });
+                };
             });
-        };
+        })
     })
 })();

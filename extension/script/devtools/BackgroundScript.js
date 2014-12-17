@@ -1,6 +1,28 @@
 var prefix = 'Success payload=';
 var auth_key_in_storage = 'token';
 
+var haveAccessToChromeStorageAPI = chrome && chrome.storage;
+
+var collection = {};
+var inMemoryDb = {};
+
+inMemoryDb.store = function (key, value) {
+	collection[key] = value;
+};
+
+inMemoryDb.get = function (key) {
+	if (key) {
+		return collection[key] ? collection[key] : undefined;
+	}
+	var allValues = Object.keys(collection).map(function (item) {
+		return item === 'token' ? null: collection[item];
+	});
+	allValues = allValues ? allValues.filter(function (val) {
+		return val !== null;
+	}) : [];
+	return allValues;
+};
+
 /**
  * ContentScript that can be called from anywhere within the extension
  */
@@ -40,6 +62,54 @@ var BackgroundScript = {
 				);
 			}
 		});
+		return deferredResponse.promise();
+	},
+
+	getFromLocalStorage: function (key) {
+		var deferredResponse = $.Deferred();
+
+		if (haveAccessToChromeStorageAPI) {
+			chrome.storage.sync.get(key, function (value) {
+				if (key) {
+					// Single element
+					deferredResponse.resolve(value ? value[key] : undefined);
+				} else {
+					// Multiple elements
+					var allValues = Object.keys(value).map(function (item) {
+						// TODO Improve this poor man's logic
+						return item === 'token' ? null: value[item];
+					});
+					allValues = allValues ? allValues.filter(function (val) {
+						return val !== null;
+					}) : [];
+					deferredResponse.resolve(allValues);
+				}
+			});
+		} else {
+			deferredResponse.resolve(inMemoryDb.get(key));
+		}
+		return deferredResponse.promise();
+	},
+
+	setInLocalStorage: function (keyValueRq) {
+		var deferredResponse = $.Deferred();
+
+		if (haveAccessToChromeStorageAPI) {
+			var objectToSave = {};
+			objectToSave[keyValueRq.key] = keyValueRq.value;
+			chrome.storage.sync.set(objectToSave, function () {
+				if (chrome.runtime.lasterror) {
+					alert("Error when saving value in local storage: " + chrome.runtime.lasterror.message);
+					deferredResponse.reject(chrome.runtime.lasterror.message);
+				} else {
+					deferredResponse.resolve();
+				}
+			});
+
+		} else {
+			deferredResponse.resolve(inMemoryDb.store(keyValueRq.key, keyValueRq.value));
+		}
+
 		return deferredResponse.promise();
 	},
 

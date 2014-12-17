@@ -23,12 +23,9 @@ module.exports = (function () {
                     scope.currentStep.fields.push(Site.getDefaults(Site.TYPES.SELECTOR));
                 };
                 scope.selectSelector = function (index) {
-                    console.log("Selecting selector for index " + index);
-                    console.log(JSON.stringify(scope.currentStep.fields));
                     RunInCurrentTabContext
                         .selectSelector({parentCSSSelector: "", allowedElements: "*"})
-                        .done(
-                        function (retrievedCssSelector) {
+                        .done(function (retrievedCssSelector) {
                             scope.$apply(function () {
                                 scope.currentStep.fields[index].key = retrievedCssSelector.CSSSelector;
                             });

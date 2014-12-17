@@ -11,6 +11,7 @@ var basePath = './extension/script/devtools';
 gulp.task('browserify', function() {
     // The order here is important!
     return browserify([basePath + '/panel.js',
+                       basePath + '/services/AngularScope.js',
                        basePath + '/services/RunInCurrentTabContext.js',
                        basePath + '/services/RunInBackgroundScript.js',
                        basePath + '/controllers/ZeroController.js',
