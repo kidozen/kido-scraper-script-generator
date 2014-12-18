@@ -13,32 +13,39 @@ module.exports = (function () {
         RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function (siteAsJson) {
             AngularScope.apply($scope, function () {
                 $scope.site = siteAsJson;
-                $scope.currentStep = Site.getDefaults($routeParams.type);
-                alert("$scope.currentStep = ");
-                alert(JSON.stringify($scope.currentStep, null, 2));
-                $scope.isForm = $scope.currentStep.type === Site.TYPES.FORM;
-                $scope.isClick = $scope.currentStep.type === Site.TYPES.CLICK;
-                $scope.isScrape = $scope.currentStep.type === Site.TYPES.SCRAPE;
-                $scope.submit = function () {
-                    try {
-                        Site.validateStep($scope.currentStep);
-                    } catch (exception) {
-                        return window.alert(exception.toString());
-                    }
-                    $scope.site.steps.push($scope.currentStep);
-
-                    RunInBackgroundScript.setInLocalStorage({
-                        key: $routeParams.name, value: new Site($scope.site).toJson()
-                    }).done(function () {
-                        AngularScope.apply($scope, function () {
-                            $location.path('/two/' + $scope.site.name);
-                        });
-                    });
-                };
-                $scope.cancel = function () {
-                    $location.path('/two/' + $scope.site.name);
-                };
             });
         });
+        $scope.currentStep = Site.getDefaults($routeParams.type);
+        $scope.isForm = $scope.currentStep.type === Site.TYPES.FORM;
+        $scope.isClick = $scope.currentStep.type === Site.TYPES.CLICK;
+        $scope.isScrape = $scope.currentStep.type === Site.TYPES.SCRAPE;
+
+        $scope.submit = function () {
+            try {
+                Site.validateStep($scope.currentStep);
+            } catch (exception) {
+                return alert(exception.toString());
+            }
+            if (!$scope.site) {
+                alert("$scope.site is required!");
+                return;
+            }
+            $scope.site.steps.push($scope.currentStep);
+
+            RunInBackgroundScript.setInLocalStorage({
+                key: $routeParams.name, value: new Site($scope.site).toJson()
+            }).done(function () {
+                AngularScope.apply($scope, function () {
+                    $location.path('/two/' + $scope.site.name);
+                });
+            });
+        };
+        $scope.cancel = function () {
+            if (!$scope.site) {
+                alert("$scope.site is required!");
+                return;
+            }
+            $location.path('/two/' + $scope.site.name);
+        };
     })
 })();

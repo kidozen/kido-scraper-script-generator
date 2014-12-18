@@ -4,11 +4,7 @@ require('angular');
 require('angular-route');
 var Site = require('./model/Site');
 
-// TODO Get rid of this
-Function.prototype.toJSON = function() { return "<function>" };
-
 angular.module('KidoScraper', ['ngRoute'])
-    .constant('runningAsAnExtension', chrome && (chrome.devtools || chrome.tabs))
     .config(function ($routeProvider, $compileProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);

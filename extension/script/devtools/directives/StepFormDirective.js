@@ -5,7 +5,7 @@ var Site = require('../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').directive('stepForm', function (RunInCurrentTabContext) {
+    angular.module('KidoScraper').directive('stepForm', function (RunInCurrentTabContext, AngularScope) {
         return {
             restrict: 'E',
             scope: {
@@ -22,7 +22,7 @@ module.exports = (function () {
                     RunInCurrentTabContext
                         .selectSelector({parentCSSSelector: "", allowedElements: "*"})
                         .done(function (retrievedCssSelector) {
-                            scope.$apply(function () {
+                            AngularScope.apply(scope, function () {
                                 if (index === -1) {
                                     scope.currentStep.submit.key = retrievedCssSelector.CSSSelector;
                                 } else {

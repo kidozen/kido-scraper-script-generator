@@ -1,21 +1,20 @@
-chrome.runtime.onMessage.addListener(
-	function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
-		console.log("chrome.runtime.onMessage", request);
+        console.log("chrome.runtime.onMessage", request);
 
-		// Universal ContentScript communication handler
-		if(request.contentScriptCall) {
+        // Universal ContentScript communication handler
+        if (request.contentScriptCall) {
 
-			var contentScript = getContentScript("ContentScript");
+            var contentScript = getContentScript("ContentScript");
 
-			console.log("received ContentScript request", request);
+            console.log("received ContentScript request", request);
 
-			var deferredResponse = contentScript[request.fn](request.request);
-			deferredResponse.done(function(response) {
-				sendResponse(response);
-			});
+            var deferredResponse = contentScript[request.fn](request.request);
+            deferredResponse.done(function (response) {
+                sendResponse(response);
+            });
 
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 );

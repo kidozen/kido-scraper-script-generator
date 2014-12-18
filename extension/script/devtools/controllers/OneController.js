@@ -19,13 +19,13 @@ module.exports = (function () {
                         $scope.create = function () {
                             $scope.name = $scope.name ? $scope.name.toLowerCase() : '';
                             if (!$scope.name || !$scope.url) {
-                                return window.alert('name and url are required');
+                                return alert('name and url are required');
                             }
                             RunInBackgroundScript.getFromLocalStorage($scope.name).done(function (existingSite) {
 
                                 AngularScope.apply($scope, function () {
                                     if (existingSite) {
-                                        return window.alert('name already in use');
+                                        return alert('name already in use');
                                     }
                                     var site = Site.getDefaults();
                                     site.name = $scope.name;

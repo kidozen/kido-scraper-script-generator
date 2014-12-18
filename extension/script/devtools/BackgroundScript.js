@@ -1,6 +1,7 @@
 var prefix = 'Success payload=';
 var auth_key_in_storage = 'token';
 
+// TODO This does not work when running as a web application, refactor!
 var haveAccessToChromeStorageAPI = chrome && chrome.storage;
 
 var collection = {};
@@ -34,7 +35,6 @@ var BackgroundScript = {
 		chrome.storage.sync.get(auth_key_in_storage, function(token) {
 			if (token && token[auth_key_in_storage]) {
 				deferredResponse.resolve(token);
-				return;
 			} else {
 				chrome.tabs.create(
 					{url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"},
@@ -53,7 +53,6 @@ var BackgroundScript = {
 									});
 									chrome.tabs.onUpdated.removeListener(authTokenGrabber);
 									chrome.tabs.remove(tab.id);
-									return;
 								}
 							}
 						};

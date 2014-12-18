@@ -4,7 +4,7 @@ require('angular');
 module.exports = (function () {
 
     angular.module('KidoScraper')
-        .service('AngularScope', function (/*runningAsAnExtension*/) {
+        .service('AngularScope', function () {
             var service = {};
 
             // This enables the Chrome extension to work also as a simple web app (for testing)

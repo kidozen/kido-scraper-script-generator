@@ -5,7 +5,7 @@ module.exports = (function () {
 
     angular.module('KidoScraper')
         .service('RunInBackgroundScript', function () {
-            return getBackgroundScript(chrome && chrome.devtools ? "DevTools" : (chrome && chrome.tabs ? "BackgroundScript" : "ContentScript"));
+            return getBackgroundScript(chrome && !chrome.tabs ? (chrome && chrome.storage ? "DevTools" : "ContentScript") : "BackgroundScript");
         }
     );
 })();

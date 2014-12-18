@@ -5,6 +5,7 @@ module.exports = (function () {
 
     angular.module('KidoScraper').controller('ZeroController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Zero Controller...');
+
         RunInBackgroundScript.getFromLocalStorage(null).done(function(allSites) {
             AngularScope.apply($scope,  function () {
                 $scope.sites = allSites;
