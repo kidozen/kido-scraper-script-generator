@@ -29,36 +29,91 @@ inMemoryDb.get = function (key) {
  */
 var BackgroundScript = {
 
-	getAuthToken: function () {
-		var deferredResponse = $.Deferred();
+	decodeToken: function (token) {
+		var decodedToken = $.base64.decode(token);
 
-		chrome.storage.sync.get(auth_key_in_storage, function(token) {
-			if (token && token[auth_key_in_storage]) {
-				deferredResponse.resolve(token);
-			} else {
-				chrome.tabs.create(
-					{url: "https://auth-qa.kidozen.com/v1/armonia/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"},
-					function (t) {
-						var authTokenGrabber = function(tabId, changeInfo, tab) {
-							if (tabId === t.id) {
-								if ((tab && tab.title || '').indexOf(prefix) === 0) {
-									var token = tab.title.substr(prefix.length);
-									deferredResponse.resolve(token);
-									var saveObject = {};
-									saveObject[auth_key_in_storage] = token;
-									chrome.storage.sync.set(saveObject, function () {
-										if (chrome.runtime.lasterror) {
-											console.error(chrome.runtime.lasterror.message);
-										}
-									});
-									chrome.tabs.onUpdated.removeListener(authTokenGrabber);
-									chrome.tabs.remove(tab.id);
-								}
+		var parsedToken = decodedToken.split(",")[1].substr('{"access_token":"'.length - 1);
+
+		parsedToken = parsedToken.substr(0, parsedToken.length - 1); // remove trailing "
+
+		// TODO Re-instate this code when we solve the problem of the tab title being truncated by Google Chrome
+		//var parsedToken = JSON.parse(decodedToken).access_token;
+
+		console.log("Decoded token: " + parsedToken);
+
+		return parsedToken;
+	},
+
+	fetchANewToken: function () {
+		var deferredResponse = $.Deferred();
+		var self = this;
+
+		//TODO Take this URL from a web-service and store it in local storage, rather than having it hardcoded here.
+		chrome.tabs.create(
+			{url: "https://auth-qa.kidozen.com/v1/contoso/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"},
+			function (t) {
+				var authTokenGrabber = function (tabId, changeInfo, tab) {
+					if (tabId === t.id) {
+						if ((tab && tab.title || '').indexOf(prefix) === 0) {
+
+							var token = tab.title.substr(prefix.length);
+
+							try {
+								var accessToken = self.decodeToken(token);
+								deferredResponse.resolve(accessToken);
+
+								var saveRequest = {};
+								saveRequest["key"] = auth_key_in_storage;
+								saveRequest["value"] = accessToken;
+
+								self.setInLocalStorage(saveRequest);
+								chrome.tabs.onUpdated.removeListener(authTokenGrabber);
+								chrome.tabs.remove(tab.id);
+
+							} catch (err) {
+								var errorMsg = "Problem while attempting to retrieve auth token: " + err;
+								deferredResponse.reject(errorMsg);
+								alert(errorMsg);
 							}
-						};
-						chrome.tabs.onUpdated.addListener(authTokenGrabber);
+						}
 					}
-				);
+				};
+				chrome.tabs.onUpdated.addListener(authTokenGrabber);
+			}
+		);
+		return deferredResponse.promise();
+	},
+
+	getAuthToken: function (marketplaceURL) {
+		//TODO Use marketplaceURL
+
+		var deferredResponse = $.Deferred();
+		var self = this;
+
+		self.getFromLocalStorage(auth_key_in_storage).done(function (accessToken) {
+			if (accessToken) {
+				try {
+					var headers = {};
+					headers["Authorization"] = accessToken;
+
+					$.ajax({url: "https://contoso.local.kidozen.com/api/admin/services", headers: headers})
+						.done(function (data) {
+							alert("Previous access token is valid, returning it straight away...");
+
+							alert("Currently running services: " + JSON.stringify(data, null, 2));
+							deferredResponse.resolve(accessToken);
+						}).fail(function(jqXHR) {
+							var errorDetail = JSON.parse(jqXHR.responseText).error;
+							alert("Previous access token is invalid (" + jqXHR.status + " / " + errorDetail + "). Fetching a new one...");
+							self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
+						});
+				} catch (error) {
+					alert("Unable to parse existing token (" + error + "). Fetching a new one...");
+					self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
+				}
+			} else {
+				alert("Token not present in local storage. Fetching a new one...");
+				self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
 			}
 		});
 		return deferredResponse.promise();

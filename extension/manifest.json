@@ -23,6 +23,7 @@
     "background": {
         "scripts": [
             "assets/jquery-2.0.3.js",
+            "assets/jquery.base64.min.js",
             "script/devtools/ContentScript.js",
             "script/devtools/ContentSelector.js",
             "script/devtools/CssSelector.js",

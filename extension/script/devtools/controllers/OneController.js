@@ -42,14 +42,15 @@ module.exports = (function () {
                                 });
                             });
                         };
-                        $scope.cancel = function () {
-                            $scope.name = '';
-                            $scope.url = '';
-                            return $location.path('/');
-                        };
                     });
                 }
-            });
+            }
+        );
+        $scope.cancel = function () {
+            $scope.name = '';
+            $scope.url = '';
+            return $location.path('/');
+        };
     })
 })
 ();
