@@ -7,7 +7,7 @@ module.exports = (function () {
         console.log('Loading Zero Controller...');
 
         RunInBackgroundScript.getFromLocalStorage(null).done(function(allSites) {
-            AngularScope.apply($scope,  function () {
+            AngularScope.apply($scope, function () {
                 $scope.sites = allSites;
                 $scope.appcenter = '';
 
@@ -18,10 +18,11 @@ module.exports = (function () {
                     $location.path('/two/' + site.name);
                 };
                 $scope.configure = function () {
-                    RunInBackgroundScript.getAuthToken().done(function (token) {
+                    //TODO Validate whether this is a valid URL or not
+                    RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
 
                         AngularScope.apply($scope, function () {
-                            alert("Retrieved token: " + token);
+                            //TODO Do something with the token...
                         });
                     });
                 };
