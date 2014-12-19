@@ -1,3 +1,11 @@
+.two-cols-column-long {
+    width: 90%;
+}
+
+.two-cols-column-short {
+    width: 10%;
+}
+
 .form-horizontal .form-inline .form-group {
     margin-left: 0px;
     margin-right: 0px;

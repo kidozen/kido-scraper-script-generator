@@ -14,19 +14,17 @@ module.exports = (function () {
                 $scope.addNewSite = function () {
                     $location.path('/one');
                 };
-                $scope.open = function (site) {
-                    $location.path('/two/' + site.name);
-                };
-                $scope.configure = function () {
-                    //TODO Validate whether this is a valid URL or not
-                    RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
-
+                $scope.deleteSite = function (index) {
+                    RunInBackgroundScript.deleteFromLocalStorage($scope.sites[index].name).done(function() {
                         AngularScope.apply($scope, function () {
-                            //TODO Do something with the token...
+                            $scope.sites.splice(index, 1);
                         });
                     });
                 };
+                $scope.open = function (site) {
+                    $location.path('/two/' + site.name);
+                };
             });
-        })
+        });
     })
 })();

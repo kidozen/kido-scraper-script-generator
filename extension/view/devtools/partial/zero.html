@@ -1,28 +1,23 @@
 <ol class="breadcrumb">
-  <li>Scraper Generator</a></li>
-  <li class="active"><a href="#/zero">My Projects</a></li>
+    <li>Scraper Generator</a></li>
+    <li class="active"><a href="#/zero">My Projects</a></li>
 </ol>
-<div class="row">
-	<div class="col-md-8">
-		<a ng-click="addNewSite()" class="btn btn-primary">
-			<span class="fui-plus"></span>
-			Add New Project</a>
+<div class="col-md-8">
+    <a ng-click="addNewSite()" class="btn btn-primary">
+        <span class="fui-plus"></span>
+        Add New Project</a>
 
-		<table class="table">
-		    <tr ng-repeat="s in sites">
-		    	<td ng-click="open(s)">
-			        <a><label>{{ s.name }}</label></a>
-		        </td>
-		    </tr>
-		</table>
-	</div>
-	<div class="col-md-4">
-		<div class="tile">
-			<div class="form-group">
-				<input type="text" ng-model="marketplaceURL" class="form-control" placeholder="(ie: https://your-company.kidocloud.com)" />
-				<hr>
-				<button ng-click="configure()" class="btn">Configure</button>
-			</div>
-		</div>
-	</div>
+    <table class="table">
+        <tr ng-repeat="s in sites">
+            <td ng-click="open(s)" class="two-cols-column-long">
+                <a><label>{{ s.name }}</label></a>
+            </td>
+            <td class="two-cols-column-short">
+                <button ng-click="deleteSite($index)" class="btn btn-danger btn-sm">
+                    <span class="fui-cross"></span>
+                    Delete
+                </button>
+            </td>
+        </tr>
+    </table>
 </div>

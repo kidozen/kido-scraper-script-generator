@@ -30,6 +30,10 @@ angular.module('KidoScraper', ['ngRoute'])
                 templateUrl: 'partial/export.html',
                 controller: 'ExportController'
             })
+            .when('/run/:name', {
+                templateUrl: 'partial/run.html',
+                controller: 'RunController'
+            })
             .otherwise({
                 redirectTo: '/zero'
             });

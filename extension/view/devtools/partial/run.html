@@ -1,0 +1,27 @@
+<ol class="breadcrumb">
+    <li>Scraper Generator</a></li>
+    <li><a href="#/zero">My Projects</a></li>
+    <li><a href="#/two/{{site.name}}">{{site.name}}</a></li>
+    <li class="active">Run</li>
+</ol>
+<div class="col-md-4" ng-show="authRequired">
+    <div class="tile">
+        <div class="form-group">
+            <input type="text" ng-model="marketplaceURL" class="form-control"
+                   placeholder="(e.g. https://your-company.kidocloud.com)"/>
+            <hr>
+            <button ng-click="authenticate()" class="btn">Authenticate</button>
+        </div>
+    </div>
+</div>
+<div class="col-md-8" ng-show="!authRequired">
+    <label>Run in:</label><br>
+    <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>New Service</a>
+    <table class="table">
+        <tr ng-repeat="s in services">
+            <td ng-click="runIn(s)">
+                <a><label>{{ s.name }}</label></a>
+            </td>
+        </tr>
+    </table>
+</div>

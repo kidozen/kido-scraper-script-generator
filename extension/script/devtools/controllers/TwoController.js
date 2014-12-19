@@ -46,6 +46,9 @@ module.exports = (function () {
                 $scope.export = function (site) {
                     $location.path('/export/' + site.name);
                 };
+                $scope.run = function (site) {
+                    $location.path('/run/' + site.name);
+                };
             });
         });
     })

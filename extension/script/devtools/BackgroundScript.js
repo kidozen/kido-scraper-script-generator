@@ -11,6 +11,10 @@ inMemoryDb.store = function (key, value) {
 	collection[key] = value;
 };
 
+inMemoryDb.remove = function (key) {
+	delete collection[key];
+};
+
 inMemoryDb.get = function (key) {
 	if (key) {
 		return collection[key] ? collection[key] : undefined;
@@ -90,13 +94,15 @@ var BackgroundScript = {
 		var deferredResponse = $.Deferred();
 		var self = this;
 
+		// TODO See if we can use the refresh_token...
 		self.getFromLocalStorage(auth_key_in_storage).done(function (accessToken) {
 			if (accessToken) {
+				alert("Found an access token, validating it...");
 				try {
 					var headers = {};
 					headers["Authorization"] = accessToken;
 
-					$.ajax({url: "https://contoso.local.kidozen.com/api/admin/services", headers: headers})
+					$.ajax({type: "HEAD", url: "https://contoso.local.kidozen.com/api/admin/services", headers: headers})
 						.done(function (data) {
 							alert("Previous access token is valid, returning it straight away...");
 
@@ -159,9 +165,28 @@ var BackgroundScript = {
 					deferredResponse.resolve();
 				}
 			});
-
 		} else {
 			deferredResponse.resolve(inMemoryDb.store(keyValueRq.key, keyValueRq.value));
+		}
+
+		return deferredResponse.promise();
+	},
+
+	deleteFromLocalStorage: function (key) {
+		var deferredResponse = $.Deferred();
+
+		if (haveAccessToChromeStorageAPI) {
+			chrome.storage.sync.remove(key, function () {
+				if (chrome.runtime.lasterror) {
+					alert("Error when deleting key '" + key + "' from local storage: " + chrome.runtime.lasterror.message);
+					deferredResponse.reject(chrome.runtime.lasterror.message);
+				} else {
+					deferredResponse.resolve();
+				}
+			});
+		} else {
+			inMemoryDb.remove(key);
+			deferredResponse.resolve();
 		}
 
 		return deferredResponse.promise();
