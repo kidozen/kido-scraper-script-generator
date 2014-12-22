@@ -10,19 +10,25 @@ module.exports = (function () {
         if (!$routeParams.name) {
             return $location.path('/');
         }
-
+        RunInBackgroundScript.getFromLocalStorage(RunInBackgroundScript.lastUsedMarketplaceURL).done(function (lastUsedMarketplaceURL) {
+            AngularScope.apply($scope, function () {
+                $scope.marketplaceURL = lastUsedMarketplaceURL;
+            });
+        });
         RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function (siteAsJson) {
             AngularScope.apply($scope, function () {
                 $scope.site = siteAsJson;
                 $scope.authRequired = true;
                 $scope.authenticate = function () {
-                    //TODO Validate the presence of $scope.marketplaceURL and whether it is a valid URL
+                    if (!$scope.marketplaceURL) {
+                        alert("The Marketplace URL is mandatory");
+                        return;
+                    }
+                    //TODO Validate the presence of $scope.marketplaceURL and whether it is a valid URL and make it canonic so that we don't screw it up
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
-                        alert("About to hit the services API with token = " + token);
-
                         $http({
                             method: 'GET',
-                            url: 'https://contoso.local.kidozen.com/api/services',
+                            url: $scope.marketplaceURL + '/api/services',
                             headers: {'Authorization': token}
                         }).then(function (response) {
                             $scope.services = response.data;

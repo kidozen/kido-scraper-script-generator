@@ -1,8 +1,12 @@
 var prefix = 'Success payload=';
-var auth_key_in_storage = 'token';
+var auth_key_in_storage = 'token_';
 
 // TODO This does not work when running as a web application, refactor!
 var haveAccessToChromeStorageAPI = chrome && chrome.storage;
+
+String.prototype.startsWith = function (sufix) {
+	return this.substr(0, sufix.length) === sufix;
+};
 
 var collection = {};
 var inMemoryDb = {};
@@ -33,6 +37,8 @@ inMemoryDb.get = function (key) {
  */
 var BackgroundScript = {
 
+	lastUsedMarketplaceURL: 'last_used_marketplace_url',
+
 	decodeToken: function (token) {
 		var decodedToken = $.base64.decode(token);
 
@@ -48,11 +54,12 @@ var BackgroundScript = {
 		return parsedToken;
 	},
 
-	fetchANewToken: function () {
+	fetchANewTokenFor: function (marketplaceURL) {
 		var deferredResponse = $.Deferred();
 		var self = this;
 
-		//TODO Take this URL from a web-service and store it in local storage, rather than having it hardcoded here.
+		// TODO Take this URL from a web-service and store it in local storage, rather than having it hardcoded here.
+		// TODO Hit https://contoso.local.kidozen.com/publicapi/auth/config
 		chrome.tabs.create(
 			{url: "https://auth-qa.kidozen.com/v1/contoso/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"},
 			function (t) {
@@ -67,7 +74,7 @@ var BackgroundScript = {
 								deferredResponse.resolve(accessToken);
 
 								var saveRequest = {};
-								saveRequest["key"] = auth_key_in_storage;
+								saveRequest["key"] = auth_key_in_storage + marketplaceURL;
 								saveRequest["value"] = accessToken;
 
 								self.setInLocalStorage(saveRequest);
@@ -89,21 +96,22 @@ var BackgroundScript = {
 	},
 
 	getAuthToken: function (marketplaceURL) {
-		//TODO Use marketplaceURL
-
 		var deferredResponse = $.Deferred();
 		var self = this;
 
+		self.setInLocalStorage({key: self.lastUsedMarketplaceURL, value: marketplaceURL});
+
 		// TODO See if we can use the refresh_token...
-		self.getFromLocalStorage(auth_key_in_storage).done(function (accessToken) {
+		self.getFromLocalStorage(auth_key_in_storage + marketplaceURL).done(function (accessToken) {
 			if (accessToken) {
 				try {
 					var headers = {};
 					headers["Authorization"] = accessToken;
 
+					//TODO When this service throws 500, we don't report that situation properly
 					$.ajax({
 						type: "GET",
-						url: "https://contoso.local.kidozen.com/api/admin/services",
+						url: marketplaceURL + "/api/admin/services",
 						headers: headers
 					}).done(function (data) {
 						alert("Previous access token is valid, returning it straight away...");
@@ -111,15 +119,15 @@ var BackgroundScript = {
 					}).fail(function (jqXHR) {
 						var errorDetail = JSON.parse(jqXHR.responseText).error;
 						alert("Previous access token is invalid (" + jqXHR.status + " / " + errorDetail + "). Fetching a new one...");
-						self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
+						self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 					});
 				} catch (error) {
 					alert("Unable to parse existing token (" + error + "). Fetching a new one...");
-					self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
+					self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 				}
 			} else {
 				alert("Token not present in local storage. Fetching a new one...");
-				self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
+				self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 			}
 		});
 		return deferredResponse.promise();
@@ -127,6 +135,7 @@ var BackgroundScript = {
 
 	getFromLocalStorage: function (key) {
 		var deferredResponse = $.Deferred();
+		var self = this;
 
 		if (haveAccessToChromeStorageAPI) {
 			chrome.storage.sync.get(key, function (value) {
@@ -137,7 +146,7 @@ var BackgroundScript = {
 					// Multiple elements
 					var allValues = Object.keys(value).map(function (item) {
 						// TODO Improve this poor man's logic
-						return item === 'token' ? null: value[item];
+						return (item.startsWith(auth_key_in_storage) || item === self.lastUsedMarketplaceURL) ? null: value[item];
 					});
 					allValues = allValues ? allValues.filter(function (val) {
 						return val !== null;
