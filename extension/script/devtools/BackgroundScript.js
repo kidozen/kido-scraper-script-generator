@@ -97,22 +97,22 @@ var BackgroundScript = {
 		// TODO See if we can use the refresh_token...
 		self.getFromLocalStorage(auth_key_in_storage).done(function (accessToken) {
 			if (accessToken) {
-				alert("Found an access token, validating it...");
 				try {
 					var headers = {};
 					headers["Authorization"] = accessToken;
 
-					$.ajax({type: "HEAD", url: "https://contoso.local.kidozen.com/api/admin/services", headers: headers})
-						.done(function (data) {
-							alert("Previous access token is valid, returning it straight away...");
-
-							alert("Currently running services: " + JSON.stringify(data, null, 2));
-							deferredResponse.resolve(accessToken);
-						}).fail(function(jqXHR) {
-							var errorDetail = JSON.parse(jqXHR.responseText).error;
-							alert("Previous access token is invalid (" + jqXHR.status + " / " + errorDetail + "). Fetching a new one...");
-							self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
-						});
+					$.ajax({
+						type: "GET",
+						url: "https://contoso.local.kidozen.com/api/admin/services",
+						headers: headers
+					}).done(function (data) {
+						alert("Previous access token is valid, returning it straight away...");
+						deferredResponse.resolve(accessToken);
+					}).fail(function (jqXHR) {
+						var errorDetail = JSON.parse(jqXHR.responseText).error;
+						alert("Previous access token is invalid (" + jqXHR.status + " / " + errorDetail + "). Fetching a new one...");
+						self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });
+					});
 				} catch (error) {
 					alert("Unable to parse existing token (" + error + "). Fetching a new one...");
 					self.fetchANewToken().done(function (newToken) { deferredResponse.resolve(newToken); });

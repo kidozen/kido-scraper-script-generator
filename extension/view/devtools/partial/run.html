@@ -17,7 +17,7 @@
 <div class="col-md-8" ng-show="!authRequired">
     <label>Run in:</label><br>
     <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>New Service</a>
-    <table class="table">
+    <table class="table" ng-model="services">
         <tr ng-repeat="s in services">
             <td ng-click="runIn(s)">
                 <a><label>{{ s.name }}</label></a>
