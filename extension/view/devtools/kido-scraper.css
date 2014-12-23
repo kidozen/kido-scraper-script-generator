@@ -6,6 +6,10 @@
     width: 10%;
 }
 
+.two-cols-equal-width {
+    width: 50%;
+}
+
 .form-horizontal .form-inline .form-group {
     margin-left: 0px;
     margin-right: 0px;

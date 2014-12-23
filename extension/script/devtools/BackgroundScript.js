@@ -49,8 +49,6 @@ var BackgroundScript = {
 		// TODO Re-instate this code when we solve the problem of the tab title being truncated by Google Chrome
 		//var parsedToken = JSON.parse(decodedToken).access_token;
 
-		console.log("Decoded token: " + parsedToken);
-
 		return parsedToken;
 	},
 
@@ -108,25 +106,22 @@ var BackgroundScript = {
 					var headers = {};
 					headers["Authorization"] = accessToken;
 
-					//TODO When this service throws 500, we don't report that situation properly
+					//TODO When this service throws 500 or we haven't accepted the certificate, we don't report that situation properly
 					$.ajax({
 						type: "GET",
-						url: marketplaceURL + "/api/admin/services",
+						url: marketplaceURL + "api/admin/services",
 						headers: headers
 					}).done(function (data) {
-						alert("Previous access token is valid, returning it straight away...");
 						deferredResponse.resolve(accessToken);
 					}).fail(function (jqXHR) {
 						var errorDetail = JSON.parse(jqXHR.responseText).error;
-						alert("Previous access token is invalid (" + jqXHR.status + " / " + errorDetail + "). Fetching a new one...");
+						alert("Previously saved auth details have expired. You need to re-authenticate");
 						self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 					});
 				} catch (error) {
-					alert("Unable to parse existing token (" + error + "). Fetching a new one...");
 					self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 				}
 			} else {
-				alert("Token not present in local storage. Fetching a new one...");
 				self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 			}
 		});

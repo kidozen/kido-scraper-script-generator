@@ -14,14 +14,25 @@
         </div>
     </div>
 </div>
-<div class="col-md-8" ng-show="!authRequired">
-    <label>Run in:</label><br>
-    <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>New Service</a>
+<div class="col-md-8" ng-show="!authRequired && !executionResult">
+    <label>Run in:</label>
+    <div class="form-inline" role="form">
+        <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>New Service</a>
+        <label>Timeout (in seconds):</label>
+        <input ng-model="timeout" class="form-control" placeholder="timeout">
+    </div>
     <table class="table" ng-model="services">
-        <tr ng-repeat="s in services">
-            <td ng-click="runIn(s)">
+        <tr ng-repeat="s in services" ng-click="runIn(s)">
+            <td class="two-cols-equal-width" data-loading-text="<img src='../../assets/images/loading-small.gif'> Invoking...">
                 <a><label>{{ s.name }}</label></a>
+            </td>
+            <td class="two-cols-equal-width">
+                <label>{{ s.runOn.type === 'agent' ? s.runOn.name : 'cloud' }}</label>
             </td>
         </tr>
     </table>
+</div>
+<div ng-show="executionResult">
+    <label>Results:</label>
+    <pre>{{executionResult}}</pre>
 </div>
