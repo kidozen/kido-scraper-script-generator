@@ -1,5 +1,6 @@
 var prefix = 'Success payload=';
 var auth_key_in_storage = 'token_';
+var auth_service_url_in_storage = 'auth_service_url_';
 
 // TODO This does not work when running as a web application, refactor!
 var haveAccessToChromeStorageAPI = chrome && chrome.storage;
@@ -52,44 +53,69 @@ var BackgroundScript = {
 		return parsedToken;
 	},
 
+	getAuthServiceUrlFor: function (marketplaceURL) {
+		var deferredResponse = $.Deferred();
+		var self = this;
+
+		self.getFromLocalStorage(auth_service_url_in_storage + marketplaceURL).done(function (authServiceUrl) {
+			if (authServiceUrl) {
+				deferredResponse.resolve(authServiceUrl);
+			} else {
+				try {
+					$.ajax({
+						type: "GET",
+						url: marketplaceURL + "publicapi/auth/config"
+					}).done(function (data) {
+						deferredResponse.resolve(data.signInUrl);
+					}).fail(function (jqXHR) {
+						deferredResponse.reject("Unable to retrieve the URL of the Auth Service. Please contact the administrator.");
+					});
+				} catch (error) {
+					self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
+				}
+			}
+		});
+		return deferredResponse.promise();
+	},
+
 	fetchANewTokenFor: function (marketplaceURL) {
 		var deferredResponse = $.Deferred();
 		var self = this;
 
-		// TODO Take this URL from a web-service and store it in local storage, rather than having it hardcoded here.
-		// TODO Hit https://contoso.local.kidozen.com/publicapi/auth/config
-		chrome.tabs.create(
-			{url: "https://auth-qa.kidozen.com/v1/contoso/sign-in?wtrealm=_marketplace&wreply=urn-ietf-wg-oauth-2.0-oob&wa=wsignin1.0"},
-			function (t) {
-				var authTokenGrabber = function (tabId, changeInfo, tab) {
-					if (tabId === t.id) {
-						if ((tab && tab.title || '').indexOf(prefix) === 0) {
+		self.getAuthServiceUrlFor(marketplaceURL).done(function(authServiceUrl) {
+			chrome.tabs.create(
+				{url: authServiceUrl},
+				function (t) {
+					var authTokenGrabber = function (tabId, changeInfo, tab) {
+						if (tabId === t.id) {
+							if ((tab && tab.title || '').indexOf(prefix) === 0) {
 
-							var token = tab.title.substr(prefix.length);
+								var token = tab.title.substr(prefix.length);
 
-							try {
-								var accessToken = self.decodeToken(token);
-								deferredResponse.resolve(accessToken);
+								try {
+									var accessToken = self.decodeToken(token);
+									deferredResponse.resolve(accessToken);
 
-								var saveRequest = {};
-								saveRequest["key"] = auth_key_in_storage + marketplaceURL;
-								saveRequest["value"] = accessToken;
+									var saveRequest = {};
+									saveRequest["key"] = auth_key_in_storage + marketplaceURL;
+									saveRequest["value"] = accessToken;
 
-								self.setInLocalStorage(saveRequest);
-								chrome.tabs.onUpdated.removeListener(authTokenGrabber);
-								chrome.tabs.remove(tab.id);
+									self.setInLocalStorage(saveRequest);
+									chrome.tabs.onUpdated.removeListener(authTokenGrabber);
+									chrome.tabs.remove(tab.id);
 
-							} catch (err) {
-								var errorMsg = "Problem while attempting to retrieve auth token: " + err;
-								deferredResponse.reject(errorMsg);
-								alert(errorMsg);
+								} catch (err) {
+									var errorMsg = "Problem while attempting to retrieve auth token: " + err;
+									deferredResponse.reject(errorMsg);
+									alert(errorMsg);
+								}
 							}
 						}
-					}
-				};
-				chrome.tabs.onUpdated.addListener(authTokenGrabber);
-			}
-		);
+					};
+					chrome.tabs.onUpdated.addListener(authTokenGrabber);
+				}
+			);
+		});
 		return deferredResponse.promise();
 	},
 
