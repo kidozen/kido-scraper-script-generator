@@ -106,7 +106,6 @@ var BackgroundScript = {
 					var headers = {};
 					headers["Authorization"] = accessToken;
 
-					//TODO When this service throws 500 or we haven't accepted the certificate, we don't report that situation properly
 					$.ajax({
 						type: "GET",
 						url: marketplaceURL + "api/admin/services",
@@ -114,8 +113,9 @@ var BackgroundScript = {
 					}).done(function (data) {
 						deferredResponse.resolve(accessToken);
 					}).fail(function (jqXHR) {
-						var errorDetail = JSON.parse(jqXHR.responseText).error;
-						alert("Previously saved auth details have expired. You need to re-authenticate");
+						if (jqXHR.status === 401) {
+							alert("Previously saved auth details have expired.\nYou need to re-authenticate");
+						}
 						self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 					});
 				} catch (error) {
@@ -210,7 +210,7 @@ var BackgroundScript = {
 		}, function (tabs) {
 
 			if (tabs.length < 1) {
-				// @TODO must be running within popup. maybe find another active window?
+				// must be running within popup
 				deferredResponse.reject("couldn't find the active tab");
 			}
 			else {

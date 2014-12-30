@@ -4,7 +4,7 @@ require('angular');
 require('angular-route');
 var Site = require('./model/Site');
 
-angular.module('KidoScraper', ['ngRoute'])
+angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
     .config(function ($routeProvider, $compileProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);

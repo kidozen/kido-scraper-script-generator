@@ -27,7 +27,6 @@ var CssSelector = function (options) {
 	}
 };
 
-// TODO refactor element selector list into a ~ class
 var ElementSelector = function (element, ignoredClasses) {
 
 	this.element = element;
@@ -410,8 +409,7 @@ CssSelector.prototype = {
      */
     getElementGroups: function(elements) {
 
-        // first elment is in the first group
-        // @TODO maybe i dont need this?
+        // first element is in the first group
         var groups = [[elements[0]]];
 
         for(var i = 1; i < elements.length; i++) {

@@ -22,8 +22,8 @@
         <input ng-model="timeout" class="form-control" placeholder="timeout">
     </div>
     <table class="table" ng-model="services">
-        <tr ng-repeat="s in services" ng-click="runIn(s)">
-            <td class="two-cols-equal-width" data-loading-text="<img src='../../assets/images/loading-small.gif'> Invoking...">
+        <tr ng-repeat="s in services" ng-click="!running && runIn(s)">
+            <td class="two-cols-equal-width">
                 <a><label>{{ s.name }}</label></a>
             </td>
             <td class="two-cols-equal-width">
@@ -33,6 +33,12 @@
     </table>
 </div>
 <div ng-show="executionResult">
-    <label>Results:</label>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button ng-click="!running && runAgain()" class="btn btn-primary" ng-disabled="running">Run Again</button>
+            <button ng-click="back()" class="btn">Back</button>
+        </div>
+    </div>
+    <h6>Results:</h6>
     <pre>{{executionResult}}</pre>
 </div>

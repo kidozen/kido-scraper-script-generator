@@ -1,5 +1,6 @@
 'use strict';
 require('angular');
+require('angular-loading-bar');
 var Site = require('../model/Site');
 
 module.exports = (function () {
@@ -11,6 +12,8 @@ module.exports = (function () {
             return $location.path('/');
         }
         $scope.timeout = 60; //default, can be changed by the user
+        $scope.running = false;
+
         RunInBackgroundScript.getFromLocalStorage(RunInBackgroundScript.lastUsedMarketplaceURL).done(function (lastUsedMarketplaceURL) {
             AngularScope.apply($scope, function () {
                 $scope.marketplaceURL = lastUsedMarketplaceURL;
@@ -20,6 +23,7 @@ module.exports = (function () {
             AngularScope.apply($scope, function () {
                 $scope.site = siteAsJson;
                 $scope.authRequired = true;
+
                 $scope.authenticate = function () {
                     if (!$scope.marketplaceURL) {
                         alert("The Marketplace URL is required");
@@ -32,7 +36,8 @@ module.exports = (function () {
                         $http({
                             method: 'GET',
                             url: $scope.marketplaceURL + 'api/services',
-                            headers: {'Authorization': token}
+                            headers: {'Authorization': token},
+                            ignoreLoadingBar: true
                         }).then(function (response) {
                             if (response.data && typeof Array.isArray(response.data)) {
                                 response.data = response.data.filter(function(service) {
@@ -42,7 +47,7 @@ module.exports = (function () {
                             $scope.services = response.data;
                             $scope.authRequired = false;
                         }, function (error) {
-                            alert("Error while attempting to retrieve services from " + $scope.marketplaceURL + ": " + JSON.stringify(error, null, 2));
+                            handleError(error, "Error while attempting to retrieve services");
                         });
                     });
                 };
@@ -50,12 +55,17 @@ module.exports = (function () {
                     alert("To-Do: Create a new service");
                 };
                 $scope.runIn = function (service) {
-                    var url = $scope.marketplaceURL + 'api/admin/services/' + service.name + '/invoke/runJson';
+                    if (!service) {
+                        alert("Could not determine which service I have to run the script with!");
+                        return;
+                    }
+                    $scope.lastUsedService = service;
+                    $scope.running = true;
 
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
                         $http({
                             method: 'POST',
-                            url: url,
+                            url: $scope.marketplaceURL + 'api/admin/services/' + service.name + '/invoke/runJson',
                             headers: {'Authorization': token, 'timeout': $scope.timeout, "Content-Type": "application/json"},
                             data: {json: $scope.site}
                         }).then(function (response) {
@@ -64,11 +74,32 @@ module.exports = (function () {
                             } else {
                                 $scope.executionResult = JSON.stringify(response.data, null, 2);
                             }
+                            $scope.running = false;
                         }, function (error) {
-                            alert("Error while invoking the method 'runJson' in " + $scope.marketplaceURL + ": " + JSON.stringify(error, null, 2));
+                            handleError(error, "Error while invoking the method 'runJson'");
+                            $scope.running = false;
                         });
                     });
                 };
+                $scope.runAgain = function () {
+                    $scope.runIn($scope.lastUsedService);
+                };
+
+                $scope.back = function () {
+                    $scope.executionResult = null;
+                };
+
+                var handleError = function(error, baseMessage) {
+                    var msg = baseMessage;
+                    if (error) {
+                        if (error.status === 0) {
+                            msg += "\n\nIs " + $scope.marketplaceURL + " up and running?\nAre SSL certs valid?";
+                        } else {
+                            msg += " (status code: " + error.status + ")";
+                        }
+                    }
+                    alert(msg);
+                }
             });
         });
     })
