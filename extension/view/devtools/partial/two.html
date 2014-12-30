@@ -1,43 +1,49 @@
 <ol class="breadcrumb">
-  <li>Scraper Generator</a></li>
-  <li><a href="#/zero">My Projects</a></li>
-  <li class="active"><a href="#/two/{{ site.name }}">{{ site.name }}</a></li>
+    <li>Scraper Generator</a></li>
+    <li><a href="#/zero">My Projects</a></li>
+    <li class="active"><a href="#/two/{{ site.name }}">{{ site.name }}</a></li>
 </ol>
 <div class="row">
-	<div class="col-md-6">
-		<button ng-click="addCompleteForm()" class="btn btn-primary">
-			<span class="fui-plus"></span>
-			Complete Form</button>
-		<button ng-click="addClickEvent()" class="btn btn-primary">
-			<span class="fui-plus"></span>
-			Click Event</button>
-		<button ng-click="addScrape()" class="btn btn-danger">
-			<span class="fui-upload"></span>
-			Scrape Data</button>
-		<table class="table" style="margin:10px">
-		    <tr ng-repeat="s in site.steps">
-		    	<td>
-		    		{{ s.name }} ({{ s.type }})
-		    	</td>
-		    </tr>
-		</table>
-		<p>Once you have the necessary steps to arrive to the page where
-			the data is, and how to scrape it, you can proceed to either
-			<b>export the configuration</b> to JSON or Casper script format;
-			or you can <b>run the scraper</b> straight away from here.
-		</p>
+    <div class="col-md-6">
+        <button ng-click="addCompleteForm()" class="btn btn-primary">
+            <span class="fui-plus"></span>
+            Complete Form
+        </button>
+        <button ng-click="addClickEvent()" class="btn btn-primary">
+            <span class="fui-plus"></span>
+            Click Event
+        </button>
+        <button ng-click="addScrape()" class="btn btn-danger">
+            <span class="fui-upload"></span>
+            Scrape Data
+        </button>
+        <table class="table" style="margin:10px">
+            <tr ng-repeat="s in site.steps">
+                <td>
+                    {{ s.name }} ({{ s.type }})
+                </td>
+            </tr>
+        </table>
+        <p>
+            <small>Once you have the necessary steps to arrive to the page where
+                the data is, and how to scrape it, you can proceed to either
+                <strong>export the configuration</strong> to JSON or Casper script format;
+                or you can <strong>run the scraper</strong> straight away from here.
+            </small>
+        </p>
 
-		<a class="btn btn-primary" ng-click="export(site)">Export</a>
-		<a class="btn btn-primary" ng-click="run(site)">Run</a>
-	</div>
-	<div class="col-md-6">
-		<div class="tile" style="text-align:left">
-			<h6>Complete Form</h6>
-			<small>Use the "Complete Form Step" to add values to a form and then either
-				use enter or a button to submit the data</small>
-			<h6>Click Event</h6>
-			<small>Use the "Click" step to trigger a click event on any element of the
-				page.</small>
-		</div>
-	</div>
+        <a class="btn btn-primary" ng-click="export(site)">Export</a>
+        <a class="btn btn-primary" ng-click="run(site)">Run</a>
+    </div>
+    <div class="col-md-6">
+        <div class="tile" style="text-align:left">
+            <h6>Complete Form</h6>
+            <small>Use the "Complete Form Step" to add values to a form and then either
+                use enter or a button to submit the data
+            </small>
+            <h6>Click Event</h6>
+            <small>Use the "Click" step to trigger a click event on any element of the page.
+            </small>
+        </div>
+    </div>
 </div>

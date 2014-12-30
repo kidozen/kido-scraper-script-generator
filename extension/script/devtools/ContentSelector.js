@@ -115,22 +115,19 @@ ContentSelector.prototype = {
 
         this.bindElementHighlight();
         this.bindElementSelection();
-        //this.bindKeyboardSelectionManipulations();
+        this.bindKeyboardSelectionManipulations();
         this.attachToolbar();
-        //this.bindMultipleGroupCheckbox();
-        //this.bindMultipleGroupPopupHide();
+        this.bindMultipleGroupCheckbox();
+        this.bindMultipleGroupPopupHide();
         this.bindMoveImagesToTop();
     },
 
     bindElementSelection: function () {
         this.$allElements.bind("click.elementSelector", function (e) {
             var element = e.currentTarget;
-
-            //if(this.selectedElements.indexOf(element) === -1) {
-            //	this.selectedElements.push(element);
-            //}
-            this.selectedElements.length = 0;		// clear the array
-            this.selectedElements.push(element);	// make sure there's always one selected element
+            if (this.selectedElements.indexOf(element) === -1) {
+                this.selectedElements.push(element);
+            }
             this.highlightSelectedElements();
 
             // Cancel all other events
@@ -301,27 +298,26 @@ ContentSelector.prototype = {
 
     attachToolbar: function () {
 
-        var $toolbar =
-            '<div id="-selector-toolbar">' +
+        var $toolbar = '<div id="-selector-toolbar">' +
             '<div class="list-item"><div class="selector-container"><div class="selector"></div></div></div>' +
-                //'<div class="input-group-addon list-item">' +
-                //	'<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
-                //	'<div class="popover top">' +
-                //	'<div class="close">×</div>' +
-                //	'<div class="arrow"></div>' +
-                //	'<div class="popover-content">' +
-                //	'<div class="txt">' +
-                //	'Different type element selection is disabled. If the element ' +
-                //	'you clicked should also be included then enable this and ' +
-                //	'click on the element again. Usually this is not needed.' +
-                //	'</div>' +
-                //	'</div>' +
-                //	'</div>' +
-                //'</div>' +
-                //'<div class="list-item key-events"><div title="Click here to enable key press events for selection">Enable key events</div></div>' +
-                //'<div class="list-item key-button key-button-select hide" title="Use S key to select element">S</div>' +
-                //'<div class="list-item key-button key-button-parent hide" title="Use P key to select parent">P</div>' +
-                //'<div class="list-item key-button key-button-child hide" title="Use C key to select child">C</div>' +
+            '<div class="input-group-addon list-item">' +
+            '<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
+            '<div class="popover top">' +
+            '<div class="close">×</div>' +
+            '<div class="arrow"></div>' +
+            '<div class="popover-content">' +
+            '<div class="txt">' +
+            'Different type element selection is disabled. If the element ' +
+            'you clicked should also be included then enable this and ' +
+            'click on the element again. Usually this is not needed.' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="list-item key-events"><div title="Click here to enable key press events for selection">Enable key events</div></div>' +
+            '<div class="list-item key-button key-button-select hide" title="Use S key to select element">S</div>' +
+            '<div class="list-item key-button key-button-parent hide" title="Use P key to select parent">P</div>' +
+            '<div class="list-item key-button key-button-child hide" title="Use C key to select child">C</div>' +
             '<div class="list-item done-selecting-button">Done selecting!</div>' +
             '</div>';
         $("body").append($toolbar);
@@ -366,9 +362,9 @@ ContentSelector.prototype = {
 
         this.unbindElementSelection();
         this.unbindElementHighlight();
-        //this.unbindKeyboardSelectionMaipulatios();
-        //this.unbindMultipleGroupPopupHide();
-        //this.unbindMultipleGroupCheckbox();
+        this.unbindKeyboardSelectionMaipulatios();
+        this.unbindMultipleGroupPopupHide();
+        this.unbindMultipleGroupCheckbox();
         this.unbindMoveImagesToTop();
         this.removeToolbar();
     },
