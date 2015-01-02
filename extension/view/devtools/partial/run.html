@@ -16,35 +16,42 @@
 </div>
 <div class="col-md-8" ng-show="!authRequired && !executionResult">
     <div class="form-inline" role="form" style="float:left">
-        <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>New Service</a>
+        <h6>Run in Service</h6>
     </div>
     <div class="form-inline" role="form" style="float:right">
         <label>Timeout (in seconds):</label>
         <input ng-model="timeout" class="form-control" placeholder="timeout">
     </div>
     <table class="table" ng-model="services">
-        <thead>
         <tr>
-            <th>Service</th>
-            <th>Runs in</th>
+            <td class="three-cols-main-column">
+                <input ng-model="newServiceName" class="form-control" placeholder="New Service">
+            </td>
+            <td class="three-cols-main-column">
+                <select class="form-control select select-primary" select2 ng-model="runOn"
+                        ng-options="a.name group by a.type for a in agents">
+                    <option value="">Choose where this service will run ...</option>
+                </select>
+            </td>
+            <td class="three-cols-secondary-column" align="right">
+                <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>Create New
+                    Service</a>
+            </td>
         </tr>
-        </thead>
-        <tbody>
         <tr ng-repeat="s in services">
             <td class="three-cols-main-column" ng-click="!running && runIn(s)">
                 <a><label>{{ s.name }}</label></a>
             </td>
             <td class="three-cols-secondary-column">
-                <label>{{ s.runOn.type === 'agent' ? s.runOn.name : 'cloud' }}</label>
+                <label>{{ s.runOn.type === 'agent' ? s.runOn.name : 'kidozen' }}</label>
             </td>
             <td class="three-cols-secondary-column" align="right">
-                <button ng-click="deleteService(s)" class="btn btn-danger btn-sm">
+                <button ng-click="deleteService($index)" class="btn btn-danger btn-sm">
                     <span class="fui-cross"></span>
                     Delete
                 </button>
             </td>
         </tr>
-        </tbody>
     </table>
 </div>
 <div ng-show="executionResult">
