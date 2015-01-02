@@ -54,6 +54,9 @@ module.exports = (function () {
                 $scope.createNewService = function () {
                     alert("To-Do: Create a new service");
                 };
+                $scope.deleteService = function () {
+                    alert("To-Do: Delete a service");
+                };
                 $scope.runIn = function (service) {
                     if (!service) {
                         alert("Could not determine which service I have to run the script with!");

@@ -15,21 +15,36 @@
     </div>
 </div>
 <div class="col-md-8" ng-show="!authRequired && !executionResult">
-    <label>Run in:</label>
-    <div class="form-inline" role="form">
+    <div class="form-inline" role="form" style="float:left">
         <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>New Service</a>
+    </div>
+    <div class="form-inline" role="form" style="float:right">
         <label>Timeout (in seconds):</label>
         <input ng-model="timeout" class="form-control" placeholder="timeout">
     </div>
     <table class="table" ng-model="services">
-        <tr ng-repeat="s in services" ng-click="!running && runIn(s)">
-            <td class="two-cols-equal-width">
+        <thead>
+        <tr>
+            <th>Service</th>
+            <th>Runs in</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="s in services">
+            <td class="three-cols-main-column" ng-click="!running && runIn(s)">
                 <a><label>{{ s.name }}</label></a>
             </td>
-            <td class="two-cols-equal-width">
+            <td class="three-cols-secondary-column">
                 <label>{{ s.runOn.type === 'agent' ? s.runOn.name : 'cloud' }}</label>
             </td>
+            <td class="three-cols-secondary-column" align="right">
+                <button ng-click="deleteService(s)" class="btn btn-danger btn-sm">
+                    <span class="fui-cross"></span>
+                    Delete
+                </button>
+            </td>
         </tr>
+        </tbody>
     </table>
 </div>
 <div ng-show="executionResult">
