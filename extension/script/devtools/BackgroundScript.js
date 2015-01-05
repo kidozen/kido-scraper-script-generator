@@ -3,7 +3,7 @@ var auth_key_in_storage = 'token_';
 var auth_service_url_in_storage = 'auth_service_url_';
 
 // TODO This does not work when running as a web application, refactor!
-var haveAccessToChromeStorageAPI = chrome && chrome.storage;
+var haveAccessToChromeStorageAPI = function() { return chrome && chrome.storage; };
 
 String.prototype.startsWith = function (sufix) {
 	return this.substr(0, sufix.length) === sufix;
@@ -158,7 +158,7 @@ var BackgroundScript = {
 		var deferredResponse = $.Deferred();
 		var self = this;
 
-		if (haveAccessToChromeStorageAPI) {
+		if (haveAccessToChromeStorageAPI()) {
 			chrome.storage.sync.get(key, function (value) {
 				if (key) {
 					// Single element
@@ -184,7 +184,7 @@ var BackgroundScript = {
 	setInLocalStorage: function (keyValueRq) {
 		var deferredResponse = $.Deferred();
 
-		if (haveAccessToChromeStorageAPI) {
+		if (haveAccessToChromeStorageAPI()) {
 			var objectToSave = {};
 			objectToSave[keyValueRq.key] = keyValueRq.value;
 			chrome.storage.sync.set(objectToSave, function () {
@@ -205,7 +205,7 @@ var BackgroundScript = {
 	deleteFromLocalStorage: function (key) {
 		var deferredResponse = $.Deferred();
 
-		if (haveAccessToChromeStorageAPI) {
+		if (haveAccessToChromeStorageAPI()) {
 			chrome.storage.sync.remove(key, function () {
 				if (chrome.runtime.lasterror) {
 					alert("Error when deleting key '" + key + "' from local storage: " + chrome.runtime.lasterror.message);
@@ -300,6 +300,7 @@ var getBackgroundScript = function(location) {
 					var deferredResponse = $.Deferred();
 
 					console.log("request to background script: " + JSON.stringify(reqToBackgroundScript, null, 2));
+
 					chrome.runtime.sendMessage(reqToBackgroundScript, function(response) {
 						deferredResponse.resolve(response);
 					});

@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-    <li>Scraper Generator</a></li>
+    <li>Scraper Generator</li>
     <li><a href="#/zero">My Projects</a></li>
     <li><a href="#/two/{{site.name}}">{{site.name}}</a></li>
     <li class="active">Run</li>
@@ -39,8 +39,8 @@
             </td>
         </tr>
         <tr ng-repeat="s in services">
-            <td class="three-cols-main-column" ng-click="!running && runIn(s)">
-                <a><label>{{ s.name }}</label></a>
+            <td class="three-cols-main-column">
+                <a ng-click="!running && runIn(s)"><label>{{ s.name }}</label></a>
             </td>
             <td class="three-cols-secondary-column">
                 <label>{{ s.runOn.type === 'agent' ? s.runOn.name : 'kidozen' }}</label>

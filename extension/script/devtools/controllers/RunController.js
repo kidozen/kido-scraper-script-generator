@@ -65,6 +65,7 @@ module.exports = (function () {
                                 } else {
                                     response.data = [];
                                 }
+                                // artificially add the 'kidozen' (cloud) option
                                 response.data.unshift({name: 'kidozen', type: 'cloud'});
                                 $scope.agents = response.data;
                             }, function (error) {
@@ -122,7 +123,7 @@ module.exports = (function () {
                                     }
                                     $scope.services.push(service);
                                     $scope.newServiceName = '';
-                                    $scope.runOn = 'CADORNA';
+                                    $scope.runOn = null;
 
                                 }, function (error) {
                                     if (retries-- > 0) {
@@ -235,4 +236,4 @@ module.exports = (function () {
             });
         });
     })
-})()
+})();
