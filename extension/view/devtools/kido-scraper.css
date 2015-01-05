@@ -25,6 +25,13 @@
     padding-top: 5px;
 }
 
+input.ng-invalid {
+    border: 1px solid #e74c3c;
+}
+input.ng-valid {
+    border: 1px solid #2ecc71;
+}
+
 .select2-drop.select2-display-none.select2-with-searchbox.select2-drop-active {
     margin-top: 0px !important;
     /*border-top: 1px solid #eee;*/

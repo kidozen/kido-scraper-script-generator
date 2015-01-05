@@ -41,11 +41,6 @@ module.exports = (function () {
                             headers: {'Authorization': token},
                             ignoreLoadingBar: true
                         }).then(function (response) {
-                            if (response.data && typeof Array.isArray(response.data)) {
-                                response.data = response.data.filter(function (service) {
-                                    return service.enterpriseApi === 'webscraper';
-                                });
-                            }
                             $scope.services = response.data;
                             $scope.authRequired = false;
 
@@ -79,12 +74,7 @@ module.exports = (function () {
                     });
                 };
                 $scope.createNewService = function () {
-                    if (!$scope.newServiceName) {
-                        alert('Please specify the name of the new service');
-                        return;
-                    }
-                    if (!$scope.runOn || typeof $scope.runOn !== 'object') {
-                        alert('Please specify where the new service will run on');
+                    if (newServiceNameIsInvalid() || runOnIsInvalid() || timeoutIsInvalid()) {
                         return;
                     }
                     var service = {};
@@ -146,6 +136,9 @@ module.exports = (function () {
                         alert("Could not determine the service to be deleted");
                         return;
                     }
+                    if (timeoutIsInvalid($scope.timeout)) {
+                        return;
+                    }
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
                         $http({
                             method: 'POST',
@@ -186,6 +179,9 @@ module.exports = (function () {
                 $scope.runIn = function (service) {
                     if (!service) {
                         alert("Could not determine the service to run the script with!");
+                        return;
+                    }
+                    if (timeoutIsInvalid($scope.timeout)) {
                         return;
                     }
                     $scope.lastUsedService = service;
@@ -232,7 +228,42 @@ module.exports = (function () {
                         }
                     }
                     alert(msg);
-                }
+                };
+
+                var newServiceNameIsInvalid = function () {
+                    if (!$scope.newServiceName) {
+                        alert('Please specify the name of the new service');
+                        return true;
+                    }
+                    if ($scope.newServiceName.toString().match(/^[-a-zA-Z0-9,&]+$/) == null) {
+                        alert('New Service name must contain only alphanumeric characters');
+                        return true;
+                    }
+                    var existingServiceWithSameName = $scope.services.filter(function(s) {
+                        return s.name === $scope.newServiceName;
+                    });
+                    if (existingServiceWithSameName.length > 0) {
+                        alert($scope.newServiceName + ' already exists. Please choose a different name');
+                        return true;
+                    }
+                    return false;
+                };
+
+                var runOnIsInvalid = function() {
+                    if (!$scope.runOn || typeof $scope.runOn !== 'object') {
+                        alert('Please specify where the new service will run on');
+                        return true;
+                    }
+                    return false;
+                };
+
+                var timeoutIsInvalid = function () {
+                    if (!$scope.timeout || $scope.timeout.toString().match(/[^0-9]+/) != null) {
+                        alert("The timeout must be a positive integer!");
+                        return true;
+                    }
+                    return false;
+                };
             });
         });
     })

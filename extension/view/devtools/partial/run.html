@@ -7,7 +7,7 @@
 <div class="col-md-4" ng-show="authRequired">
     <div class="tile">
         <div class="form-group">
-            <input type="text" ng-model="marketplaceURL" class="form-control"
+            <input type="url" ng-model="marketplaceURL" class="form-control"
                    placeholder="(e.g. https://your-company.kidocloud.com)"/>
             <hr>
             <button ng-click="authenticate()" class="btn">Authenticate</button>
@@ -20,17 +20,17 @@
     </div>
     <div class="form-inline" role="form" style="float:right">
         <label>Timeout (in seconds):</label>
-        <input ng-model="timeout" class="form-control" placeholder="timeout">
+        <input type="number" ng-model="timeout" class="form-control" placeholder="timeout">
     </div>
     <table class="table" ng-model="services">
         <tr>
             <td class="three-cols-main-column">
-                <input ng-model="newServiceName" class="form-control" placeholder="New Service">
+                <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" class="form-control" placeholder="New Service">
             </td>
             <td class="three-cols-main-column">
                 <select class="form-control select select-primary" select2 ng-model="runOn"
-                        ng-options="a.name group by a.type for a in agents">
-                    <option value="">Choose where this service will run ...</option>
+                        ng-options="a.name group by a.type for a in agents" data-placeholder="Choose where this service will run ...">
+                    <option></option>
                 </select>
             </td>
             <td class="three-cols-secondary-column" align="right">
@@ -38,7 +38,7 @@
                     Service</a>
             </td>
         </tr>
-        <tr ng-repeat="s in services">
+        <tr ng-repeat="s in services" ng-show="s.enterpriseApi === 'webscraper'">
             <td class="three-cols-main-column">
                 <a ng-click="!running && runIn(s)"><label>{{ s.name }}</label></a>
             </td>
