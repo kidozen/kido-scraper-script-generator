@@ -15,7 +15,12 @@ module.exports = (function () {
                     $location.path('/one');
                 };
                 $scope.deleteSite = function (index) {
-                    RunInBackgroundScript.deleteFromLocalStorage($scope.sites[index].name).done(function() {
+                    var siteName = $scope.sites[index].name;
+
+                    if (!confirm("Are you sure you want to delete the site '" + siteName + "'?")) {
+                        return;
+                    }
+                    RunInBackgroundScript.deleteFromLocalStorage(siteName).done(function() {
                         AngularScope.apply($scope, function () {
                             $scope.sites.splice(index, 1);
                         });

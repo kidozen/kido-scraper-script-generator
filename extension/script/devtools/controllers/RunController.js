@@ -80,7 +80,7 @@ module.exports = (function () {
                     var service = {};
                     service.name = $scope.newServiceName;
                     service.runOn = $scope.runOn;
-                    service.enterpriseApi = 'webscraper';
+                    service.enterpriseApi = 'webauthorapi';
                     service.config = {};
 
                     if (service.runOn.type === 'cloud') {
@@ -134,6 +134,9 @@ module.exports = (function () {
 
                     if (!service) {
                         alert("Could not determine the service to be deleted");
+                        return;
+                    }
+                    if (!confirm("Are you sure you want to delete the service '" + service.name + "'?")) {
                         return;
                     }
                     if (timeoutIsInvalid($scope.timeout)) {
