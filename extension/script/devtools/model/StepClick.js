@@ -32,11 +32,11 @@ module.exports = (function() {
 
     StepClick.prototype.toCasper = function() {
         return Util.supplant.call(multiline(function() {
-/*
-    casper.then(function() {
-        this.click({{key}});
-    });
-*/
+            /*
+                 casper.then(function() {
+                     this.click({{key}});
+                 });
+             */
         }), {
             key: Util.quote.call(this._key)
         });

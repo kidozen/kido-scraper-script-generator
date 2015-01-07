@@ -32,6 +32,10 @@ module.exports = (function() {
         };
     };
 
+    StepSelector.prototype.getKey = function() {
+        return this._key;
+    };
+
     StepSelector.prototype.toJson = function() {
         return {
             type: this._Site.TYPES.SELECTOR,
@@ -44,14 +48,14 @@ module.exports = (function() {
     StepSelector.prototype.toCasper = function() {
         // TODO: select according to attr
         return Util.supplant.call(multiline(function() {
-/*
-        values[{{name}}] = this.evaluate(function() {
-            var selection = document.querySelectorAll({{key}});
-            return [].map.call(selection, function(item) {
-                return item.innerText;
-            });
-        });
-*/
+            /*
+                values[{{name}}] = this.evaluate(function() {
+                    var selection = document.querySelectorAll({{key}});
+                    return [].map.call(selection, function(item) {
+                        return item.innerText;
+                    });
+                });
+            */
         }), {
             name: Util.quote.call(this._name),
             key: Util.quote.call(this._key)

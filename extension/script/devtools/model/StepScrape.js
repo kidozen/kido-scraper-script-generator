@@ -37,27 +37,34 @@ module.exports = (function() {
 
     StepScrape.prototype.toCasper = function() {
         return Util.supplant.call(multiline(function() {
-/*
-    casper.then(function() {
-        var values = {};
-{{fields}}
-        var result = [];
-        Object.keys(values).forEach(function(key) {
-            values[key].forEach(function(val, index) {
-                result[index] = result[index] || {};
-                result[index][key] = val;
-            });
-        });
-        this.echo(JSON.stringify(result, null, 2));
-    });
-*/
+            /*
+                 casper.then(function() {
+                     {{header}}
+                     var values = {};
+                     {{fields}}
+                     var result = [];
+                     Object.keys(values).forEach(function(key) {
+                         values[key].forEach(function(val, index) {
+                             result[index] = result[index] || {};
+                             result[index][key] = val;
+                         });
+                     });
+                     this.echo(JSON.stringify(result, null, 2));
+                     {{footer}}
+                 });
+             */
         }), {
-            fields: this._fields.map(function(item) {
+            header: this._fields.map(function (item) {
+                return "casper.waitForSelector('" + item.getKey() + "', function() {";
+            }).join('\n'),
+            fields: this._fields.map(function (item) {
                 return item.toCasper();
+            }).join('\n'),
+            footer: this._fields.map(function (item) {
+                return "});";
             }).join('\n')
         });
     };
-
     return StepScrape;
 
 })();
