@@ -1,0 +1,61 @@
+<ol class="breadcrumb">
+    <li>Scraper Generator</a></li>
+    <li><a href="#/zero">Datasources</a></li>
+    <li class="active">Create</li>
+</ol>
+<div class="row">
+    <div class="col-md-10">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Name</label>
+
+                <div class="col-md-10">
+                    <input ng-model="newDatasourceName" class="form-control" placeholder="Name" value="Delete me">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Project</label>
+
+                <div class="col-md-10">
+                    <label>{{siteName}}</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Service</label>
+
+                <div class="col-md-10">
+                    <label>{{serviceName}}</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Method</label>
+
+                <div class="col-md-10">
+                    <select class="form-control select select-primary" select2 ng-model="method"
+                            ng-options="m for m in methods"
+                            data-placeholder="Choose the method to run ...">
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Description</label>
+
+                <div class="col-md-10">
+                    <textarea rows="5" class="form-control" ng-model="description" ng-maxlength="400" value="delete this description" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-click="createNewDatasource()" class="btn btn-primary">Create</button>
+                    <button ng-click="cancel()" class="btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

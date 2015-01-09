@@ -3,6 +3,7 @@
 require('angular');
 require('angular-route');
 require('angular-loading-bar');
+require("simple-errors");
 var Site = require('./model/Site');
 
 angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
