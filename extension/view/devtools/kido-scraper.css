@@ -10,12 +10,16 @@
     width: 50%;
 }
 
-.three-cols-main-column {
-    width: 40%;
+.three-cols-first-column {
+    width: 30%;
 }
 
-.three-cols-secondary-column {
-    width: 20%;
+.three-cols-second-column {
+    width: 30%;
+}
+
+.three-cols-third-column {
+    width: 40%;
 }
 
 .form-horizontal .form-inline .form-group {

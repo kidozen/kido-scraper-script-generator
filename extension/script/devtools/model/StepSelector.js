@@ -36,6 +36,10 @@ module.exports = (function() {
         return this._key;
     };
 
+    StepSelector.prototype.getAllParams = function() {
+        return [];
+    };
+
     StepSelector.prototype.toJson = function() {
         return {
             type: this._Site.TYPES.SELECTOR,

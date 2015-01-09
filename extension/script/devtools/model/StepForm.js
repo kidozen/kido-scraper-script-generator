@@ -30,6 +30,13 @@ module.exports = (function() {
         };
     };
 
+    StepForm.prototype.getAllParams = function() {
+        var allParams = this._selectors.map(function(selector) {
+            return selector.getAllParams();
+        });
+        return [].concat.apply([], allParams);
+    };
+
     StepForm.prototype.toJson = function() {
         return {
             type: this._Site.TYPES.FORM,

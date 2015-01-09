@@ -87,6 +87,13 @@ module.exports = (function() {
     Site.prototype._url = undefined;
     Site.prototype._steps = [];
 
+    Site.prototype.getAllParams = function() {
+        var allParams = this._steps.map(function(step) {
+            return step.getAllParams();
+        });
+        return [].concat.apply([], allParams);
+    };
+
     Site.prototype.toJson = function() {
         return {
             name: this._name,

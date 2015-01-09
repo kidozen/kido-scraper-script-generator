@@ -24,32 +24,35 @@
     </div>
     <table class="table" ng-model="services">
         <tr>
-            <td class="three-cols-main-column">
-                <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" class="form-control" placeholder="New Service">
+            <td class="three-cols-first-column">
+                <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" class="form-control"
+                       placeholder="New Service">
             </td>
-            <td class="three-cols-main-column">
+            <td class="three-cols-second-column">
                 <select class="form-control select select-primary" select2 ng-model="runOn"
-                        ng-options="a.name group by a.type for a in agents" data-placeholder="Choose where this service will run ...">
+                        ng-options="a.name group by a.type for a in agents"
+                        data-placeholder="Choose where this service will run ...">
                     <option></option>
                 </select>
             </td>
-            <td class="three-cols-secondary-column" align="right">
+            <td class="three-cols-third-column" align="right">
                 <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>Create New
                     Service</a>
             </td>
         </tr>
         <tr ng-repeat="s in services" ng-show="s.enterpriseApi === 'webauthorapi'">
-            <td class="three-cols-main-column">
-                <a ng-click="!running && runIn(s)"><label>{{ s.name }}</label></a>
+            <td class="three-cols-first-column">
+                <label>{{ s.name }}</label>
             </td>
-            <td class="three-cols-secondary-column">
+            <td class="three-cols-second-column">
                 <label>{{ s.runOn.type === 'agent' ? s.runOn.name : 'kidozen' }}</label>
             </td>
-            <td class="three-cols-secondary-column" align="right">
-                <button ng-click="deleteService($index)" class="btn btn-danger btn-sm">
-                    <span class="fui-cross"></span>
-                    Delete
-                </button>
+            <td class="three-cols-third-column" align="right">
+                <div class="form-inline" role="form">
+                    <button ng-click="!running && runIn(s)" class="btn btn-info"></span>Run Here</button>
+                    <button ng-click="createDatasource(s)" class="btn btn-primary"><span class="fui-plus"></span>Create DS</button>
+                    <button ng-click="deleteService($index)" class="btn btn-danger btn-sm"><span class="fui-cross"></span>Delete</button>
+                </div>
             </td>
         </tr>
     </table>
@@ -57,7 +60,7 @@
 <div ng-show="executionResult">
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button ng-click="!running && runAgain()" class="btn btn-primary" ng-disabled="running">Run Again</button>
+            <button ng-click="!running && runAgain()" class="btn btn-info" ng-disabled="running">Run Again</button>
             <button ng-click="back()" class="btn">Back</button>
         </div>
     </div>

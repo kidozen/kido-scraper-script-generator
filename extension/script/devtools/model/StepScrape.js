@@ -25,6 +25,10 @@ module.exports = (function() {
         };
     };
 
+    StepScrape.prototype.getAllParams = function() {
+        return [];
+    };
+
     StepScrape.prototype.toJson = function() {
         return {
             type: this._Site.TYPES.SCRAPE,

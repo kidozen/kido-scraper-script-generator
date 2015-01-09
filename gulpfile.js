@@ -20,6 +20,7 @@ gulp.task('browserify', function() {
                        basePath + '/controllers/ThreeController.js',
                        basePath + '/controllers/ExportController.js',
                        basePath + '/controllers/RunController.js',
+                       basePath + '/controllers/datasource/CreateDSController.js',
                        basePath + '/directives/StepClickDirective.js',
                        basePath + '/directives/StepFormDirective.js',
                        basePath + '/directives/StepScrapeDirective.js',

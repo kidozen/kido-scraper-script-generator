@@ -2,6 +2,7 @@
 'use strict';
 require('angular');
 require('angular-route');
+require('angular-loading-bar');
 var Site = require('./model/Site');
 
 angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
@@ -33,6 +34,10 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
             .when('/run/:name', {
                 templateUrl: 'partial/run.html',
                 controller: 'RunController'
+            })
+            .when('/datasource/create/:serviceName/:siteName', {
+                templateUrl: 'partial/ds.html',
+                controller: 'CreateDSController'
             })
             .otherwise({
                 redirectTo: '/zero'

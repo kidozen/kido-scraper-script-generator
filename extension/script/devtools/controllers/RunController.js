@@ -1,6 +1,5 @@
 'use strict';
 require('angular');
-require('angular-loading-bar');
 var Site = require('../model/Site');
 
 //TODO Refactor this class as it got too large and convoluted
@@ -139,7 +138,7 @@ module.exports = (function () {
                     if (!confirm("Are you sure you want to delete the service '" + service.name + "'?")) {
                         return;
                     }
-                    if (timeoutIsInvalid($scope.timeout)) {
+                    if (timeoutIsInvalid()) {
                         return;
                     }
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
@@ -184,7 +183,7 @@ module.exports = (function () {
                         alert("Could not determine the service to run the script with!");
                         return;
                     }
-                    if (timeoutIsInvalid($scope.timeout)) {
+                    if (timeoutIsInvalid()) {
                         return;
                     }
                     $scope.lastUsedService = service;
@@ -212,6 +211,13 @@ module.exports = (function () {
                             $scope.running = false;
                         });
                     });
+                };
+                $scope.createDatasource = function (service) {
+                    if (!service) {
+                        alert("Could not determine the service the datasource will be associated to!");
+                        return;
+                    }
+                    $location.path('/datasource/create/' + service.name + '/' + $scope.site.name);
                 };
                 $scope.runAgain = function () {
                     $scope.runIn($scope.lastUsedService);

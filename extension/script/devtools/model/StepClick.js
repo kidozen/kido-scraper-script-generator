@@ -22,6 +22,10 @@ module.exports = (function() {
         };
     };
 
+    StepClick.prototype.getAllParams = function() {
+        return [];
+    };
+
     StepClick.prototype.toJson = function() {
         return {
             type: this._Site.TYPES.CLICK,
