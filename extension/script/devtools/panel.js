@@ -13,7 +13,12 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
 
         $routeProvider
             .when('/', {
-                templateUrl: 'partial/home.html'
+                templateUrl: 'partial/session/session.html',
+                controller: 'SessionController'
+            })
+            .when('/home', {
+                templateUrl: 'partial/home.html',
+                controller: 'HomeController'
             })
             .when('/projects', {
                 templateUrl: 'partial/project/projects.html',
