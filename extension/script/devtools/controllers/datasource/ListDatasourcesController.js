@@ -22,7 +22,15 @@ module.exports = (function () {
                 };
 
                 $scope.deleteDatasource = function (index) {
-                    alert("To be implemented!");
+                    var datasource = $scope.datasources[index];
+
+                    datasourceService.deleteDatasource(datasource, $scope.marketplaceURL, function(error, outcome) {
+                        if (error) return;
+
+                        if (outcome && outcome.deleted) {
+                            $scope.datasources.splice(index, 1);
+                        }
+                    });
                 };
             });
         });

@@ -46,6 +46,28 @@ module.exports = (function () {
                 });
             };
 
+            var deleteDatasource = function (ds, marketplaceURL, cb) {
+                if (!ds) {
+                    var msg = "Could not determine the datasource to be deleted";
+                    alert(msg);
+                    return cb(Error.create(msg));
+                }
+                if (!confirm("Are you sure you want to delete the datasource '" + ds.name + "'?")) {
+                    return cb(null, {deleted: false});
+                }
+                RunInBackgroundScript.getAuthToken(marketplaceURL).done(function (token) {
+                    $http({
+                        method: 'DELETE',
+                        url: marketplaceURL + "api/admin/datasources/" + ds.name,
+                        headers: { 'Authorization': token }
+                    }).then(function (response) {
+                        cb(null, {deleted: true});
+                    }, function (err) {
+                        cb(Error.create("An error occurred while deleting the datasource instance " + ds.name, err));
+                    });
+                });
+            };
+
             var _datasourceIsInvalid = function (ds) {
                 return _newDatasourceNameIsInvalid(ds) || _descriptionIsInvalid(ds) || _serviceNameIsInvalid(ds) || _methodIsInvalid(ds) || _timeoutIsInvalid(ds);
             };
@@ -104,7 +126,8 @@ module.exports = (function () {
 
             return {
                 createDatasource: createDatasource,
-                getAllDatasources: getAllDatasources
+                getAllDatasources: getAllDatasources,
+                deleteDatasource: deleteDatasource
             };
         }
     );
