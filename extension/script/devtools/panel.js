@@ -12,9 +12,12 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);
 
         $routeProvider
-            .when('/zero', {
-                templateUrl: 'partial/zero.html',
-                controller: 'ZeroController'
+            .when('/', {
+                templateUrl: 'partial/home.html'
+            })
+            .when('/projects', {
+                templateUrl: 'partial/project/projects.html',
+                controller: 'ProjectController'
             })
             .when('/one', {
                 templateUrl: 'partial/one.html',
@@ -36,12 +39,24 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
                 templateUrl: 'partial/run.html',
                 controller: 'RunController'
             })
-            .when('/datasource/create/:serviceName/:siteName', {
-                templateUrl: 'partial/ds.html',
-                controller: 'CreateDSController'
+            .when('/datasources', {
+                templateUrl: 'partial/datasource/ds_list.html',
+                controller: 'ListDatasourcesController'
+            })
+            .when('/datasources/create', {
+                templateUrl: 'partial/datasource/ds_create.html',
+                controller: 'CreateDatasourceController'
+            })
+            .when('/datasources/create/:serviceName/:siteName', {
+                templateUrl: 'partial/datasource/ds_create.html',
+                controller: 'CreateDatasourceController'
             })
             .otherwise({
-                redirectTo: '/zero'
+                redirectTo: '/'
             });
     })
-    .run();
+    .run(function ($window, $rootScope) {
+        $rootScope.goBack = function () {
+            $window.history.back();
+        }
+    });

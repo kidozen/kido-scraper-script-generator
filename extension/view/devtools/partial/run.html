@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
-    <li>Scraper Generator</li>
-    <li><a href="#/zero">My Projects</a></li>
+    <li><a href="#/">Scraper Generator</a></li>
+    <li><a href="#/projects">Projects</a></li>
     <li><a href="#/two/{{site.name}}">{{site.name}}</a></li>
     <li class="active">Run</li>
 </ol>
@@ -25,8 +25,8 @@
     <table class="table" ng-model="services">
         <tr>
             <td class="three-cols-first-column">
-                <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" class="form-control"
-                       placeholder="New Service">
+                <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" regexp-matching="/^[-a-zA-Z0-9,&]+$/"
+                       class="form-control" placeholder="New Service">
             </td>
             <td class="three-cols-second-column">
                 <select class="form-control select select-primary" select2 ng-model="runOn"

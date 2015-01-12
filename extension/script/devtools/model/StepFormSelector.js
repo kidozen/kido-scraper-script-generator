@@ -13,7 +13,7 @@ module.exports = (function() {
         this._key = step.key;
         this._value = step.value;
         this._isParameterizable = step.isParameterizable;
-        this._param = step.param;
+        this._param = this._validateParam(step.param);
     }
 
     StepFormSelector.prototype = Object.create(Step.prototype);
@@ -42,22 +42,38 @@ module.exports = (function() {
         return [this._param];
     };
 
-    StepFormSelector.prototype.toJson = function() {
+    StepFormSelector.prototype.toJson = function(parameterizable) {
         return {
             type: this._Site.TYPES.FORM_SELECTOR,
             name: this._name,
             key: this._key,
-            value: this._value,
+            value: this._getValue(parameterizable),
             isParameterizable: this._isParameterizable,
             param: this._param
         };
     };
 
-    StepFormSelector.prototype.toCasper = function() {
+    StepFormSelector.prototype.toCasper = function(parameterizable) {
         return Util.supplant.call('document.querySelector({{key}}).value = "{{value}}";', {
             key: Util.quote.call(this._key),
-            value: this._value
+            value: this._getValue(parameterizable)
         });
+    };
+
+    StepFormSelector.prototype._validateParam = function(param) {
+        if (this._isParameterizable) {
+            if (!param.name) {
+                throw 'Please specify the param name';
+            }
+            if (param.name.toString().match(/^[-a-zA-Z0-9,&]+$/) == null) {
+                throw 'Param name must contain only alphanumeric characters';
+            }
+        }
+        return param;
+    };
+
+    StepFormSelector.prototype._getValue = function(parameterizable) {
+        return parameterizable && this._isParameterizable ? "<%" + this._param.name + "%>" : this._value;
     };
 
     return StepFormSelector;

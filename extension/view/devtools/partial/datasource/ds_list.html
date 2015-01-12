@@ -1,0 +1,27 @@
+<ol class="breadcrumb">
+    <li><a href="#/">Scraper Generator</a></li>
+    <li class="active">Datasources</li>
+</ol>
+<div class="col-md-8">
+    <table class="table" ng-model="datasources">
+        <tr>
+            <td colspan="3">
+                <a href="#/datasources/create" class="btn btn-primary"><span class="fui-plus"></span>Create New Datasource</a>
+            </td>
+        </tr>
+        <tr ng-repeat="d in datasources" ng-show="  d.serviceType === 'webauthorapi'">
+            <td class="three-cols-first-column">
+                <label>{{ d.name }}</label>
+            </td>
+            <td class="three-cols-second-column">
+                <label>{{ d.serviceName }}</label>
+            </td>
+            <td class="three-cols-third-column" align="right">
+                <div class="form-inline" role="form">
+                    <button ng-click="runDatasource(d)" class="btn btn-info"></span>Run</button>
+                    <button ng-click="deleteDatasource($index)" class="btn btn-danger btn-sm"><span class="fui-cross"></span>Delete</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

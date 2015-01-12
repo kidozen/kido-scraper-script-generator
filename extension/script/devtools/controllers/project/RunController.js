@@ -1,12 +1,12 @@
 'use strict';
 require('angular');
-var Site = require('../model/Site');
+var Site = require('../../model/Site');
 
 //TODO Refactor this class as it got too large and convoluted
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('RunController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope) {
+    angular.module('KidoScraper').controller('RunController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, serviceService) {
         console.log('Loading Run Controller...');
 
         if (!$routeParams.name) {
@@ -33,16 +33,15 @@ module.exports = (function () {
                     // Standardize all marketplace URLs to have a trailing slash
                     $scope.marketplaceURL = $scope.marketplaceURL.replace(/\/?$/, '/');
 
-                    RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
-                        $http({
-                            method: 'GET',
-                            url: $scope.marketplaceURL + 'api/services',
-                            headers: {'Authorization': token},
-                            ignoreLoadingBar: true
-                        }).then(function (response) {
-                            $scope.services = response.data;
-                            $scope.authRequired = false;
+                    serviceService.getAllServices($scope.marketplaceURL, function (error, services) {
+                        if (error) {
+                            return baseErrorHandler.handleError(error, "Error while attempting to retrieve services");
+                        }
+                        $scope.services = services;
+                        $scope.authRequired = false;
 
+                        // TODO Abstract this out to an "AgentService"
+                        RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
                             $http({
                                 method: 'GET',
                                 url: $scope.marketplaceURL + 'api/admin/agents',
@@ -64,11 +63,8 @@ module.exports = (function () {
                                 $scope.agents = response.data;
                             }, function (error) {
                                 alert(JSON.stringify(error, null, 2));
-                                handleError(error, "Error while attempting to retrieve agents");
+                                baseErrorHandler.handleError(error, "Error while attempting to retrieve agents");
                             });
-
-                        }, function (error) {
-                            handleError(error, "Error while attempting to retrieve services");
                         });
                     });
                 };
@@ -217,7 +213,7 @@ module.exports = (function () {
                         alert("Could not determine the service the datasource will be associated to!");
                         return;
                     }
-                    $location.path('/datasource/create/' + service.name + '/' + $scope.site.name);
+                    $location.path('/datasources/create/' + service.name + '/' + $scope.site.name);
                 };
                 $scope.runAgain = function () {
                     $scope.runIn($scope.lastUsedService);
@@ -225,18 +221,6 @@ module.exports = (function () {
 
                 $scope.back = function () {
                     $scope.executionResult = null;
-                };
-
-                var handleError = function (error, baseMessage) {
-                    var msg = baseMessage;
-                    if (error) {
-                        if (error.status === 0) {
-                            msg += "\n\nIs " + $scope.marketplaceURL + " up and running?\nAre SSL certs valid?";
-                        } else {
-                            msg += " (status code: " + error.status + ")";
-                        }
-                    }
-                    alert(msg);
                 };
 
                 var newServiceNameIsInvalid = function () {

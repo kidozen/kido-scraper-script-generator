@@ -3,8 +3,8 @@ require('angular');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ZeroController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
-        console.log('Loading Zero Controller...');
+    angular.module('KidoScraper').controller('ProjectController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
+        console.log('Loading Project Controller...');
 
         RunInBackgroundScript.getFromLocalStorage(null).done(function(allSites) {
             AngularScope.apply($scope, function () {

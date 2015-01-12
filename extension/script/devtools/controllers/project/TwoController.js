@@ -1,6 +1,6 @@
 'use strict';
 require('angular');
-var Site = require('../model/Site');
+var Site = require('../../model/Site');
 
 module.exports = (function () {
 

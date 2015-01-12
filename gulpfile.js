@@ -16,17 +16,20 @@ gulp.task('browserify', function() {
                        basePath + '/services/RunInCurrentTabContext.js',
                        basePath + '/services/RunInBackgroundScript.js',
                        basePath + '/services/DatasourceService.js',
-                       basePath + '/controllers/ZeroController.js',
-                       basePath + '/controllers/OneController.js',
-                       basePath + '/controllers/TwoController.js',
-                       basePath + '/controllers/ThreeController.js',
-                       basePath + '/controllers/ExportController.js',
-                       basePath + '/controllers/RunController.js',
-                       basePath + '/controllers/datasource/CreateDSController.js',
+                       basePath + '/services/ServiceService.js',
+                       basePath + '/controllers/project/ProjectController.js',
+                       basePath + '/controllers/project/OneController.js',
+                       basePath + '/controllers/project/TwoController.js',
+                       basePath + '/controllers/project/ThreeController.js',
+                       basePath + '/controllers/project/ExportController.js',
+                       basePath + '/controllers/project/RunController.js',
+                       basePath + '/controllers/datasource/CreateDatasourceController.js',
+                       basePath + '/controllers/datasource/ListDatasourcesController.js',
                        basePath + '/directives/StepClickDirective.js',
                        basePath + '/directives/StepFormDirective.js',
                        basePath + '/directives/StepScrapeDirective.js',
-                       basePath + '/directives/Select2Directive.js'])
+                       basePath + '/directives/Select2Directive.js',
+                       basePath + '/directives/RegexpMatchingDirective.js'])
         .bundle()
         .pipe(source('bundle.js'))
         .pipe(gulp.dest('./extension/'));

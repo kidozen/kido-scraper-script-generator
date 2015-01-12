@@ -4,33 +4,31 @@ require('angular');
 module.exports = (function () {
 
     angular.module('KidoScraper')
-        .service('datasourceService', function ($http, RunInBackgroundScript, AngularScope) {
+        .service('datasourceService', function ($http, RunInBackgroundScript) {
 
             // TODO The marketplaceURL should be provided by a service that knows the current auth details
-            var createDatasource = function ($scope, ds, marketplaceURL, cb) {
-                if (_newDatasourceNameIsInvalid(ds) || _descriptionIsInvalid(ds) || _methodIsInvalid(ds) || _timeoutIsInvalid(ds)) {
+            var createDatasource = function (ds, marketplaceURL, cb) {
+                if (_datasourceIsInvalid(ds)) {
                     return cb(Error.create("Validation errors"));
                 }
                 RunInBackgroundScript.getAuthToken(marketplaceURL).done(function (token) {
-                    AngularScope.apply($scope, function() {
-                        $http({
-                            method: 'POST',
-                            url: marketplaceURL + 'api/admin/datasources/',
-                            headers: {
-                                'Authorization': token,
-                                "Content-Type": "application/json"
-                            },
-                            data: JSON.stringify(ds)
-                        }).then(function (response) {
-                            cb(null);
-                        }, function (err) {
-                            cb(Error.create("An error occurred while creating the datasource " + ds.name, err));
-                        });
+                    $http({
+                        method: 'POST',
+                        url: marketplaceURL + 'api/admin/datasources/',
+                        headers: {
+                            'Authorization': token,
+                            "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify(ds)
+                    }).then(function (response) {
+                        cb(null);
+                    }, function (err) {
+                        cb(Error.create("An error occurred while creating the datasource " + ds.name, err));
                     });
                 });
             };
 
-            var getAllDatasources = function (cb, marketplaceURL) {
+            var getAllDatasources = function (marketplaceURL, cb) {
                 RunInBackgroundScript.getAuthToken(marketplaceURL).done(function (token) {
                     $http({
                         method: 'GET',
@@ -41,12 +39,15 @@ module.exports = (function () {
                         },
                         cache: false
                     }).then(function (response) {
-                        alert(JSON.stringify(response, null, 2));
-                        cb(response);
+                        cb(null, response.data);
                     }, function (err) {
-                        cb(Error.create("An error occurred while retrieving existing datasources", err));
+                        cb(Error.create("An error occurred while retrieving existing datasources", err), null);
                     });
                 });
+            };
+
+            var _datasourceIsInvalid = function (ds) {
+                return _newDatasourceNameIsInvalid(ds) || _descriptionIsInvalid(ds) || _serviceNameIsInvalid(ds) || _methodIsInvalid(ds) || _timeoutIsInvalid(ds);
             };
 
             var _newDatasourceNameIsInvalid = function (ds) {
@@ -69,6 +70,22 @@ module.exports = (function () {
                 return false;
             };
 
+            var _descriptionIsInvalid = function (ds) {
+                if (ds.description && ds.description.length > 400) {
+                    alert("The description must be shorter than 400 characters");
+                    return true;
+                }
+                return false;
+            };
+
+            var _serviceNameIsInvalid = function (ds) {
+                if (!ds.serviceName) {
+                    alert('Please specify the service this datasource is associated to');
+                    return true;
+                }
+                return false;
+            };
+
             var _methodIsInvalid = function (ds) {
                 if (!ds.operationName) {
                     alert('Please specify the method to execute');
@@ -80,14 +97,6 @@ module.exports = (function () {
             var _timeoutIsInvalid = function (ds) {
                 if (!ds.timeout || ds.timeout.toString().match(/[^0-9]+/) != null) {
                     alert("The timeout must be a positive integer!");
-                    return true;
-                }
-                return false;
-            };
-
-            var _descriptionIsInvalid = function (ds) {
-                if (ds.description && ds.description.length > 400) {
-                    alert("The description is mandatory and must be shorter than 400 characters");
                     return true;
                 }
                 return false;
