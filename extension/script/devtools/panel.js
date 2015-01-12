@@ -39,6 +39,10 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
                 templateUrl: 'partial/run.html',
                 controller: 'RunController'
             })
+            .when('/services', {
+                templateUrl: 'partial/service/service_list.html',
+                controller: 'ListServicesController'
+            })
             .when('/datasources', {
                 templateUrl: 'partial/datasource/ds_list.html',
                 controller: 'ListDatasourcesController'

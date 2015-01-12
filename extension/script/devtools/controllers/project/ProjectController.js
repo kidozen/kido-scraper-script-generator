@@ -26,8 +26,14 @@ module.exports = (function () {
                         });
                     });
                 };
-                $scope.open = function (site) {
+                $scope.openSite = function (site) {
                     $location.path('/two/' + site.name);
+                };
+                $scope.exportSite = function (site) {
+                    $location.path('/export/' + site.name);
+                };
+                $scope.runSite = function (site) {
+                    $location.path('/run/' + site.name);
                 };
             });
         });

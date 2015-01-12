@@ -24,6 +24,7 @@ gulp.task('browserify', function () {
         basePath + '/controllers/project/ThreeController.js',
         basePath + '/controllers/project/ExportController.js',
         basePath + '/controllers/project/RunController.js',
+        basePath + '/controllers/service/ListServicesController.js',
         basePath + '/controllers/datasource/CreateDatasourceController.js',
         basePath + '/controllers/datasource/ListDatasourcesController.js',
         basePath + '/controllers/datasource/RunDatasourceController.js',

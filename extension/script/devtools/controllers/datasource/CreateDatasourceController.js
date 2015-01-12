@@ -9,8 +9,8 @@ module.exports = (function () {
 
         $scope.serviceName = $routeParams.serviceName;
         $scope.siteName = $routeParams.siteName;
-        $scope.projectNameWasSpecified = $scope.siteName == true;   // checking "trustiness" on purpose
-        $scope.serviceNameWasSpecified = $scope.serviceName == true;// checking "trustiness" on purpose
+        $scope.projectNameWasSpecified = $scope.siteName != null;
+        $scope.serviceNameWasSpecified = $scope.serviceName != null;
         $scope.methods = ['runJson', 'runScript'];
         $scope.timeout = 60;
 
