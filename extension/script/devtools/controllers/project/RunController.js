@@ -114,13 +114,13 @@ module.exports = (function () {
                                     if (retries-- > 0) {
                                         enableService();
                                     } else {
-                                        handleError(error, "An error occurred while enabling the service instance " + service.name);
+                                        baseErrorHandler.handleError(error, "An error occurred while enabling the service instance " + service.name);
                                     }
                                 });
                             };
                             enableService();
                         }, function (error) {
-                            handleError(error, "An error occurred while creating the service instance " + service.name);
+                            baseErrorHandler.handleError(error, "An error occurred while creating the service instance " + service.name);
                         });
                     });
                 };
@@ -163,14 +163,14 @@ module.exports = (function () {
                                     if (retries-- > 0) {
                                         deleteService();
                                     } else {
-                                        handleError(error, "An error occurred while deleting the service instance " + service.name);
+                                        baseErrorHandler.handleError(error, "An error occurred while deleting the service instance " + service.name);
                                     }
                                 });
                             };
                             deleteService();
 
                         }, function (error) {
-                            handleError(error, "An error occurred while disabling the service instance " + service.name);
+                            baseErrorHandler.handleError(error, "An error occurred while disabling the service instance " + service.name);
                         });
                     });
                 };
@@ -203,7 +203,7 @@ module.exports = (function () {
                             }
                             $scope.running = false;
                         }, function (error) {
-                            handleError(error, "Error while invoking the method 'runJson'");
+                            baseErrorHandler.handleError(error, "Error while invoking the method 'runJson'");
                             $scope.running = false;
                         });
                     });

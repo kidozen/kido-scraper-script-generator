@@ -18,7 +18,11 @@ module.exports = (function () {
                 });
 
                 $scope.runDatasource = function (datasource) {
-                    alert("To be implemented!");
+                    if (!datasource) {
+                        alert("Could not determine the datasource to run the script with!");
+                        return;
+                    }
+                    $location.path('/datasources/run/' + datasource.name);
                 };
 
                 $scope.deleteDatasource = function (index) {

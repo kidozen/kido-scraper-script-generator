@@ -51,6 +51,10 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
                 templateUrl: 'partial/datasource/ds_create.html',
                 controller: 'CreateDatasourceController'
             })
+            .when('/datasources/run/:dsName', {
+                templateUrl: 'partial/datasource/ds_run.html',
+                controller: 'RunDatasourceController'
+            })
             .otherwise({
                 redirectTo: '/'
             });

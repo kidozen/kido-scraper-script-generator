@@ -12,17 +12,12 @@ module.exports = (function () {
         $scope.projectNameWasSpecified = $scope.siteName == true;   // checking "trustiness" on purpose
         $scope.serviceNameWasSpecified = $scope.serviceName == true;// checking "trustiness" on purpose
         $scope.methods = ['runJson', 'runScript'];
-        $scope.timeout = 60; //default, can be changed by the user
+        $scope.timeout = 60;
 
         // TODO This is a clear candidate to be refactored out, to a service that deals with user session, auth credentials, etc...
         RunInBackgroundScript.getFromLocalStorage(RunInBackgroundScript.lastUsedMarketplaceURL).done(function (lastUsedMarketplaceURL) {
             AngularScope.apply($scope, function () {
                 $scope.marketplaceURL = lastUsedMarketplaceURL;
-
-                datasourceService.getAllDatasources($scope.marketplaceURL, function (error, allDatasources) {
-                    if (error) return;
-                    $scope.datasources = allDatasources;
-                });
 
                 //TODO Create a "projectService" that deals with the details of how to retrieve projects
                 RunInBackgroundScript.getFromLocalStorage(null).done(function (allSites) {
@@ -38,6 +33,7 @@ module.exports = (function () {
                     $scope.services = services;
 
                     $scope.createNewDatasource = function () {
+
                         if (siteNameIsNotPresent()) {
                             return;
                         }
@@ -55,7 +51,9 @@ module.exports = (function () {
                                 datasource.timeout = $scope.timeout;
                                 datasource.cache = '0';
                                 datasource.params = $scope.site.getAllParams();
-                                datasource.body = $scope.method === 'runJson' ? JSON.stringify({json: $scope.site.toJson(true)}) : JSON.stringify({script: $scope.site.toCasper(true)});
+                                datasource.body = $scope.method === 'runJson' ?
+                                    JSON.stringify({json: $scope.site.toJson(true)}) :
+                                    JSON.stringify({script: $scope.site.toCasper(true)});
 
                                 datasourceService.createDatasource(datasource, $scope.marketplaceURL, function (error) {
                                     if (error) {
@@ -66,18 +64,6 @@ module.exports = (function () {
                                 });
                             });
                         });
-                    };
-
-                    $scope.runDatasource = function (datasource) {
-                        alert("To be implemented!");
-                    };
-
-                    $scope.deleteDatasource = function (index) {
-                        alert("To be implemented!");
-                    };
-
-                    $scope.cancel = function () {
-                        $location.path('/datasources');
                     };
 
                     var siteNameIsNotPresent = function () {

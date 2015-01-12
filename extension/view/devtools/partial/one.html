@@ -1,36 +1,37 @@
 <ol class="breadcrumb">
-	<li><a href="#/">Scraper Generator</a></li>
-  <li><a href="#/projects">Projects</a></li>
-  <li class="active">New Site</li>
+    <li><a href="#/">Scraper Generator</a></li>
+    <li><a href="#/projects">Projects</a></li>
+    <li class="active">New Site</li>
 </ol>
 <div class="row">
-	<div class="col-md-8">
-		<form class="form-horizontal">
-			  <div class="form-group">
-			    <label class="col-sm-2 control-label">Name</label>
-			    <div class="col-sm-10">
-			      <input ng-model="name" class="form-control" placeholder="Name">
-			    </div>
-			  </div>
-			  <div class="form-group">
-			    <label class="col-sm-2 control-label">Site URL</label>
-			    <div class="col-sm-10">
-			      <input type="url" ng-model="url" class="form-control" placeholder="URL">
-			    </div>
-			  </div>
-			   <div class="form-group">
-			    <div class="col-sm-offset-2 col-sm-10">
-					<button ng-click="create()" class="btn btn-primary">Create</button>
-					<button ng-click="goBack()" class="btn">Cancel</button>
-			    </div>
-			  </div>
-		</form>
-	</div>
-	<div class="col-md-4">
-		<div class="tile">
-			<h4>Creating a new Project</h4>
-			<p>By creating a new Project you can then record
-			the steps for scraping data out of a website.</p>
-		</div>
-	</div>
+    <div class="col-md-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Name</label>
+
+                <div class="col-sm-10">
+                    <input ng-model="name" class="form-control" placeholder="Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Site URL</label>
+
+                <div class="col-sm-10">
+                    <input type="url" ng-model="url" class="form-control" placeholder="URL">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-click="create()" class="btn btn-primary">Create</button>
+                    <button ng-click="goBack()" class="btn">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div class="tile">
+            <h4>Creating a new Project</h4>
+            <p>By creating a new Project you can then record the steps for scraping data out of a website.</p>
+        </div>
+    </div>
 </div>

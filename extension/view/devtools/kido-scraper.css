@@ -29,6 +29,15 @@
     padding-top: 5px;
 }
 
+th > label {
+    font-weight: bold;
+}
+
+.required-param:after {
+    color: #d00;
+    content: "*";
+}
+
 input.ng-invalid {
     border: 1px solid #e74c3c;
 }
