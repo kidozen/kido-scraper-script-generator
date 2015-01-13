@@ -9,8 +9,8 @@ module.exports = (function() {
     function StepScrape(Site, step) {
         Step.call(this, Site, step);
         if (!Array.isArray(step.fields)) throw 'The "step.fields" property must be an array';
-        this._fields = step.fields.map(function(item) {
-            return new StepSelector(Site, item);
+        this._fields = step.fields.map(function(s) {
+            return new StepSelector(Site, s);
         });
     }
 
@@ -25,17 +25,21 @@ module.exports = (function() {
         };
     };
 
-    StepScrape.prototype.toJson = function() {
+    StepScrape.prototype.getAllParams = function() {
+        return [];
+    };
+
+    StepScrape.prototype.toJson = function(parameterizable) {
         return {
             type: this._Site.TYPES.SCRAPE,
             name: this._name,
-            fields: this._fields.map(function(item) {
-                return item.toJson();
+            fields: this._fields.map(function(step) {
+                return step.toJson(parameterizable);
             })
         };
     };
 
-    StepScrape.prototype.toCasper = function() {
+    StepScrape.prototype.toCasper = function(parameterizable) {
         return Util.supplant.call(multiline(function() {
             /*
                  casper.then(function() {
@@ -54,13 +58,13 @@ module.exports = (function() {
                  });
              */
         }), {
-            header: this._fields.map(function (item) {
-                return "casper.waitForSelector('" + item.getKey() + "', function() {";
+            header: this._fields.map(function (field) {
+                return "casper.waitForSelector('" + field.getKey() + "', function() {";
             }).join('\n'),
-            fields: this._fields.map(function (item) {
-                return item.toCasper();
+            fields: this._fields.map(function (field) {
+                return field.toCasper(parameterizable);
             }).join('\n'),
-            footer: this._fields.map(function (item) {
+            footer: this._fields.map(function (field) {
                 return "});";
             }).join('\n')
         });

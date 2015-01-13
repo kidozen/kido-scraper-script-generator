@@ -2,6 +2,8 @@
 'use strict';
 require('angular');
 require('angular-route');
+require('angular-loading-bar');
+require("simple-errors");
 var Site = require('./model/Site');
 
 angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
@@ -10,9 +12,12 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);
 
         $routeProvider
-            .when('/zero', {
-                templateUrl: 'partial/zero.html',
-                controller: 'ZeroController'
+            .when('/', {
+                templateUrl: 'partial/home.html'
+            })
+            .when('/projects', {
+                templateUrl: 'partial/project/projects.html',
+                controller: 'ProjectController'
             })
             .when('/one', {
                 templateUrl: 'partial/one.html',
@@ -34,8 +39,32 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
                 templateUrl: 'partial/run.html',
                 controller: 'RunController'
             })
+            .when('/services', {
+                templateUrl: 'partial/service/service_list.html',
+                controller: 'ListServicesController'
+            })
+            .when('/datasources', {
+                templateUrl: 'partial/datasource/ds_list.html',
+                controller: 'ListDatasourcesController'
+            })
+            .when('/datasources/create', {
+                templateUrl: 'partial/datasource/ds_create.html',
+                controller: 'CreateDatasourceController'
+            })
+            .when('/datasources/create/:serviceName/:siteName', {
+                templateUrl: 'partial/datasource/ds_create.html',
+                controller: 'CreateDatasourceController'
+            })
+            .when('/datasources/run/:dsName', {
+                templateUrl: 'partial/datasource/ds_run.html',
+                controller: 'RunDatasourceController'
+            })
             .otherwise({
-                redirectTo: '/zero'
+                redirectTo: '/'
             });
     })
-    .run();
+    .run(function ($window, $rootScope) {
+        $rootScope.goBack = function () {
+            $window.history.back();
+        }
+    });

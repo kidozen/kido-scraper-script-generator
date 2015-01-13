@@ -1,0 +1,22 @@
+<ol class="breadcrumb">
+    <li><a href="#/">Scraper Generator</a></li>
+    <li class="active">Projects</li>
+</ol>
+<div class="col-md-8">
+    <a ng-click="addNewSite()" class="btn btn-primary">
+        <span class="fui-plus"></span>
+        Add New Project</a>
+
+    <table class="table">
+        <tr ng-repeat="s in sites">
+            <td ng-click="openSite(s)" class="two-cols-column-long">
+                <a><label>{{ s.name }}</label></a>
+            </td>
+            <td class="two-cols-column-short">
+                <a class="btn btn-primary" ng-click="exportSite(s)">Export</a>
+                <a class="btn btn-primary" ng-click="runSite(s)">Run</a>
+                <a class="btn btn-danger btn-sm" ng-click="deleteSite($index)"><span class="fui-cross"></span>Delete</a>
+            </td>
+        </tr>
+    </table>
+</div>

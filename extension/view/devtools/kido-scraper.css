@@ -1,21 +1,25 @@
 .two-cols-column-long {
-    width: 90%;
+    width: 70%;
 }
 
 .two-cols-column-short {
-    width: 10%;
+    width: 30%;
 }
 
 .two-cols-equal-width {
     width: 50%;
 }
 
-.three-cols-main-column {
-    width: 40%;
+.three-cols-first-column {
+    width: 30%;
 }
 
-.three-cols-secondary-column {
-    width: 20%;
+.three-cols-second-column {
+    width: 30%;
+}
+
+.three-cols-third-column {
+    width: 40%;
 }
 
 .form-horizontal .form-inline .form-group {
@@ -23,6 +27,15 @@
     margin-right: 0px;
     margin-bottom: 5px;
     padding-top: 5px;
+}
+
+th > label {
+    font-weight: bold;
+}
+
+.required-param:after {
+    color: #d00;
+    content: "*";
 }
 
 input.ng-invalid {

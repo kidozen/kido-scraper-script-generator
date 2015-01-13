@@ -17,18 +17,18 @@ module.exports = (function() {
         if (!Array.isArray(site.steps)) throw 'The "site.steps" property must be an array';
         this._name = site.name;
         this._url = site.url;
-        this._steps = site.steps.map(function(item) {
-            switch (item.type) {
+        this._steps = site.steps.map(function(step) {
+            switch (step.type) {
                 case Site.TYPES.CLICK:
-                    return new StepClick(Site, item);
+                    return new StepClick(Site, step);
                 case Site.TYPES.FORM:
-                    return new StepForm(Site, item);
+                    return new StepForm(Site, step);
                 case Site.TYPES.FORM_SELECTOR:
-                    return new StepFormSelector(Site, item);
+                    return new StepFormSelector(Site, step);
                 case Site.TYPES.SCRAPE:
-                    return new StepScrape(Site, item);
+                    return new StepScrape(Site, step);
                 case Site.TYPES.SELECTOR:
-                    return new StepSelector(Site, item);
+                    return new StepSelector(Site, step);
             }
         });
     }
@@ -87,17 +87,24 @@ module.exports = (function() {
     Site.prototype._url = undefined;
     Site.prototype._steps = [];
 
-    Site.prototype.toJson = function() {
+    Site.prototype.getAllParams = function() {
+        var allParams = this._steps.map(function(step) {
+            return step.getAllParams();
+        });
+        return [].concat.apply([], allParams);
+    };
+
+    Site.prototype.toJson = function(parameterizable) {
         return {
             name: this._name,
             url: this._url,
-            steps: this._steps.map(function(item) {
-                return item.toJson();
+            steps: this._steps.map(function(step) {
+                return step.toJson(parameterizable);
             })
         };
     };
 
-    Site.prototype.toCasper = function() {
+    Site.prototype.toCasper = function(parameterizable) {
         return beautify(Util.supplant.call(multiline(function() {
             /*
                  var casper = require('casper').create({
@@ -114,8 +121,8 @@ module.exports = (function() {
              */
         }), {
             url: this._url,
-            steps: this._steps.map(function(item) {
-                return item.toCasper();
+            steps: this._steps.map(function(step) {
+                return step.toCasper(parameterizable);
             }).join('\n')
         }), { indent_size: 4 });
     };

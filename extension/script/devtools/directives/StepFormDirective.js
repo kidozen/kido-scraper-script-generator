@@ -15,6 +15,8 @@ module.exports = (function () {
             link: function (scope) {
                 if (!scope.currentStep) throw 'stepForm directive needs a currentStep to work with';
 
+                scope.validParamTypes = ['string', 'number', 'boolean', 'array', 'object', 'userEmail', 'claim', 'timestamp'];
+
                 scope.addSelector = function () {
                     scope.currentStep.selectors.push(Site.getDefaults(Site.TYPES.FORM_SELECTOR));
                 };

@@ -36,7 +36,11 @@ module.exports = (function() {
         return this._key;
     };
 
-    StepSelector.prototype.toJson = function() {
+    StepSelector.prototype.getAllParams = function() {
+        return [];
+    };
+
+    StepSelector.prototype.toJson = function(parameterizable) {
         return {
             type: this._Site.TYPES.SELECTOR,
             name: this._name,
@@ -45,7 +49,7 @@ module.exports = (function() {
         };
     };
 
-    StepSelector.prototype.toCasper = function() {
+    StepSelector.prototype.toCasper = function(parameterizable) {
         // TODO: select according to attr
         return Util.supplant.call(multiline(function() {
             /*

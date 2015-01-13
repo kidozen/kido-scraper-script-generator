@@ -11,8 +11,8 @@ module.exports = (function() {
         Step.call(this, Site, step);
         if (!Array.isArray(step.selectors)) throw 'The "step.selectors" property must be an array';
         if (!step.submit) throw 'The "step.submit" property is required';
-        this._selectors = step.selectors.map(function(item) {
-            return new StepFormSelector(Site, item);
+        this._selectors = step.selectors.map(function(s) {
+            return new StepFormSelector(Site, s);
         });
         this._submit = new StepClick(Site, step.submit);
     }
@@ -30,18 +30,25 @@ module.exports = (function() {
         };
     };
 
-    StepForm.prototype.toJson = function() {
+    StepForm.prototype.getAllParams = function() {
+        var allParams = this._selectors.map(function(selector) {
+            return selector.getAllParams();
+        });
+        return [].concat.apply([], allParams);
+    };
+
+    StepForm.prototype.toJson = function(parameterizable) {
         return {
             type: this._Site.TYPES.FORM,
             name: this._name,
-            selectors: this._selectors.map(function(item) {
-                return item.toJson();
+            selectors: this._selectors.map(function(selector) {
+                return selector.toJson(parameterizable);
             }),
-            submit: this._submit.toJson()
+            submit: this._submit.toJson(parameterizable)
         };
     };
 
-    StepForm.prototype.toCasper = function() {
+    StepForm.prototype.toCasper = function(parameterizable) {
         return Util.supplant.call(multiline(function() {
             /*
                  casper.thenEvaluate(function() {
@@ -50,10 +57,10 @@ module.exports = (function() {
                  {{submit}}
              */
         }), {
-            selectors: this._selectors.map(function(item) {
-                return item.toCasper();
+            selectors: this._selectors.map(function(step) {
+                return step.toCasper(parameterizable);
             }).join('\n'),
-            submit: this._submit.toCasper()
+            submit: this._submit.toCasper(parameterizable)
         });
     };
 

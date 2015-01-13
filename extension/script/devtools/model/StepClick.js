@@ -22,7 +22,11 @@ module.exports = (function() {
         };
     };
 
-    StepClick.prototype.toJson = function() {
+    StepClick.prototype.getAllParams = function() {
+        return [];
+    };
+
+    StepClick.prototype.toJson = function(parameterizable) {
         return {
             type: this._Site.TYPES.CLICK,
             name: this._name,
@@ -30,7 +34,7 @@ module.exports = (function() {
         };
     };
 
-    StepClick.prototype.toCasper = function() {
+    StepClick.prototype.toCasper = function(parameterizable) {
         return Util.supplant.call(multiline(function() {
             /*
                  casper.then(function() {
