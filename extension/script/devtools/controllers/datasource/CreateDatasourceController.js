@@ -28,7 +28,7 @@ module.exports = (function () {
 
                 serviceService.getAllServices($scope.marketplaceURL, function (error, services) {
                     if (error) {
-                        return baseErrorHandler.handleError(error, "Error while attempting to retrieve services");
+                        return baseErrorHandler.handleError(error, "Error while attempting to retrieve services", $scope.marketplaceURL);
                     }
                     $scope.services = services;
 
@@ -57,7 +57,7 @@ module.exports = (function () {
 
                                 datasourceService.createDatasource(datasource, $scope.marketplaceURL, function (error) {
                                     if (error) {
-                                        baseErrorHandler.handleError(error, "Error while creating datasource '" + datasource.name + "'");
+                                        baseErrorHandler.handleError(error, "Error while creating datasource '" + datasource.name + "'", $scope.marketplaceURL);
                                         return;
                                     }
                                     $location.path('/datasources');

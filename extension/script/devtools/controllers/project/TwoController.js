@@ -43,10 +43,10 @@ module.exports = (function () {
                 $scope.addScrape = function () {
                     _addStep(Site.TYPES.SCRAPE);
                 };
-                $scope.export = function (site) {
+                $scope.exportSite = function (site) {
                     $location.path('/export/' + site.name);
                 };
-                $scope.run = function (site) {
+                $scope.runSite = function (site) {
                     $location.path('/run/' + site.name);
                 };
             });

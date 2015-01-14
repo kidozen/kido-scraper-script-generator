@@ -4,7 +4,7 @@ var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('RunDatasourceController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, datasourceService, serviceService) {
+    angular.module('KidoScraper').controller('RunDatasourceController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, datasourceService) {
         console.log('Loading Run Datasource Controller...');
 
         if (!$routeParams.dsName) {

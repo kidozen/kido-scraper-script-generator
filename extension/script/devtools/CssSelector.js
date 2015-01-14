@@ -71,8 +71,8 @@ var ElementSelector = function (element, ignoredClasses) {
 		}
 	}
 
-	for (var i = 0; i < element.classList.length; i++) {
-		var cclass = element.classList[i];
+	for (var j = 0; j < element.classList.length; j++) {
+		var cclass = element.classList[j];
 		if (ignoredClasses.indexOf(cclass) === -1) {
 			cclass = cclass.replace(/:/g, '\\:');
 			this.classes.push(cclass);
@@ -121,8 +121,7 @@ ElementSelectorList.prototype.getCssSelector = function () {
 		resultSelectors.push(resultSelector);
 	}
 
-	var resultCSSSelector = resultSelectors.reverse().join(' ');
-	return resultCSSSelector;
+	return resultSelectors.reverse().join(' ');
 };
 
 ElementSelector.prototype = {

@@ -4,7 +4,7 @@ var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ListDatasourcesController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, datasourceService, serviceService) {
+    angular.module('KidoScraper').controller('ListDatasourcesController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, datasourceService) {
         console.log('Loading List Datasources Controller...');
 
         // TODO This is a clear candidate to be refactored out, to a service that deals with user session, auth credentials, etc...

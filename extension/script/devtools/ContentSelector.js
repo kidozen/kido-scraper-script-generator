@@ -20,7 +20,6 @@ ContentSelector = function (options) {
         //  handle situation when parent selector not found
         if (this.parent === undefined) {
             this.deferredCSSSelectorResponse.reject("parent selector not found");
-            return;
         }
     } else {
         this.parent = $("body")[0];

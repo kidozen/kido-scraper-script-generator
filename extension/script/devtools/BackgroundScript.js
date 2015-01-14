@@ -5,8 +5,8 @@ var auth_service_url_in_storage = 'auth_service_url_';
 // TODO This does not work when running as a web application, refactor!
 var haveAccessToChromeStorageAPI = function() { return chrome && chrome.storage; };
 
-String.prototype.startsWith = function (sufix) {
-	return this.substr(0, sufix.length) === sufix;
+String.prototype.startsWith = function (suffix) {
+	return this.substr(0, suffix.length) === suffix;
 };
 
 var collection = {};

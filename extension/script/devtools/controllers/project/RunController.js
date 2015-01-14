@@ -35,7 +35,7 @@ module.exports = (function () {
 
                     serviceService.getAllServices($scope.marketplaceURL, function (error, services) {
                         if (error) {
-                            return baseErrorHandler.handleError(error, "Error while attempting to retrieve services");
+                            return baseErrorHandler.handleError(error, "Error while attempting to retrieve services", $scope.marketplaceURL);
                         }
                         $scope.services = services;
                         $scope.authRequired = false;
@@ -62,8 +62,7 @@ module.exports = (function () {
                                 response.data.unshift({name: 'kidozen', type: 'cloud'});
                                 $scope.agents = response.data;
                             }, function (error) {
-                                alert(JSON.stringify(error, null, 2));
-                                baseErrorHandler.handleError(error, "Error while attempting to retrieve agents");
+                                baseErrorHandler.handleError(error, "Error while attempting to retrieve agents", $scope.marketplaceURL);
                             });
                         });
                     });
@@ -114,13 +113,13 @@ module.exports = (function () {
                                     if (retries-- > 0) {
                                         enableService();
                                     } else {
-                                        baseErrorHandler.handleError(error, "An error occurred while enabling the service instance " + service.name);
+                                        baseErrorHandler.handleError(error, "An error occurred while enabling the service instance " + service.name, $scope.marketplaceURL);
                                     }
                                 });
                             };
                             enableService();
                         }, function (error) {
-                            baseErrorHandler.handleError(error, "An error occurred while creating the service instance " + service.name);
+                            baseErrorHandler.handleError(error, "An error occurred while creating the service instance " + service.name, $scope.marketplaceURL);
                         });
                     });
                 };
@@ -163,14 +162,14 @@ module.exports = (function () {
                                     if (retries-- > 0) {
                                         deleteService();
                                     } else {
-                                        baseErrorHandler.handleError(error, "An error occurred while deleting the service instance " + service.name);
+                                        baseErrorHandler.handleError(error, "An error occurred while deleting the service instance " + service.name, $scope.marketplaceURL);
                                     }
                                 });
                             };
                             deleteService();
 
                         }, function (error) {
-                            baseErrorHandler.handleError(error, "An error occurred while disabling the service instance " + service.name);
+                            baseErrorHandler.handleError(error, "An error occurred while disabling the service instance " + service.name, $scope.marketplaceURL);
                         });
                     });
                 };
@@ -194,7 +193,7 @@ module.exports = (function () {
                                 'timeout': $scope.timeout,
                                 "Content-Type": "application/json"
                             },
-                            data: {json: $scope.site}
+                            data: {json: new Site($scope.site).toJson()}
                         }).then(function (response) {
                             if (response.status !== 200 || response.data.error) {
                                 alert("The service invocation produced an error: " + response.statusText + " / " + JSON.stringify(response.data, null, 2));
@@ -203,7 +202,7 @@ module.exports = (function () {
                             }
                             $scope.running = false;
                         }, function (error) {
-                            baseErrorHandler.handleError(error, "Error while invoking the method 'runJson'");
+                            baseErrorHandler.handleError(error, "Error while invoking the method 'runJson'", $scope.marketplaceURL);
                             $scope.running = false;
                         });
                     });

@@ -1,7 +1,5 @@
 /**
  * Element selector. Uses jQuery as base and adds some more features
- * @param parentElement
- * @param selector
  */
 ElementQuery = function(CSSSelector, parentElement) {
 
