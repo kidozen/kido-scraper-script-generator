@@ -37,18 +37,18 @@ module.exports = (function() {
         return [].concat.apply([], allParams);
     };
 
-    StepForm.prototype.toJson = function(parameterizable) {
+    StepForm.prototype.toJson = function(options) {
         return {
             type: this._Site.TYPES.FORM,
             name: this._name,
             selectors: this._selectors.map(function(selector) {
-                return selector.toJson(parameterizable);
+                return selector.toJson(options);
             }),
-            submit: this._submit.toJson(parameterizable)
+            submit: this._submit.toJson(options)
         };
     };
 
-    StepForm.prototype.toCasper = function(parameterizable) {
+    StepForm.prototype.toCasper = function(options) {
         return Util.supplant.call(multiline(function() {
             /*
                  casper.thenEvaluate(function() {
@@ -58,9 +58,9 @@ module.exports = (function() {
              */
         }), {
             selectors: this._selectors.map(function(step) {
-                return step.toCasper(parameterizable);
+                return step.toCasper(options);
             }).join('\n'),
-            submit: this._submit.toCasper(parameterizable)
+            submit: this._submit.toCasper(options)
         });
     };
 

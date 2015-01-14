@@ -3,7 +3,7 @@ var multiline = require('multiline');
 var Util = require('./Util');
 var Step = require('./Step');
 
-module.exports = (function() {
+module.exports = (function () {
 
     function StepSelector(Site, step) {
         Step.call(this, Site, step);
@@ -23,7 +23,7 @@ module.exports = (function() {
     StepSelector.prototype._key = undefined;
     StepSelector.prototype._attr = undefined;
 
-    StepSelector.getDefaults = function(Site) {
+    StepSelector.getDefaults = function (Site) {
         return {
             type: Site.TYPES.SELECTOR,
             name: '',
@@ -32,15 +32,15 @@ module.exports = (function() {
         };
     };
 
-    StepSelector.prototype.getKey = function() {
+    StepSelector.prototype.getKey = function () {
         return this._key;
     };
 
-    StepSelector.prototype.getAllParams = function() {
+    StepSelector.prototype.getAllParams = function () {
         return [];
     };
 
-    StepSelector.prototype.toJson = function(parameterizable) {
+    StepSelector.prototype.toJson = function (options) {
         return {
             type: this._Site.TYPES.SELECTOR,
             name: this._name,
@@ -49,18 +49,30 @@ module.exports = (function() {
         };
     };
 
-    StepSelector.prototype.toCasper = function(parameterizable) {
-        // TODO: select according to attr
-        return Util.supplant.call(multiline(function() {
-            /*
-                values[{{name}}] = this.evaluate(function() {
-                    var selection = document.querySelectorAll({{key}});
-                    return [].map.call(selection, function(item) {
-                        return item.innerText;
+    StepSelector.prototype.toCasper = function (options) {
+        // TODO: select according to this._attr instead of hard-coding "innerText"
+        var code;
+        if (options && options.scrapeWithinContainer) {
+            code = function () {
+                /*
+                    element = container.querySelector({{key}});
+                    currentItemScrapedValues[{{name}}] = element ? element.innerText : null;
+                 */
+            };
+        } else {
+            code = function () {
+                /*
+                    values[{{name}}] = this.evaluate(function() {
+                        var selection = document.querySelectorAll({{key}});
+                        return [].map.call(selection, function(item) {
+                            return item.innerText;
+                        });
                     });
-                });
-            */
-        }), {
+                */
+            };
+        }
+
+        return Util.supplant.call(multiline(code), {
             name: Util.quote.call(this._name),
             key: Util.quote.call(this._key)
         });

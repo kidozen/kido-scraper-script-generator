@@ -40,6 +40,7 @@ module.exports = (function () {
                         RunInBackgroundScript.getFromLocalStorage($scope.siteName).done(function (siteAsJson) {
                             AngularScope.apply($scope, function () {
                                 $scope.site = new Site(siteAsJson);
+                                var options = { parameterizable: true };
 
                                 var datasource = {};
                                 datasource.name = $scope.newDatasourceName;
@@ -52,8 +53,8 @@ module.exports = (function () {
                                 datasource.cache = '0';
                                 datasource.params = $scope.site.getAllParams();
                                 datasource.body = $scope.method === 'runJson' ?
-                                    JSON.stringify({json: $scope.site.toJson(true)}) :
-                                    JSON.stringify({script: $scope.site.toCasper(true)});
+                                    JSON.stringify({json: $scope.site.toJson(options)}) :
+                                    JSON.stringify({script: $scope.site.toCasper(options)});
 
                                 datasourceService.createDatasource(datasource, $scope.marketplaceURL, function (error) {
                                     if (error) {

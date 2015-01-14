@@ -94,17 +94,17 @@ module.exports = (function() {
         return [].concat.apply([], allParams);
     };
 
-    Site.prototype.toJson = function(parameterizable) {
+    Site.prototype.toJson = function(options) {
         return {
             name: this._name,
             url: this._url,
             steps: this._steps.map(function(step) {
-                return step.toJson(parameterizable);
+                return step.toJson(options);
             })
         };
     };
 
-    Site.prototype.toCasper = function(parameterizable) {
+    Site.prototype.toCasper = function(options) {
         return beautify(Util.supplant.call(multiline(function() {
             /*
                  var casper = require('casper').create({
@@ -122,7 +122,7 @@ module.exports = (function() {
         }), {
             url: this._url,
             steps: this._steps.map(function(step) {
-                return step.toCasper(parameterizable);
+                return step.toCasper(options);
             }).join('\n')
         }), { indent_size: 4 });
     };

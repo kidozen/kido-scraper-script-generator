@@ -19,8 +19,25 @@ module.exports = (function () {
                     id: ATTRS.TEXT,
                     name: 'Text'
                 }];
+                scope.scrapeWithinContainer = false;
+
+                // blank container property every time the checkbox gets unchecked
+                scope.$watch('scrapeWithinContainer', function (enabled) {
+                    if (!enabled) {
+                        scope.currentStep.container = '';
+                    }
+                });
                 scope.addField = function () {
                     scope.currentStep.fields.push(Site.getDefaults(Site.TYPES.SELECTOR));
+                };
+                scope.selectContainer = function () {
+                    RunInCurrentTabContext
+                        .selectSelector({parentCSSSelector: "", allowedElements: "*"})
+                        .done(function (retrievedCssSelector) {
+                            AngularScope.apply(scope, function () {
+                                scope.currentStep.container = retrievedCssSelector.CSSSelector;
+                            });
+                        })
                 };
                 scope.selectSelector = function (index) {
                     RunInCurrentTabContext
@@ -29,8 +46,7 @@ module.exports = (function () {
                             AngularScope.apply(scope, function () {
                                 scope.currentStep.fields[index].key = retrievedCssSelector.CSSSelector;
                             });
-                        }
-                    );
+                        });
                 };
                 scope.removeField = function (index) {
                     scope.currentStep.fields.splice(index, 1);

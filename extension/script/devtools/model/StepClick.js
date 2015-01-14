@@ -26,7 +26,7 @@ module.exports = (function() {
         return [];
     };
 
-    StepClick.prototype.toJson = function(parameterizable) {
+    StepClick.prototype.toJson = function(options) {
         return {
             type: this._Site.TYPES.CLICK,
             name: this._name,
@@ -34,7 +34,7 @@ module.exports = (function() {
         };
     };
 
-    StepClick.prototype.toCasper = function(parameterizable) {
+    StepClick.prototype.toCasper = function(options) {
         return Util.supplant.call(multiline(function() {
             /*
                  casper.then(function() {

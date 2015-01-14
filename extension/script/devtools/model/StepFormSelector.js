@@ -42,21 +42,21 @@ module.exports = (function() {
         return [this._param];
     };
 
-    StepFormSelector.prototype.toJson = function(parameterizable) {
+    StepFormSelector.prototype.toJson = function(options) {
         return {
             type: this._Site.TYPES.FORM_SELECTOR,
             name: this._name,
             key: this._key,
-            value: this._getValue(parameterizable),
+            value: this._getValue(options),
             isParameterizable: this._isParameterizable,
             param: this._param
         };
     };
 
-    StepFormSelector.prototype.toCasper = function(parameterizable) {
+    StepFormSelector.prototype.toCasper = function(options) {
         return Util.supplant.call('document.querySelector({{key}}).value = "{{value}}";', {
             key: Util.quote.call(this._key),
-            value: this._getValue(parameterizable)
+            value: this._getValue(options)
         });
     };
 
@@ -72,8 +72,8 @@ module.exports = (function() {
         return param;
     };
 
-    StepFormSelector.prototype._getValue = function(parameterizable) {
-        return parameterizable && this._isParameterizable ? "<%" + this._param.name + "%>" : this._value;
+    StepFormSelector.prototype._getValue = function(options) {
+        return this._isParameterizable && options && options.parameterizable ? "<%" + this._param.name + "%>" : this._value;
     };
 
     return StepFormSelector;
