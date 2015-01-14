@@ -6,10 +6,17 @@ require('angular-loading-bar');
 require("simple-errors");
 var Site = require('./model/Site');
 
-angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar'])
-    .config(function ($routeProvider, $compileProvider) {
+angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap'])
+    .config(function ($routeProvider, $compileProvider, $tooltipProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);
+
+        // when the user either leaves the element or clicks on it, the tooltip/popover will go off.
+        $tooltipProvider.setTriggers({
+            'mouseenter': 'mouseleave click',
+            'click': 'click',
+            'focus': 'blur'
+        });
 
         $routeProvider
             .when('/', {

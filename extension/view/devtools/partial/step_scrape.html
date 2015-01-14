@@ -7,7 +7,9 @@
                 <span class="fui-plus"></span>Add Field
             </button>
 
-            <div class="form-group">
+            <div class="form-group" popover-trigger="mouseenter" popover-placement="right"
+                 popover="Use this option when all the fields are related with each other. This is usually the case when
+                    scraping data from a list of items (e.g. items from a product list on eBay).">
                 <input id="scrapeWithinContainerCheckbox" type="checkbox" ng-model="scrapeWithinContainer">
                 <label for="scrapeWithinContainerCheckbox">All fields belong to a common container</label>
             </div>

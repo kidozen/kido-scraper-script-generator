@@ -45,6 +45,10 @@ input.ng-valid {
     border: 1px solid #2ecc71;
 }
 
+.popover-content {
+    font-size: 14px;
+}
+
 .select2-drop.select2-display-none.select2-with-searchbox.select2-drop-active {
     margin-top: 0px !important;
     /*border-top: 1px solid #eee;*/
