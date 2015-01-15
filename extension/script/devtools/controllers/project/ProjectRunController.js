@@ -6,8 +6,8 @@ var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('RunController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, serviceService) {
-        console.log('Loading Run Controller...');
+    angular.module('KidoScraper').controller('ProjectRunController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, serviceService) {
+        console.log('Loading Project Run Controller...');
 
         if (!$routeParams.name) {
             return $location.path('/');

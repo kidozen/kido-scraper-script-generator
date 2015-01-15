@@ -3,18 +3,18 @@ require('angular');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ProjectController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
-        console.log('Loading Project Controller...');
+    angular.module('KidoScraper').controller('ListProjectsController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
+        console.log('Loading ListProjects Controller...');
 
         RunInBackgroundScript.getFromLocalStorage(null).done(function(allSites) {
             AngularScope.apply($scope, function () {
                 $scope.sites = allSites;
                 $scope.appcenter = '';
 
-                $scope.addNewSite = function () {
-                    $location.path('/one');
+                $scope.createNewProject = function () {
+                    $location.path('/projects/create');
                 };
-                $scope.deleteSite = function (index) {
+                $scope.deleteProject = function (index) {
                     var siteName = $scope.sites[index].name;
 
                     if (!confirm("Are you sure you want to delete the site '" + siteName + "'?")) {
@@ -26,14 +26,14 @@ module.exports = (function () {
                         });
                     });
                 };
-                $scope.openSite = function (site) {
-                    $location.path('/two/' + site.name);
+                $scope.openProjectDetails = function (site) {
+                    $location.path('/projects/' + site.name);
                 };
-                $scope.exportSite = function (site) {
-                    $location.path('/export/' + site.name);
+                $scope.exportProject = function (site) {
+                    $location.path('/projects/export/' + site.name);
                 };
-                $scope.runSite = function (site) {
-                    $location.path('/run/' + site.name);
+                $scope.runProject = function (site) {
+                    $location.path('/projects/run/' + site.name);
                 };
             });
         });

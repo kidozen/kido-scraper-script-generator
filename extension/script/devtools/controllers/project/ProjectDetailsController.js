@@ -4,8 +4,8 @@ var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('TwoController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
-        console.log('Loading Two Controller...');
+    angular.module('KidoScraper').controller('ProjectDetailsController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
+        console.log('Loading Project Details Controller...');
 
         if (!$routeParams.name) {
             return $location.path('/');
@@ -28,7 +28,7 @@ module.exports = (function () {
                 $scope.site.steps = $scope.site.steps || [];
 
                 function _addStep(type) {
-                    $location.path('/three/' + $routeParams.name + '/' + type);
+                    $location.path('/projects/step/edit/' + $routeParams.name + '/' + type);
                 }
 
                 $scope.addStep = function () {
@@ -44,10 +44,10 @@ module.exports = (function () {
                     _addStep(Site.TYPES.SCRAPE);
                 };
                 $scope.exportSite = function (site) {
-                    $location.path('/export/' + site.name);
+                    $location.path('/projects/export/' + site.name);
                 };
                 $scope.runSite = function (site) {
-                    $location.path('/run/' + site.name);
+                    $location.path('/projects/run/' + site.name);
                 };
             });
         });

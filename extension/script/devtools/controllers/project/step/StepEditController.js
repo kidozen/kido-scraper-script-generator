@@ -1,11 +1,11 @@
 'use strict';
 require('angular');
-var Site = require('../../model/Site');
+var Site = require('../../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ThreeController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
-        console.log('Loading Three Controller...');
+    angular.module('KidoScraper').controller('StepEditController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
+        console.log('Loading Step Edit Controller...');
 
         if (!$routeParams.name || !$routeParams.type) {
             return $location.path('/');
@@ -36,7 +36,7 @@ module.exports = (function () {
                 key: $routeParams.name, value: new Site($scope.site).toJson()
             }).done(function () {
                 AngularScope.apply($scope, function () {
-                    $location.path('/two/' + $scope.site.name);
+                    $location.path('/projects/' + $scope.site.name);
                 });
             });
         };
@@ -45,7 +45,7 @@ module.exports = (function () {
                 alert("$scope.site is required!");
                 return;
             }
-            $location.path('/two/' + $scope.site.name);
+            $location.path('/projects/' + $scope.site.name);
         };
     })
 })();

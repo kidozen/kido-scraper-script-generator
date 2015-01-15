@@ -20,28 +20,28 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap']
 
         $routeProvider
             .when('/projects', {
-                templateUrl: 'partial/project/projects.html',
-                controller: 'ProjectController'
+                templateUrl: 'partial/project/project_list.html',
+                controller: 'ListProjectsController'
             })
-            .when('/one', {
-                templateUrl: 'partial/one.html',
-                controller: 'OneController'
+            .when('/projects/create', {
+                templateUrl: 'partial/project/project_create.html',
+                controller: 'CreateProjectController'
             })
-            .when('/two/:name', {
-                templateUrl: 'partial/two.html',
-                controller: 'TwoController'
+            .when('/projects/:name', {
+                templateUrl: 'partial/project/project_detail.html',
+                controller: 'ProjectDetailsController'
             })
-            .when('/three/:name/:type', {
-                templateUrl: 'partial/three.html',
-                controller: 'ThreeController'
+            .when('/projects/step/edit/:name/:type', {
+                templateUrl: 'partial/project/step/step_edit.html',
+                controller: 'StepEditController'
             })
-            .when('/export/:name', {
-                templateUrl: 'partial/export.html',
-                controller: 'ExportController'
+            .when('/projects/export/:name', {
+                templateUrl: 'partial/project/project_export.html',
+                controller: 'ProjectExportController'
             })
-            .when('/run/:name', {
-                templateUrl: 'partial/run.html',
-                controller: 'RunController'
+            .when('/projects/run/:name', {
+                templateUrl: 'partial/project/project_run.html',
+                controller: 'ProjectRunController'
             })
             .when('/services', {
                 templateUrl: 'partial/service/service_list.html',

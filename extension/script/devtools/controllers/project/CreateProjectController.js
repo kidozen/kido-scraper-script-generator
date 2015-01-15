@@ -4,8 +4,8 @@ var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('OneController', function ($scope, $location, RunInBackgroundScript, RunInCurrentTabContext, AngularScope) {
-        console.log('Loading One Controller...');
+    angular.module('KidoScraper').controller('CreateProjectController', function ($scope, $location, RunInBackgroundScript, RunInCurrentTabContext, AngularScope) {
+        console.log('Loading Create Project Controller...');
 
         RunInCurrentTabContext
             .getCurrentPageDetails()
@@ -35,7 +35,7 @@ module.exports = (function () {
                                     value: new Site(site).toJson()
                                 }).done(function () {
                                     AngularScope.apply($scope, function () {
-                                        $location.path('/two/' + $scope.name);
+                                        $location.path('/projects/' + $scope.name);
                                     });
                                 });
                             });
