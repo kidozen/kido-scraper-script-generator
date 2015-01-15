@@ -114,11 +114,15 @@ ContentSelector.prototype = {
 
         this.bindElementHighlight();
         this.bindElementSelection();
-        this.bindKeyboardSelectionManipulations();
         this.attachToolbar();
+        this.bindKeyboardSelectionManipulations();
+        this.bindDoneSelectingButton();
+        this.bindCancelButton();
+        this.bindHelpPopupHide();
         this.bindMultipleGroupCheckbox();
         this.bindMultipleGroupPopupHide();
         this.bindMoveImagesToTop();
+        this.showHelp();
     },
 
     bindElementSelection: function () {
@@ -267,19 +271,35 @@ ContentSelector.prototype = {
     },
 
     showMultipleGroupPopup: function () {
-        $("#-selector-toolbar .popover").attr("style", "display:block !important;");
+        $("#-selector-toolbar .popover.top").attr("style", "display:block !important;");
     },
 
     hideMultipleGroupPopup: function () {
-        $("#-selector-toolbar .popover").attr("style", "");
+        $("#-selector-toolbar .popover.top").attr("style", "");
+    },
+
+    showHelp: function () {
+        $("#-selector-toolbar .popover.help").attr("style", "display:block !important;");
+    },
+
+    hideHelp: function () {
+        $("#-selector-toolbar .popover.help ").attr("style", "");
     },
 
     bindMultipleGroupPopupHide: function () {
-        $("#-selector-toolbar .popover .close").click(this.hideMultipleGroupPopup.bind(this));
+        $("#-selector-toolbar #closeMultipleGroupPopup").click(this.hideMultipleGroupPopup.bind(this));
     },
 
     unbindMultipleGroupPopupHide: function () {
-        $("#-selector-toolbar .popover .close").unbind("click");
+        $("#-selector-toolbar #closeMultipleGroupPopup").unbind("click");
+    },
+
+    bindHelpPopupHide: function () {
+        $("#-selector-toolbar #closeHelpPopup").click(this.hideHelp.bind(this));
+    },
+
+    unbindHelpPopupHide: function () {
+        $("#-selector-toolbar #closeHelpPopup").unbind("click");
     },
 
     bindMultipleGroupCheckbox: function () {
@@ -297,34 +317,60 @@ ContentSelector.prototype = {
 
     attachToolbar: function () {
 
-        var $toolbar = '<div id="-selector-toolbar">' +
-            '<div class="list-item"><div class="selector-container"><div class="selector"></div></div></div>' +
-            '<div class="input-group-addon list-item">' +
-            '<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
-            '<div class="popover top">' +
-            '<div class="close">×</div>' +
-            '<div class="arrow"></div>' +
-            '<div class="popover-content">' +
-            '<div class="txt">' +
-            'Different type element selection is disabled. If the element ' +
-            'you clicked should also be included then enable this and ' +
-            'click on the element again. Usually this is not needed.' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '<div class="list-item key-events"><div title="Click here to enable key press events for selection">Enable key events</div></div>' +
-            '<div class="list-item key-button key-button-select hide" title="Use S key to select element">S</div>' +
-            '<div class="list-item key-button key-button-parent hide" title="Use P key to select parent">P</div>' +
-            '<div class="list-item key-button key-button-child hide" title="Use C key to select child">C</div>' +
-            '<div class="list-item done-selecting-button">Done selecting!</div>' +
+        var $toolbar =
+            '<div id="-selector-toolbar">' +
+                '<div class="list-item">' +
+                    '<div class="selector-container">' +
+                        '<div class="selector"></div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="input-group-addon list-item">' +
+                    '<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
+                    '<div class="popover help">' +
+                        '<div id="closeHelpPopup" class="close help">×</div>' +
+                        '<div class="arrow"></div>' +
+                        '<div class="popover-content">' +
+                            '<div class="txt">' +
+                                'To select all the elements within a certain container,' +
+                                'just click on the first and then on the second element' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="popover top">' +
+                        '<div id="closeMultipleGroupPopup" class="close">×</div>' +
+                        '<div class="arrow"></div>' +
+                        '<div class="popover-content">' +
+                            '<div class="txt">' +
+                                'Different type element selection is disabled. If the element ' +
+                                'you clicked should also be included then enable this and ' +
+                                'click on the element again. Usually this is not needed.' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="list-item key-events"><div title="Click here to enable key press events for selection">Enable key events</div></div>' +
+                '<div class="list-item key-button key-button-select hide" title="Use S key to select element">S</div>' +
+                '<div class="list-item key-button key-button-parent hide" title="Use P key to select parent">P</div>' +
+                '<div class="list-item key-button key-button-child hide" title="Use C key to select child">C</div>' +
+                '<div class="list-item done-selecting-button">Done selecting!</div>' +
+                '<div class="list-item cancel-button">Cancel</div>' +
             '</div>';
-        $("body").append($toolbar);
 
+        $("body").append($toolbar);
+    },
+
+    bindDoneSelectingButton: function () {
         $("body #-selector-toolbar .done-selecting-button").click(function () {
             this.selectionFinished();
         }.bind(this));
     },
+
+    bindCancelButton: function () {
+        $("body #-selector-toolbar .cancel-button").click(function () {
+            this.cancelSelection();
+        }.bind(this));
+    },
+
     highlightParent: function () {
         // do not highlight parent if its the body
         if (!$(this.parent).is("body") && !$(this.parent).is("#webpage")) {
@@ -337,18 +383,30 @@ ContentSelector.prototype = {
         // remove highlighted element classes
         this.unbindElementSelectionHighlight();
     },
+
     unbindElementSelectionHighlight: function () {
         $(".-kido-scraper-select-item-selected").removeClass('-kido-scraper-select-item-selected');
         $(".-kido-scraper-parent").removeClass('-kido-scraper-parent');
     },
+
     unbindElementHighlight: function () {
         $(this.$allElements).unbind("mouseover.elementSelector")
             .unbind("mouseout.elementSelector");
     },
+
     unbindKeyboardSelectionMaipulatios: function () {
         $(document).unbind("keydown.selectionManipulation");
         clearInterval(this.keyPressFocusInterval);
     },
+
+    unbindDoneSelectingButton: function () {
+        $("body #-selector-toolbar .done-selecting-button").unbind("click");
+    },
+
+    unbindCancelButton: function () {
+        $("body #-selector-toolbar .cancel-button").unbind("click");
+    },
+
     removeToolbar: function () {
         $("body #-selector-toolbar a").unbind("click");
         $("#-selector-toolbar").remove();
@@ -363,8 +421,11 @@ ContentSelector.prototype = {
         this.unbindElementHighlight();
         this.unbindKeyboardSelectionMaipulatios();
         this.unbindMultipleGroupPopupHide();
+        this.unbindHelpPopupHide();
         this.unbindMultipleGroupCheckbox();
         this.unbindMoveImagesToTop();
+        this.unbindDoneSelectingButton();
+        this.unbindCancelButton();
         this.removeToolbar();
     },
 
@@ -375,5 +436,9 @@ ContentSelector.prototype = {
         this.deferredCSSSelectorResponse.resolve({
             CSSSelector: resultCssSelector
         });
+    },
+
+    cancelSelection: function () {
+        this.deferredCSSSelectorResponse.reject("cancelled by user");
     }
 };

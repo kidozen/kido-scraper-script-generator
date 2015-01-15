@@ -69,8 +69,12 @@ var ContentScript = {
 					window.cs = undefined;
 				}.bind(this));
 			}.bind(this)).fail(function(message) {
-				deferredResponse.reject(message);
-				window.cs = undefined;
+				this.removeCurrentContentSelector().done(function(){
+					if (message !== "cancelled by user") {
+						deferredResponse.reject(message);
+					}
+					window.cs = undefined;
+				}.bind(this));
 			}.bind(this));
 
 		}.bind(this));

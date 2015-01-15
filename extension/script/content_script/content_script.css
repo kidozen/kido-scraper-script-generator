@@ -720,9 +720,17 @@
 #-selector-toolbar div.done-selecting-button {
 	color: #ffffff !important;
 	-webkit-text-fill-color: #FFF !important;
-	background-color: #3276b1 !important;
+	background-color: #428bca !important;
 	cursor: pointer !important;
 	width:130px !important;
+}
+
+#-selector-toolbar div.cancel-button {
+	color: #333;
+	background-color: #ccc;
+	cursor: pointer !important;
+	width:130px !important;
+	border-color: #333;
 }
 
 #-selector-toolbar div.selector-container {
@@ -796,6 +804,12 @@
 	border: 1px solid rgba(0,0,0,.2) !important;
 	border-radius: 6px !important;
 	box-shadow: 0 5px 10px rgba(0,0,0,.2) !important;
+}
+
+#-selector-toolbar div.popover.help {
+	width: 220px !important;
+	top: -130px !important;
+	left: -380px !important;
 }
 
 #-selector-toolbar div.popover div.arrow {
