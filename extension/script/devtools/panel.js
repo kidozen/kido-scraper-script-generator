@@ -19,9 +19,6 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap']
         });
 
         $routeProvider
-            .when('/', {
-                templateUrl: 'partial/home.html'
-            })
             .when('/projects', {
                 templateUrl: 'partial/project/projects.html',
                 controller: 'ProjectController'
@@ -58,7 +55,7 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap']
                 templateUrl: 'partial/datasource/ds_create.html',
                 controller: 'CreateDatasourceController'
             })
-            .when('/datasources/create/:serviceName/:siteName', {
+            .when('/datasources/create/:siteName/:serviceName?', {
                 templateUrl: 'partial/datasource/ds_create.html',
                 controller: 'CreateDatasourceController'
             })
@@ -67,7 +64,7 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap']
                 controller: 'RunDatasourceController'
             })
             .otherwise({
-                redirectTo: '/'
+                redirectTo: '/projects'
             });
     })
     .run(function ($window, $rootScope) {

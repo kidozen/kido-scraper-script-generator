@@ -212,7 +212,7 @@ module.exports = (function () {
                         alert("Could not determine the service the datasource will be associated to!");
                         return;
                     }
-                    $location.path('/datasources/create/' + service.name + '/' + $scope.site.name);
+                    $location.path('/datasources/create/' + $scope.site.name + '/' + service.name);
                 };
                 $scope.runAgain = function () {
                     $scope.runIn($scope.lastUsedService);

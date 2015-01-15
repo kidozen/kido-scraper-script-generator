@@ -26,6 +26,10 @@ module.exports = (function () {
                     $scope.jsonVisible = false;
                     $scope.scriptVisible = true;
                 };
+
+                $scope.createDatasource = function() {
+                    $location.path('/datasources/create/' + $scope.site.name);
+                }
             });
         });
     })
