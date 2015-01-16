@@ -1,0 +1,34 @@
+<h6><strong>Kido Scraper</strong></h6>
+
+<p class="small">A tool to build scripts for data extraction from websites.</p>
+
+<div class="col-md-4 login-component" ng-show="!logged">
+    <div class="tile form-group">
+        <input type="url" ng-model="marketplaceURL" class="form-control"
+               placeholder="(e.g. https://your-company.kidocloud.com)"/>
+        <br>
+        <button ng-click="login()" class="btn">Login</button>
+    </div>
+</div>
+
+<div class="col-md-4 login-component" ng-show="logged">
+    <div class="tile form-group">
+        <strong class="control-label">Logged in to:</strong>
+        <br>
+        <small><a target="_blank" href="{{marketplaceURL}}">{{marketplaceURL}}</a></small>
+        <br>
+        <button ng-click="logout()" class="btn">Logout</button>
+    </div>
+
+    <p class="small">
+        Kido Scraper is a tab where that can be accessed by opening Chrome's Developer tools:
+        <ul class="small">
+            <li><strong>Windows, Linux:</strong> Ctrl+Shift+I or F12</li>
+            <li><strong>Mac:</strong> Cmd+Opt+I</li>
+            <li><strong>Any OS:</strong> open Tools / Developer tools</li>
+        </ul>
+    </p>
+    <p class="small">
+        Documentation is available at <a target="_blank" href="http://docs.kidozen.com/web-author-api/">Kidozen's documentation site</a>
+    </p>
+</div>

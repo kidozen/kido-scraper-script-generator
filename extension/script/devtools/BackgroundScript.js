@@ -78,6 +78,10 @@ var BackgroundScript = {
 		return deferredResponse.promise();
 	},
 
+	getAuthTokenKeyInLocalStorageFor: function (marketplaceURL) {
+		return auth_key_in_storage + marketplaceURL;
+	},
+
 	fetchANewTokenFor: function (marketplaceURL) {
 		var deferredResponse = $.Deferred();
 		var self = this;
@@ -94,20 +98,25 @@ var BackgroundScript = {
 
 								try {
 									var accessToken = self.decodeToken(token);
-									deferredResponse.resolve(accessToken);
 
 									var saveRequest = {};
-									saveRequest["key"] = auth_key_in_storage + marketplaceURL;
+									saveRequest["key"] = self.getAuthTokenKeyInLocalStorageFor(marketplaceURL);
 									saveRequest["value"] = accessToken;
 
 									self.setInLocalStorage(saveRequest);
 									chrome.tabs.onUpdated.removeListener(authTokenGrabber);
 									chrome.tabs.remove(tab.id);
 
+									deferredResponse.resolve(accessToken);
 								} catch (err) {
 									var errorMsg = "Problem while attempting to retrieve auth token: " + err;
 									deferredResponse.reject(errorMsg);
-									alert(errorMsg);
+
+									// This is a HACK: for some reason a weird error is thrown when invoking this
+									// function from the extension's popup, we can safely ignore it...
+									if (err && err.message && err.message.indexOf("Attempting to use a disconnected port object") == -1) {
+										alert(errorMsg);
+									}
 								}
 							}
 						}
@@ -119,14 +128,23 @@ var BackgroundScript = {
 		return deferredResponse.promise();
 	},
 
-	getAuthToken: function (marketplaceURL) {
+	getAuthToken: function (options) {
+		 // Ugly code warning: mutable parameters: can accept either the marketplaceURL or an object with more options
+		var marketplaceURL = options;
+		var fromLogin = false;
+
+		if (typeof options === 'object') {
+			marketplaceURL = options.marketplaceURL;
+			fromLogin = options.fromLogin;
+		}
+
 		var deferredResponse = $.Deferred();
 		var self = this;
 
 		self.setInLocalStorage({key: self.lastUsedMarketplaceURL, value: marketplaceURL});
 
 		// TODO See if we can use the refresh_token...
-		self.getFromLocalStorage(auth_key_in_storage + marketplaceURL).done(function (accessToken) {
+		self.getFromLocalStorage(self.getAuthTokenKeyInLocalStorageFor(marketplaceURL)).done(function (accessToken) {
 			if (accessToken) {
 				try {
 					var headers = {};
@@ -139,7 +157,7 @@ var BackgroundScript = {
 					}).done(function (data) {
 						deferredResponse.resolve(accessToken);
 					}).fail(function (jqXHR) {
-						if (jqXHR.status === 401) {
+						if (jqXHR.status === 401 && !fromLogin) {
 							alert("Previously saved auth details have expired.\nYou need to re-authenticate");
 						}
 						self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
@@ -151,6 +169,19 @@ var BackgroundScript = {
 				self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 			}
 		});
+		return deferredResponse.promise();
+	},
+
+	changeExtensionPopUpIcon: function(loggedIn) {
+		// TODO Make this work
+		var deferredResponse = $.Deferred();
+		chrome.browserAction.setIcon({
+			'19': 'assets/images/icon19'+ (loggedIn ? '-on': '') + '.png',
+			'38': 'assets/images/icon38'+ (loggedIn ? '-on': '') + '.png'
+		}, function() {
+			alert("If you see this, changing the icon color worked and you can safely remove this alert message");
+		});
+		deferredResponse.resolve();
 		return deferredResponse.promise();
 	},
 
