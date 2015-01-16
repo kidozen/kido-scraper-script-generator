@@ -23,50 +23,39 @@ module.exports = (function () {
         RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function (siteAsJson) {
             AngularScope.apply($scope, function () {
                 $scope.site = siteAsJson;
-                $scope.authRequired = true;
 
-                $scope.authenticate = function () {
-                    if (!$scope.marketplaceURL) {
-                        alert("The Marketplace URL is required");
-                        return;
+                serviceService.getAllServices($scope.marketplaceURL, function (error, services) {
+                    if (error) {
+                        return baseErrorHandler.handleError(error, "Error while attempting to retrieve services", $scope.marketplaceURL);
                     }
-                    // Standardize all marketplace URLs to have a trailing slash
-                    $scope.marketplaceURL = $scope.marketplaceURL.replace(/\/?$/, '/');
+                    $scope.services = services;
 
-                    serviceService.getAllServices($scope.marketplaceURL, function (error, services) {
-                        if (error) {
-                            return baseErrorHandler.handleError(error, "Error while attempting to retrieve services", $scope.marketplaceURL);
-                        }
-                        $scope.services = services;
-                        $scope.authRequired = false;
-
-                        // TODO Abstract this out to an "AgentService"
-                        RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
-                            $http({
-                                method: 'GET',
-                                url: $scope.marketplaceURL + 'api/admin/agents',
-                                headers: {'Authorization': token},
-                                cache: false,
-                                ignoreLoadingBar: true
-                            }).then(function (response) {
-                                if (response.data && typeof Array.isArray(response.data)) {
-                                    response.data.forEach(function (agent) {
-                                        agent.type = 'agent';
-                                        delete agent._id;
-                                        delete agent.services;
-                                    });
-                                } else {
-                                    response.data = [];
-                                }
-                                // artificially add the 'kidozen' (cloud) option
-                                response.data.unshift({name: 'kidozen', type: 'cloud'});
-                                $scope.agents = response.data;
-                            }, function (error) {
-                                baseErrorHandler.handleError(error, "Error while attempting to retrieve agents", $scope.marketplaceURL);
-                            });
+                    // TODO Abstract this out to an "AgentService"
+                    RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
+                        $http({
+                            method: 'GET',
+                            url: $scope.marketplaceURL + 'api/admin/agents',
+                            headers: {'Authorization': token},
+                            cache: false,
+                            ignoreLoadingBar: true
+                        }).then(function (response) {
+                            if (response.data && typeof Array.isArray(response.data)) {
+                                response.data.forEach(function (agent) {
+                                    agent.type = 'agent';
+                                    delete agent._id;
+                                    delete agent.services;
+                                });
+                            } else {
+                                response.data = [];
+                            }
+                            // artificially add the 'kidozen' (cloud) option
+                            response.data.unshift({name: 'kidozen', type: 'cloud'});
+                            $scope.agents = response.data;
+                        }, function (error) {
+                            baseErrorHandler.handleError(error, "Error while attempting to retrieve agents", $scope.marketplaceURL);
                         });
                     });
-                };
+                });
                 $scope.createNewService = function () {
                     if (newServiceNameIsInvalid() || runOnIsInvalid() || timeoutIsInvalid()) {
                         return;
