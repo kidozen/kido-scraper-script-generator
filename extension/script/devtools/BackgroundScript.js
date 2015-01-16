@@ -166,7 +166,11 @@ var BackgroundScript = {
 					self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
 				}
 			} else {
-				self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
+				if (fromLogin) {
+					self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
+				} else {
+					alert("You are not logged in to any marketplace yet.\nPlease do so by opening the extension's popup dialog (next to the address bar) and try again.");
+				}
 			}
 		});
 		return deferredResponse.promise();
