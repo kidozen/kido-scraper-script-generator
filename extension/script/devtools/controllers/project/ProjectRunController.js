@@ -6,7 +6,9 @@ var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ProjectRunController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, serviceService) {
+    angular.module('KidoScraper').controller('ProjectRunController', function ($scope, $routeParams, $location, $http,
+                                                                               RunInBackgroundScript, AngularScope, baseErrorHandler,
+                                                                               serviceService, agentService) {
         console.log('Loading Project Run Controller...');
 
         if (!$routeParams.name) {
@@ -29,33 +31,17 @@ module.exports = (function () {
                         return baseErrorHandler.handleError(error, "Error while attempting to retrieve services", $scope.marketplaceURL);
                     }
                     $scope.services = services;
-
-                    // TODO Abstract this out to an "AgentService"
-                    RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
-                        $http({
-                            method: 'GET',
-                            url: $scope.marketplaceURL + 'api/admin/agents',
-                            headers: {'Authorization': token},
-                            cache: false,
-                            ignoreLoadingBar: true
-                        }).then(function (response) {
-                            if (response.data && typeof Array.isArray(response.data)) {
-                                response.data.forEach(function (agent) {
-                                    agent.type = 'agent';
-                                    delete agent._id;
-                                    delete agent.services;
-                                });
-                            } else {
-                                response.data = [];
-                            }
-                            // artificially add the 'kidozen' (cloud) option
-                            response.data.unshift({name: 'kidozen', type: 'cloud'});
-                            $scope.agents = response.data;
-                        }, function (error) {
-                            baseErrorHandler.handleError(error, "Error while attempting to retrieve agents", $scope.marketplaceURL);
-                        });
-                    });
                 });
+
+                agentService.getAllAgents($scope.marketplaceURL, function (error, agents) {
+                    if (error) {
+                        return baseErrorHandler.handleError(error, "Error while attempting to retrieve agents", $scope.marketplaceURL);
+                    }
+                    // artificially add the 'kidozen' (cloud) option
+                    agents.unshift({name: 'kidozen', type: 'cloud'});
+                    $scope.agents = agents;
+                });
+
                 $scope.createNewService = function () {
                     if (newServiceNameIsInvalid() || runOnIsInvalid() || timeoutIsInvalid()) {
                         return;
@@ -112,6 +98,7 @@ module.exports = (function () {
                         });
                     });
                 };
+
                 $scope.deleteService = function (index) {
                     var service = $scope.services[index];
 
@@ -136,7 +123,7 @@ module.exports = (function () {
                             }
                         }).then(function (response) {
                             var retries = 3;
-                            var deleteService = function() {
+                            var deleteService = function () {
                                 $http({
                                     method: 'DELETE',
                                     url: $scope.marketplaceURL + 'api/admin/services/' + service.name,
@@ -203,6 +190,7 @@ module.exports = (function () {
                     }
                     $location.path('/datasources/create/' + $scope.site.name + '/' + service.name);
                 };
+
                 $scope.runAgain = function () {
                     $scope.runIn($scope.lastUsedService);
                 };

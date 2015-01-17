@@ -18,6 +18,7 @@ gulp.task('browserify', function () {
         basePath + '/services/RunInBackgroundScript.js',
         basePath + '/services/DatasourceService.js',
         basePath + '/services/ServiceService.js',
+        basePath + '/services/AgentService.js',
         basePath + '/controllers/project/CreateProjectController.js',
         basePath + '/controllers/project/ListProjectsController.js',
         basePath + '/controllers/project/ProjectDetailsController.js',
