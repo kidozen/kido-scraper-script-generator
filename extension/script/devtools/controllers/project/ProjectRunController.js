@@ -2,8 +2,6 @@
 require('angular');
 var Site = require('../../model/Site');
 
-//TODO Refactor this class as it got too large and convoluted
-
 module.exports = (function () {
 
     angular.module('KidoScraper').controller('ProjectRunController', function ($scope, $routeParams, $location, $http,
@@ -43,59 +41,27 @@ module.exports = (function () {
                 });
 
                 $scope.createNewService = function () {
-                    if (newServiceNameIsInvalid() || runOnIsInvalid() || timeoutIsInvalid()) {
-                        return;
-                    }
                     var service = {};
                     service.name = $scope.newServiceName;
                     service.runOn = $scope.runOn;
                     service.enterpriseApi = 'webauthorapi';
                     service.config = {};
 
+                    if (serviceService.serviceIsInvalid(service, $scope.services)) return;
+
                     if (service.runOn.type === 'cloud') {
                         service.runOn.type = 'hub';
                     }
-                    RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
-                        $http({
-                            method: 'POST',
-                            url: $scope.marketplaceURL + 'api/admin/v2/services/',
-                            headers: {
-                                'Authorization': token,
-                                'timeout': $scope.timeout,
-                                "Content-Type": "application/json"
-                            },
-                            data: JSON.stringify(service)
-                        }).then(function (response) {
-                            var retries = 3;
-                            var enableService = function () {
-                                $http({
-                                    method: 'POST',
-                                    url: $scope.marketplaceURL + 'api/admin/v2/services/' + service.name + "/enable",
-                                    cache: false,
-                                    headers: {
-                                        'Authorization': token,
-                                        'timeout': $scope.timeout
-                                    }
-                                }).then(function (response) {
-                                    if (service.runOn.type === 'hub') {
-                                        service.runOn.type = 'cloud';
-                                    }
-                                    $scope.services.push(service);
-                                    $scope.newServiceName = '';
-                                    $scope.runOn = null;
-
-                                }, function (error) {
-                                    if (retries-- > 0) {
-                                        enableService();
-                                    } else {
-                                        baseErrorHandler.handleError(error, "An error occurred while enabling the service instance " + service.name, $scope.marketplaceURL);
-                                    }
-                                });
-                            };
-                            enableService();
-                        }, function (error) {
-                            baseErrorHandler.handleError(error, "An error occurred while creating the service instance " + service.name, $scope.marketplaceURL);
-                        });
+                    serviceService.createService(service, $scope.services, $scope.marketplaceURL, function (error) {
+                        if (error) {
+                            return baseErrorHandler.handleError(error, "Error while attempting to create a new service", $scope.marketplaceURL);
+                        }
+                        if (service.runOn.type === 'hub') {
+                            service.runOn.type = 'cloud';
+                        }
+                        $scope.services.push(service);
+                        $scope.newServiceName = '';
+                        $scope.runOn = null;
                     });
                 };
 
@@ -109,17 +75,14 @@ module.exports = (function () {
                     if (!confirm("Are you sure you want to delete the service '" + service.name + "'?")) {
                         return;
                     }
-                    if (timeoutIsInvalid()) {
-                        return;
-                    }
+                    // TODO Move this to ServiceService.js
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
                         $http({
                             method: 'POST',
                             url: $scope.marketplaceURL + 'api/admin/v2/services/' + service.name + "/disable",
                             cache: false,
                             headers: {
-                                'Authorization': token,
-                                'timeout': $scope.timeout
+                                'Authorization': token
                             }
                         }).then(function (response) {
                             var retries = 3;
@@ -160,6 +123,7 @@ module.exports = (function () {
                     $scope.lastUsedService = service;
                     $scope.running = true;
 
+                    // TODO Move this to ServiceService.js
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
                         $http({
                             method: 'POST',
@@ -197,33 +161,6 @@ module.exports = (function () {
 
                 $scope.back = function () {
                     $scope.executionResult = null;
-                };
-
-                var newServiceNameIsInvalid = function () {
-                    if (!$scope.newServiceName) {
-                        alert('Please specify the name of the new service');
-                        return true;
-                    }
-                    if ($scope.newServiceName.toString().match(/^[-a-zA-Z0-9,&]+$/) == null) {
-                        alert('New Service name must contain only alphanumeric characters');
-                        return true;
-                    }
-                    var existingServiceWithSameName = $scope.services.filter(function(s) {
-                        return s.name === $scope.newServiceName;
-                    });
-                    if (existingServiceWithSameName.length > 0) {
-                        alert($scope.newServiceName + ' already exists. Please choose a different name');
-                        return true;
-                    }
-                    return false;
-                };
-
-                var runOnIsInvalid = function() {
-                    if (!$scope.runOn || typeof $scope.runOn !== 'object') {
-                        alert('Please specify where the new service will run on');
-                        return true;
-                    }
-                    return false;
                 };
 
                 var timeoutIsInvalid = function () {
