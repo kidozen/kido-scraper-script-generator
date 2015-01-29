@@ -3,9 +3,7 @@
     <li class="active">Projects</li>
 </ol>
 <div class="col-md-8">
-    <a ng-click="createNewProject()" class="btn btn-primary">
-        <span class="fui-plus"></span>
-        Add New Project</a>
+    <a ng-click="createNewProject()" class="btn btn-primary">Add New Project</a>
 
     <table class="table">
         <tr ng-repeat="s in sites">
@@ -15,7 +13,7 @@
             <td class="two-cols-column-short">
                 <a class="btn btn-primary" ng-click="exportProject(s)">Export</a>
                 <a class="btn btn-primary" ng-click="runProject(s)">Run</a>
-                <a class="btn btn-danger btn-sm" ng-click="deleteProject($index)"><span class="fui-cross"></span>Delete</a>
+                <a class="btn btn-danger" ng-click="deleteProject($index)">Delete</a>
             </td>
         </tr>
     </table>

@@ -3,9 +3,7 @@
 
     <div class="col-md-10">
         <div class="form-inline" role="form">
-            <button ng-click="addField()" class="btn btn-primary btn-sm">
-                <span class="fui-plus"></span>Add Field
-            </button>
+            <button ng-click="addField()" class="btn btn-primary btn-sm">Add Field</button>
 
             <div class="form-group" popover-trigger="mouseenter" popover-placement="right"
                  popover="Use this option when all the fields are related with each other. This is usually the case when
@@ -16,7 +14,7 @@
 
             <div class="form-group" ng-show="scrapeWithinContainer">
                 <div class="form-inline" role="form">
-                    <button ng-click="selectContainer()" class="btn btn-info btn-sm">Select it!</button>
+                    <button ng-click="selectContainer()" class="btn btn-info">Select it!</button>
                     <div class="form-group">
                         <div class="col-md-10">
                             <input ng-model="currentStep.container" class="form-control" placeholder="Container's CSS Selector">
@@ -30,9 +28,7 @@
                 <div class="form-group">
                     <input ng-model="f.name" class="form-control" placeholder="Field Name">
                 </div>
-                <button ng-click="selectSelector($index)" class="btn btn-info btn-sm">
-                    Select it!
-                </button>
+                <button ng-click="selectSelector($index)" class="btn btn-info">Select it!</button>
                 <div class="form-group">
                     <input ng-model="f.key" class="form-control" placeholder="CSS Selector">
                 </div>
@@ -42,9 +38,7 @@
                         <option></option>
                     </select>
                 </div>
-                <button ng-click="removeField($index)" class="btn btn-danger btn-sm">
-                    <span class="fui-cross"></span>Remove
-                </button>
+                <button ng-click="removeField($index)" class="btn btn-danger">Remove</button>
             </div>
         </div>
     </div>

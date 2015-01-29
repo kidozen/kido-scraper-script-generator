@@ -26,7 +26,7 @@
                 </select>
             </td>
             <td class="three-cols-third-column" align="right">
-                <a ng-click="createNewService()" class="btn btn-primary"><span class="fui-plus"></span>Create New Service</a>
+                <a ng-click="createNewService()" class="btn btn-primary">Create New Service</a>
             </td>
         </tr>
         <tr ng-repeat="s in services" ng-show="s.enterpriseApi === 'webauthorapi'">
@@ -39,8 +39,8 @@
             <td class="three-cols-third-column" align="right">
                 <div class="form-inline" role="form">
                     <button ng-click="!running && runIn(s)" class="btn btn-info"></span>Run Here</button>
-                    <button ng-click="createDatasource(s)" class="btn btn-primary"><span class="fui-plus"></span>Create DS</button>
-                    <button ng-click="deleteService($index)" class="btn btn-danger btn-sm"><span class="fui-cross"></span>Delete</button>
+                    <button ng-click="createDatasource(s)" class="btn btn-primary">Create DS</button>
+                    <button ng-click="deleteService($index)" class="btn btn-danger">Delete</button>
                 </div>
             </td>
         </tr>
