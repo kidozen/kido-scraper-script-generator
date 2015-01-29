@@ -37,7 +37,7 @@ module.exports = (function () {
                             AngularScope.apply(scope, function () {
                                 scope.currentStep.container = retrievedCssSelector.CSSSelector;
                             });
-                        })
+                        });
                 };
                 scope.selectSelector = function (index) {
                     RunInCurrentTabContext

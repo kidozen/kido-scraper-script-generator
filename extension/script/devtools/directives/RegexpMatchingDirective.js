@@ -14,7 +14,7 @@ angular.module('KidoScraper').directive("regexpMatching", function () {
                 char = String.fromCharCode(event.which);
                 if (!regexp.test(elem.val() + char))
                     event.preventDefault();
-            })
+            });
         }
-    }
+    };
 });

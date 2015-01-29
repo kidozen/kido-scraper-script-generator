@@ -49,6 +49,5 @@ module.exports = (function () {
             $scope.url = '';
             return $location.path('/projects');
         };
-    })
-})
-();
+    });
+})();

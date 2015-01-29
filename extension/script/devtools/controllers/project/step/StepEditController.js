@@ -47,5 +47,5 @@ module.exports = (function () {
             }
             $location.path('/projects/' + $scope.site.name);
         };
-    })
+    });
 })();
