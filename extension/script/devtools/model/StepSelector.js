@@ -21,14 +21,14 @@ module.exports = (function () {
 
     StepSelector.prototype = Object.create(Step.prototype);
     StepSelector.prototype._key = undefined;
-    StepSelector.prototype._attr = undefined;
+    StepSelector.prototype._attr = StepSelector.ATTRS.TEXT;
 
     StepSelector.getDefaults = function (Site) {
         return {
             type: Site.TYPES.SELECTOR,
             name: '',
             key: '',
-            attr: ''
+            attr: StepSelector.ATTRS.TEXT
         };
     };
 
