@@ -5,27 +5,24 @@
         <button ng-click="addSelector()" class="btn btn-primary btn-sm">Add Field</button>
         <div ng-repeat="s in currentStep.selectors">
             <div class="form-inline" role="form">
+
                 <div class="form-group">
                     <button ng-click="selectSelector($index)" class="btn btn-info">Select it!</button>
-                <!--</div>-->
-                <!--<div class="form-group">-->
                     <input ng-model="s.key" class="form-control" placeholder="CSS Selector">
-                <!--</div>-->
-                <!--<div class="form-group">-->
                     <input ng-model="s.value" class="form-control" placeholder="Enter Value">
-                <!--</div>-->
-                <!--<div class="form-group">-->
                     <input id="parameterizableCheckbox" type="checkbox" ng-model="s.isParameterizable">
                     <label for="parameterizableCheckbox">Is parameterizable</label>
                 </div>
+
                 <button ng-click="removeSelector($index)" class="btn btn-danger">Remove</button>
+
                 <div class="form-group form-inline" ng-show="s.isParameterizable">
                     <input ng-model="s.param.name" class="form-control" placeholder="Name">
-                    <select style="min-width:auto; width: auto" class="select select-primary" select2 ng-model="s.param.type"
+                    <!--select style="min-width:auto; width: auto" class="select select-primary" select2 ng-model="s.param.type"
                             ng-options="p for p in validParamTypes"
-                            data-placeholder="Type">
+                            data-placeholder="Param Type">
                         <option></option>
-                    </select>
+                    </select-->
                     <input ng-model="s.param.default" class="form-control" placeholder="Default">
                     <input id="requiredCheckbox" type="checkbox" ng-model="s.param.required">
                     <label for="requiredCheckbox">Required</label>

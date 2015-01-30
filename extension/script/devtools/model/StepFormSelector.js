@@ -68,6 +68,10 @@ module.exports = (function() {
             if (param.name.toString().match(/^[-a-zA-Z0-9,&]+$/) == null) {
                 throw 'Param name must contain only alphanumeric characters';
             }
+            //FIXME Once we start actually supporting more kind of params, this IF condition should go away
+            if (!param.type) {
+                param.type = 'string';
+            }
         }
         return param;
     };

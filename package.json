@@ -35,6 +35,7 @@
     "angular-loading-bar": "^0.6.0",
     "multiline": "^1.0.1",
     "js-beautify": "^1.5.4",
+    "lodash": "^3.0.1",
     "simple-errors": "*"
   }
 }

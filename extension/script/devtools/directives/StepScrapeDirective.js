@@ -19,7 +19,9 @@ module.exports = (function () {
                     id: ATTRS.TEXT,
                     name: 'Text'
                 }];
-                scope.scrapeWithinContainer = false;
+                // FIXME -- Known-bug: After the second time a user reaches the page rendered by this directive,
+                // FIXME -- the checkbox is not checked because scope.scrapeWithinContainer is undefined
+                scope.scrapeWithinContainer = (scope.currentStep.container && scope.currentStep.container.length > 0);
 
                 // blank container property every time the checkbox gets unchecked
                 scope.$watch('scrapeWithinContainer', function (enabled) {

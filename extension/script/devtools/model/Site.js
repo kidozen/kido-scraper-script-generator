@@ -7,6 +7,7 @@ var StepFormSelector = require('./StepFormSelector');
 var StepScrape = require('./StepScrape');
 var StepSelector = require('./StepSelector');
 var beautify = require('js-beautify').js_beautify;
+var _ = require('lodash');
 
 module.exports = (function() {
 
@@ -71,9 +72,17 @@ module.exports = (function() {
         };
     };
 
-    Site.validateStep = function(step) {
+    Site.validateStep = function(step, site, forCreation) {
         if (!step) throw 'The "step" argument is required';
+        if (!step.name) throw 'The "step.name" property is required';
         if (!step.type) throw 'The "step.type" property is required';
+
+        if (forCreation) {
+            var existingStepWithSameName = _.find(site.steps, function (s) {
+                return s.name === step.name;
+            });
+            if (existingStepWithSameName) throw 'Duplicated step name: ' + step.name;
+        }
         var Constructor = Site.getConstructor(step.type);
         try {
             step = new Constructor(Site, step);

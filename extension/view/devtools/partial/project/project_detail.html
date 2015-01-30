@@ -19,8 +19,12 @@
         </button>
         <table class="table" style="margin:10px">
             <tr ng-repeat="s in site.steps">
-                <td>
-                    {{ s.name }} ({{ s.type }})
+                <td class="two-cols-column-long">
+                    <label>{{ s.name }} ({{ s.type }})</label>
+                </td>
+                <td class="two-cols-column-short">
+                    <a class="btn btn-primary" ng-click="editStep(s)">Edit</a>
+                    <a class="btn btn-danger" ng-click="deleteStep($index)">Delete</a>
                 </td>
             </tr>
         </table>

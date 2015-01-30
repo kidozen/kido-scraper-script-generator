@@ -18,7 +18,7 @@ module.exports = (function () {
             name: 'Click'
         }, {
             id: Site.TYPES.SCRAPE,
-            name: 'Scrap'
+            name: 'Scrape'
         }];
         $scope.stepType = $scope.types[0].id;
         RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function(siteAsJson) {
@@ -48,6 +48,22 @@ module.exports = (function () {
                 };
                 $scope.runSite = function (site) {
                     $location.path('/projects/run/' + site.name);
+                };
+                $scope.editStep = function (step) {
+                    $location.path('/projects/step/edit/' + $scope.site.name + '/' + step.type + '/' + step.name);
+                };
+                $scope.deleteStep = function (index) {
+                    var stepName = $scope.site.steps[index].name;
+
+                    if (!confirm("Are you sure you want to delete the step '" + stepName + "'?")) {
+                        return;
+                    }
+                    $scope.site.steps.splice(index, 1);
+
+                    RunInBackgroundScript.setInLocalStorage({
+                        key: $scope.site.name,
+                        value: new Site($scope.site).toJson()
+                    });
                 };
             });
         });

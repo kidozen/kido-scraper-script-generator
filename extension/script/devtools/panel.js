@@ -31,7 +31,7 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap']
                 templateUrl: 'partial/project/project_detail.html',
                 controller: 'ProjectDetailsController'
             })
-            .when('/projects/step/edit/:name/:type', {
+            .when('/projects/step/edit/:siteName/:type/:stepName?', {
                 templateUrl: 'partial/project/step/step_edit.html',
                 controller: 'StepEditController'
             })
