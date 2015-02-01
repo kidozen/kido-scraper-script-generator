@@ -28,6 +28,7 @@ gulp.task('browserify', function () {
         basePath + '/controllers/datasource/CreateDatasourceController.js',
         basePath + '/controllers/datasource/ListDatasourcesController.js',
         basePath + '/controllers/datasource/RunDatasourceController.js',
+        basePath + '/directives/BreadcrumbDirective.js',
         basePath + '/directives/StepClickDirective.js',
         basePath + '/directives/StepFormDirective.js',
         basePath + '/directives/StepScrapeDirective.js',

@@ -10,14 +10,15 @@ angular.module('KidoScraperPopup').controller("LoginController", function ($scop
             $scope.$apply(function () {
                 $scope.marketplaceURL = lastUsedMarketplaceURL;
             });
-            var tokenKey = bgScript.getAuthTokenKeyInLocalStorageFor($scope.marketplaceURL);
-            bgScript.getFromLocalStorage(tokenKey).done(function (authToken) {
-                if (authToken) {
-                    $scope.$apply(function () {
-                        $scope.logged = authToken != null;
-                        bgScript.changeExtensionPopUpIcon($scope.logged);
-                    });
-                }
+            bgScript.getAuthTokenKeyInLocalStorageFor($scope.marketplaceURL).done(function(tokenKey) {
+                bgScript.getFromLocalStorage(tokenKey).done(function (authToken) {
+                    if (authToken) {
+                        $scope.$apply(function () {
+                            $scope.logged = authToken != null;
+                            bgScript.changeExtensionPopUpIcon($scope.logged);
+                        });
+                    }
+                });
             });
         }
     });
@@ -43,10 +44,12 @@ angular.module('KidoScraperPopup').controller("LoginController", function ($scop
             alert("The Marketplace URL is required");
             return;
         }
-        bgScript.deleteFromLocalStorage(bgScript.getAuthTokenKeyInLocalStorageFor($scope.marketplaceURL)).done(function () {
-            $scope.$apply(function () {
-                $scope.logged = false;
-                bgScript.changeExtensionPopUpIcon($scope.logged);
+        bgScript.getAuthTokenKeyInLocalStorageFor($scope.marketplaceURL).done(function(tokenKey) {
+            bgScript.deleteFromLocalStorage(tokenKey).done(function () {
+                $scope.$apply(function () {
+                    $scope.logged = false;
+                    bgScript.changeExtensionPopUpIcon($scope.logged);
+                });
             });
         });
     };

@@ -30,10 +30,10 @@ module.exports = (function () {
                     $location.path('/projects/' + site.name);
                 };
                 $scope.exportProject = function (site) {
-                    $location.path('/projects/export/' + site.name);
+                    $location.path('/projects/' + site.name + "/export");
                 };
                 $scope.runProject = function (site) {
-                    $location.path('/projects/run/' + site.name);
+                    $location.path('/projects/' + site.name + "/run");
                 };
             });
         });

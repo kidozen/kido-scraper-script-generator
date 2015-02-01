@@ -22,7 +22,7 @@ module.exports = (function () {
                         alert("Could not determine the datasource to run the script with!");
                         return;
                     }
-                    $location.path('/datasources/run/' + datasource.name);
+                    $location.path('/datasources/' + datasource.name + '/run');
                 };
 
                 $scope.deleteDatasource = function (index) {

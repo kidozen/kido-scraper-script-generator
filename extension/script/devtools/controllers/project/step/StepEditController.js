@@ -8,14 +8,18 @@ module.exports = (function () {
     angular.module('KidoScraper').controller('StepEditController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Step Edit Controller...');
 
-        if (!$routeParams.siteName || !$routeParams.type) {
+        if (!$routeParams.name || !$routeParams.type) {
             return $location.path('/');
         }
-
         $scope.creationMode = !$routeParams.stepName;
         $scope.editionMode = $routeParams.stepName;
 
-        RunInBackgroundScript.getFromLocalStorage($routeParams.siteName).done(function (siteAsJson) {
+        $scope.breadcrumbReplacements = {
+            'Project Name': $routeParams.name,
+            'Step Type or Name': $scope.editionMode ? $routeParams.stepName : "New " + $routeParams.type + " step"
+        };
+
+        RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function (siteAsJson) {
             AngularScope.apply($scope, function () {
                 $scope.site = siteAsJson;
 
@@ -48,7 +52,7 @@ module.exports = (function () {
                 $scope.site.steps.push($scope.currentStep);
                 saveSiteInLocalStorage();
             } else {
-                RunInBackgroundScript.getFromLocalStorage($routeParams.siteName).done(function (site) {
+                RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function (site) {
                     var step2EditIdx = _.findIndex(site.steps, function(s){ return s.name === $routeParams.stepName; });
                     if (step2EditIdx === -1) {
                         alert("There was an error when attempting to update the step " + $routeParams.stepName);
@@ -69,7 +73,7 @@ module.exports = (function () {
         };
 
         function saveSiteInLocalStorage() {
-            RunInBackgroundScript.setInLocalStorage({key: $routeParams.siteName, value: new Site($scope.site).toJson()})
+            RunInBackgroundScript.setInLocalStorage({key: $routeParams.name, value: new Site($scope.site).toJson()})
                 .done(function () {
                     AngularScope.apply($scope, function () {
                         $location.path('/projects/' + $scope.site.name);

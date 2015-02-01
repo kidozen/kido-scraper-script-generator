@@ -12,6 +12,7 @@ module.exports = (function () {
         if (!$routeParams.name) {
             return $location.path('/');
         }
+        $scope.breadcrumbReplacements = {'Project Name': $routeParams.name};
         $scope.timeout = 60; //default, can be changed by the user
         $scope.running = false;
 

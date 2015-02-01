@@ -10,6 +10,8 @@ module.exports = (function () {
         if (!$routeParams.name) {
             return $location.path('/');
         }
+        $scope.breadcrumbReplacements = {'Project Name': $routeParams.name};
+
         RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function (siteAsJson) {
             AngularScope.apply($scope, function () {
                 $scope.site = siteAsJson;

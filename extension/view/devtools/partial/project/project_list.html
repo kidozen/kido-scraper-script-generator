@@ -1,16 +1,15 @@
-<ol class="breadcrumb">
-    <li><a href="#/">Scraper Generator</a></li>
-    <li class="active">Projects</li>
-</ol>
+<div><breadcrumb/></div>
+
 <div class="col-md-8">
     <a ng-click="createNewProject()" class="btn btn-primary">Add New Project</a>
 
     <table class="table">
         <tr ng-repeat="s in sites">
-            <td ng-click="openProjectDetails(s)" class="two-cols-column-long">
-                <a><label>{{ s.name }}</label></a>
+            <td class="two-cols-column-long">
+                <label>{{ s.name }}</label>
             </td>
             <td class="two-cols-column-short">
+                <a class="btn btn-primary" ng-click="openProjectDetails(s)">Open</a>
                 <a class="btn btn-primary" ng-click="exportProject(s)">Export</a>
                 <a class="btn btn-primary" ng-click="runProject(s)">Run</a>
                 <a class="btn btn-danger" ng-click="deleteProject($index)">Delete</a>

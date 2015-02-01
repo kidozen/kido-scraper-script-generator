@@ -10,6 +10,8 @@ module.exports = (function () {
         if (!$routeParams.name) {
             return $location.path('/');
         }
+        $scope.breadcrumbReplacements = {'Project Name': $routeParams.name};
+
         $scope.types = [{
             id: Site.TYPES.FORM,
             name: 'Form'
@@ -28,7 +30,7 @@ module.exports = (function () {
                 $scope.site.steps = $scope.site.steps || [];
 
                 function _addStep(type) {
-                    $location.path('/projects/step/edit/' + $routeParams.name + '/' + type);
+                    $location.path('/projects/' + $routeParams.name + '/step/edit/' + type);
                 }
 
                 $scope.addStep = function () {
@@ -44,13 +46,13 @@ module.exports = (function () {
                     _addStep(Site.TYPES.SCRAPE);
                 };
                 $scope.exportSite = function (site) {
-                    $location.path('/projects/export/' + site.name);
+                    $location.path('/projects/' + site.name + "/export");
                 };
                 $scope.runSite = function (site) {
-                    $location.path('/projects/run/' + site.name);
+                    $location.path('/projects/' + site.name + "/run");
                 };
                 $scope.editStep = function (step) {
-                    $location.path('/projects/step/edit/' + $scope.site.name + '/' + step.type + '/' + step.name);
+                    $location.path('/projects/' + $scope.site.name + '/step/edit/' + step.type + '/' + step.name);
                 };
                 $scope.deleteStep = function (index) {
                     var stepName = $scope.site.steps[index].name;

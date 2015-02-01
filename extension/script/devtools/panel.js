@@ -6,7 +6,7 @@ require('angular-loading-bar');
 require("simple-errors");
 var Site = require('./model/Site');
 
-angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap'])
+angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap', 'ng-breadcrumbs'])
     .config(function ($routeProvider, $compileProvider, $tooltipProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);
@@ -21,47 +21,53 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap']
         $routeProvider
             .when('/projects', {
                 templateUrl: 'partial/project/project_list.html',
-                controller: 'ListProjectsController'
+                controller: 'ListProjectsController',
+                label: 'Projects'
             })
             .when('/projects/create', {
                 templateUrl: 'partial/project/project_create.html',
-                controller: 'CreateProjectController'
+                controller: 'CreateProjectController',
+                label: 'New'
             })
             .when('/projects/:name', {
                 templateUrl: 'partial/project/project_detail.html',
-                controller: 'ProjectDetailsController'
+                controller: 'ProjectDetailsController',
+                label: 'Project Name'
             })
-            .when('/projects/step/edit/:siteName/:type/:stepName?', {
+            .when('/projects/:name/step/edit/:type/:stepName?', {
                 templateUrl: 'partial/project/step/step_edit.html',
-                controller: 'StepEditController'
+                controller: 'StepEditController',
+                label: 'Step Type or Name'
             })
-            .when('/projects/export/:name', {
+            .when('/projects/:name/export', {
                 templateUrl: 'partial/project/project_export.html',
-                controller: 'ProjectExportController'
+                controller: 'ProjectExportController',
+                label: 'Export'
             })
-            .when('/projects/run/:name', {
+            .when('/projects/:name/run', {
                 templateUrl: 'partial/project/project_run.html',
-                controller: 'ProjectRunController'
-            })
-            .when('/services', {
-                templateUrl: 'partial/service/service_list.html',
-                controller: 'ListServicesController'
+                controller: 'ProjectRunController',
+                label: 'Run'
             })
             .when('/datasources', {
                 templateUrl: 'partial/datasource/ds_list.html',
-                controller: 'ListDatasourcesController'
+                controller: 'ListDatasourcesController',
+                label: 'Datasources'
             })
             .when('/datasources/create', {
                 templateUrl: 'partial/datasource/ds_create.html',
-                controller: 'CreateDatasourceController'
+                controller: 'CreateDatasourceController',
+                label: 'New'
             })
             .when('/datasources/create/:siteName/:serviceName?', {
                 templateUrl: 'partial/datasource/ds_create.html',
-                controller: 'CreateDatasourceController'
+                controller: 'CreateDatasourceController',
+                label: 'New'
             })
-            .when('/datasources/run/:dsName', {
+            .when('/datasources/:dsName/run', {
                 templateUrl: 'partial/datasource/ds_run.html',
-                controller: 'RunDatasourceController'
+                controller: 'RunDatasourceController',
+                label: 'Run'
             })
             .otherwise({
                 redirectTo: '/projects'

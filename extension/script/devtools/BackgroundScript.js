@@ -1,6 +1,7 @@
 var prefix = 'Success payload=';
 var auth_key_in_storage = 'token_';
 var auth_service_url_in_storage = 'auth_service_url_';
+var NOT_LOGGED_IN_MESSAGE = "You are not logged in to any marketplace yet.\nPlease do so by opening the extension's popup dialog (next to the address bar) and try again.";
 
 // TODO This does not work when running as a web application, refactor!
 var haveAccessToChromeStorageAPI = function() { return chrome && chrome.storage; };
@@ -78,9 +79,11 @@ var BackgroundScript = {
 		return deferredResponse.promise();
 	},
 
-	getAuthTokenKeyInLocalStorageFor: function (marketplaceURL) {
-		return auth_key_in_storage + marketplaceURL;
-	},
+    getAuthTokenKeyInLocalStorageFor: function (marketplaceURL) {
+        var deferredResponse = $.Deferred();
+        deferredResponse.resolve(auth_key_in_storage + marketplaceURL);
+        return deferredResponse.promise();
+    },
 
 	fetchANewTokenFor: function (marketplaceURL) {
 		var deferredResponse = $.Deferred();
@@ -100,7 +103,7 @@ var BackgroundScript = {
 									var accessToken = self.decodeToken(token);
 
 									var saveRequest = {};
-									saveRequest["key"] = self.getAuthTokenKeyInLocalStorageFor(marketplaceURL);
+									saveRequest["key"] = auth_key_in_storage + marketplaceURL;
 									saveRequest["value"] = accessToken;
 
 									self.setInLocalStorage(saveRequest);
@@ -133,46 +136,49 @@ var BackgroundScript = {
 		var marketplaceURL = options;
 		var fromLogin = false;
 
-		if (typeof options === 'object') {
+		if (options && typeof options === 'object') {
 			marketplaceURL = options.marketplaceURL;
 			fromLogin = options.fromLogin;
 		}
-
 		var deferredResponse = $.Deferred();
 		var self = this;
 
-		self.setInLocalStorage({key: self.lastUsedMarketplaceURL, value: marketplaceURL});
+        if (marketplaceURL) {
+            self.setInLocalStorage({key: self.lastUsedMarketplaceURL, value: marketplaceURL});
 
-		// TODO See if we can use the refresh_token...
-		self.getFromLocalStorage(self.getAuthTokenKeyInLocalStorageFor(marketplaceURL)).done(function (accessToken) {
-			if (accessToken) {
-				try {
-					var headers = {};
-					headers["Authorization"] = accessToken;
+            // TODO See if we can use the refresh_token...
+            self.getFromLocalStorage(auth_key_in_storage + marketplaceURL).done(function (accessToken) {
+                if (accessToken) {
+                    try {
+                        var headers = {};
+                        headers["Authorization"] = accessToken;
 
-					$.ajax({
-						type: "GET",
-						url: marketplaceURL + "api/admin/services",
-						headers: headers
-					}).done(function (data) {
-						deferredResponse.resolve(accessToken);
-					}).fail(function (jqXHR) {
-						if (jqXHR.status === 401 && !fromLogin) {
-							alert("Previously saved auth details have expired.\nYou need to re-authenticate");
-						}
-						self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
-					});
-				} catch (error) {
-					self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
-				}
-			} else {
-				if (fromLogin) {
-					self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
-				} else {
-					alert("You are not logged in to any marketplace yet.\nPlease do so by opening the extension's popup dialog (next to the address bar) and try again.");
-				}
-			}
-		});
+                        $.ajax({
+                            type: "GET",
+                            url: marketplaceURL + "api/admin/services",
+                            headers: headers
+                        }).done(function (data) {
+                            deferredResponse.resolve(accessToken);
+                        }).fail(function (jqXHR) {
+                            if (jqXHR.status === 401 && !fromLogin) {
+                                alert("Previously saved auth details have expired.\nYou need to re-authenticate");
+                            }
+                            self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
+                        });
+                    } catch (error) {
+                        self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
+                    }
+                } else {
+                    if (fromLogin) {
+                        self.fetchANewTokenFor(marketplaceURL).done(function (newToken) { deferredResponse.resolve(newToken); });
+                    } else {
+                        alert(NOT_LOGGED_IN_MESSAGE);
+                    }
+                }
+            });
+        } else {
+            alert(NOT_LOGGED_IN_MESSAGE);
+        }
 		return deferredResponse.promise();
 	},
 

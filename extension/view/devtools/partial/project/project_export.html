@@ -1,9 +1,5 @@
-<ol class="breadcrumb">
-    <li><a href="#/">Scraper Generator</a></li>
-    <li><a href="#/projects">Projects</a></li>
-    <li><a href="#/projects/{{site.name}}">{{site.name}}</a></li>
-    <li class="active">Export</li>
-</ol>
+<div><breadcrumb replacements="breadcrumbReplacements"/></div>
+
 <button ng-click="showScript()" ng-class="{'btn-primary':jsonVisible}" class="btn">Script</button>
 <button ng-click="showJson()" ng-class="{'btn-primary':scriptVisible}" class="btn">JSON</button>
 <button ng-click="createDatasource()" class="btn">Create Datasource</button>
