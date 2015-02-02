@@ -15,6 +15,7 @@ module.exports = (function () {
         $scope.breadcrumbReplacements = {'Project Name': $routeParams.name};
         $scope.timeout = 60; //default, can be changed by the user
         $scope.running = false;
+        $scope.selectedService = undefined;
 
         RunInBackgroundScript.getFromLocalStorage(RunInBackgroundScript.lastUsedMarketplaceURL).done(function (lastUsedMarketplaceURL) {
             AngularScope.apply($scope, function () {
@@ -66,69 +67,21 @@ module.exports = (function () {
                     });
                 };
 
-                $scope.deleteService = function (index) {
-                    var service = $scope.services[index];
-
-                    if (!service) {
-                        alert("Could not determine the service to be deleted");
-                        return;
-                    }
-                    if (!confirm("Are you sure you want to delete the service '" + service.name + "'?")) {
-                        return;
-                    }
-                    // TODO Move this to ServiceService.js
-                    RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
-                        $http({
-                            method: 'POST',
-                            url: $scope.marketplaceURL + 'api/admin/v2/services/' + service.name + "/disable",
-                            cache: false,
-                            headers: {
-                                'Authorization': token
-                            }
-                        }).then(function (response) {
-                            var retries = 3;
-                            var deleteService = function () {
-                                $http({
-                                    method: 'DELETE',
-                                    url: $scope.marketplaceURL + 'api/admin/services/' + service.name,
-                                    headers: {
-                                        'Authorization': token,
-                                        'timeout': $scope.timeout,
-                                        "Content-Type": "application/json"
-                                    }
-                                }).then(function (response) {
-                                    $scope.services.splice(index, 1);
-                                }, function (error) {
-                                    if (retries-- > 0) {
-                                        deleteService();
-                                    } else {
-                                        baseErrorHandler.handleError(error, "An error occurred while deleting the service instance " + service.name, $scope.marketplaceURL);
-                                    }
-                                });
-                            };
-                            deleteService();
-
-                        }, function (error) {
-                            baseErrorHandler.handleError(error, "An error occurred while disabling the service instance " + service.name, $scope.marketplaceURL);
-                        });
-                    });
-                };
-                $scope.runIn = function (service) {
-                    if (!service) {
-                        alert("Could not determine the service to run the script with!");
+                $scope.run = function () {
+                    if (!$scope.selectedService) {
+                        alert("Please choose the service to run the script with!");
                         return;
                     }
                     if (timeoutIsInvalid()) {
                         return;
                     }
-                    $scope.lastUsedService = service;
                     $scope.running = true;
 
                     // TODO Move this to ServiceService.js
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
                         $http({
                             method: 'POST',
-                            url: $scope.marketplaceURL + 'api/admin/services/' + service.name + '/invoke/runJson',
+                            url: $scope.marketplaceURL + 'api/admin/services/' + $scope.selectedService.name + '/invoke/runJson',
                             headers: {
                                 'Authorization': token,
                                 'timeout': $scope.timeout,
@@ -148,20 +101,12 @@ module.exports = (function () {
                         });
                     });
                 };
-                $scope.createDatasource = function (service) {
-                    if (!service) {
+                $scope.createDatasource = function () {
+                    if (!$scope.selectedService) {
                         alert("Could not determine the service the datasource will be associated to!");
                         return;
                     }
-                    $location.path('/datasources/create/' + $scope.site.name + '/' + service.name);
-                };
-
-                $scope.runAgain = function () {
-                    $scope.runIn($scope.lastUsedService);
-                };
-
-                $scope.back = function () {
-                    $scope.executionResult = null;
+                    $location.path('/datasources/create/' + $scope.site.name + '/' + $scope.selectedService.name);
                 };
 
                 var timeoutIsInvalid = function () {

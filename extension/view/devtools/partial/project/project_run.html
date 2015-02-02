@@ -1,54 +1,34 @@
 <div><breadcrumb replacements="breadcrumbReplacements"/></div>
 
-<div class="col-md-8" ng-show="!executionResult">
-    <div class="form-inline" role="form" style="float:left">
-        <h6>Run in Service</h6>
-    </div>
-    <div class="form-inline" role="form" style="float:right">
-        <label>Timeout (in seconds):</label>
-        <input type="number" ng-model="timeout" class="form-control" placeholder="timeout">
-    </div>
-    <table class="table" ng-model="services">
-        <tr>
-            <td class="three-cols-first-column">
-                <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" regexp-matching="/^[-a-zA-Z0-9,&]+$/"
-                       class="form-control" placeholder="New Service">
-            </td>
-            <td class="three-cols-second-column">
-                <select class="form-control select select-primary" select2 ng-model="runOn"
-                        ng-options="a.name group by a.type for a in agents"
-                        data-placeholder="Choose where this service will run ...">
-                    <option></option>
-                </select>
-            </td>
-            <td class="three-cols-third-column" align="right">
-                <a ng-click="createNewService()" class="btn btn-primary">Create New Service</a>
-            </td>
-        </tr>
-        <tr ng-repeat="s in services" ng-show="s.enterpriseApi === 'webauthorapi'">
-            <td class="three-cols-first-column">
-                <label>{{ s.name }}</label>
-            </td>
-            <td class="three-cols-second-column">
-                <label>{{ s.runOn.type === 'agent' ? s.runOn.name : 'kidozen' }}</label>
-            </td>
-            <td class="three-cols-third-column" align="right">
-                <div class="form-inline" role="form">
-                    <button ng-click="!running && runIn(s)" class="btn btn-info"></span>Run</button>
-                    <button ng-click="createDatasource(s)" class="btn btn-primary">Create DS</button>
-                    <button ng-click="deleteService($index)" class="btn btn-danger">Delete</button>
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
-<div ng-show="executionResult">
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button ng-click="!running && runAgain()" class="btn btn-info" ng-disabled="running">Run Again</button>
-            <button ng-click="back()" class="btn">Back</button>
+<div class="col-md-12">
+    <div class="form-group form-inline" role="form">
+        <div class="form-group">
+            <select class="form-control select select-primary" select2 ng-model="selectedService"
+                    ng-options="s as s.name for s in services | filter:{ enterpriseApi : 'webauthorapi' }"
+                    data-placeholder="Run in service ...">
+                <option></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="number" ng-model="timeout" class="form-control" placeholder="Timeout (in seconds)">
+        </div>
+        <div class="form-group">
+            <button ng-click="!running && run()" class="btn btn-primary" ng-disabled="running">Run</button>
+            <button ng-click="goBack()" class="btn">Cancel</button>
         </div>
     </div>
-    <h6>Results:</h6>
+
+    <div class="form-group form-inline" role="form" ng-show="executionResult">
+        <div class="form-group" style="float:left">
+            <h6>Results:</h6>
+        </div>
+        <div class="form-group" style="float:right">
+            <label>Satisfied with the results?</label>
+            <button ng-click="createDatasource()" class="btn">Create New Datasource</button>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12" ng-show="executionResult">
     <pre>{{executionResult}}</pre>
 </div>
