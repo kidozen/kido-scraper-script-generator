@@ -18,6 +18,17 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">Use Basic Auth</label>
+
+                <div class="col-sm-10 form-inline">
+                    <input type="checkbox" ng-model="useBasicAuth">
+                    <div class="form-group form-inline" ng-show="useBasicAuth">
+                        <input ng-model="credentials.user" class="form-control" placeholder="Username">
+                        <input ng-model="credentials.pass" class="form-control" placeholder="Password" type="password">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button ng-click="create()" class="btn btn-primary">Create</button>
                     <button ng-click="goBack()" class="btn">Cancel</button>

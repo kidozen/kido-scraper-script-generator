@@ -15,9 +15,16 @@ module.exports = (function() {
         if (!site) throw 'The "site" argument is required';
         if (!site.name) throw 'The "site.name" property is required';
         if (!site.url) throw 'The "site.url" property is required';
+        if (!_.isEmpty(site.credentials)) {
+            if ((site.credentials.user && !site.credentials.pass) ||
+                (!site.credentials.user && site.credentials.pass)) {
+                throw 'Both the username and password are required';
+            }
+        }
         if (!Array.isArray(site.steps)) throw 'The "site.steps" property must be an array';
         this._name = site.name;
         this._url = site.url;
+        this._credentials = site.credentials;
         this._steps = site.steps.map(function(step) {
             switch (step.type) {
                 case Site.TYPES.CLICK:
@@ -68,6 +75,7 @@ module.exports = (function() {
         return {
             name: '',
             url: '',
+            credentials:{},
             steps: []
         };
     };
@@ -94,6 +102,7 @@ module.exports = (function() {
 
     Site.prototype._name = undefined;
     Site.prototype._url = undefined;
+    Site.prototype._credentials = undefined;
     Site.prototype._steps = [];
 
     Site.prototype.getAllParams = function() {
@@ -107,6 +116,7 @@ module.exports = (function() {
         return {
             name: this._name,
             url: this._url,
+            credentials: this._credentials,
             steps: this._steps.map(function(step) {
                 return step.toJson(options);
             })
@@ -122,19 +132,33 @@ module.exports = (function() {
                          loadPlugins: false
                      }
                  });
-                 casper.start('{{url}}');
+                 casper.start();
+                 {{credentials}}
+                 casper.thenOpen('{{url}}');
                  {{steps}}
                  casper.run(function() {
                      this.exit();
                  });
              */
         }), {
+            credentials: this._getHttpBasicCredentialsScript(),
             url: this._url,
             steps: this._steps.map(function(step) {
                 return step.toCasper(options);
             }).join('\n')
         }), { indent_size: 4 });
     };
+
+    Site.prototype._getHttpBasicCredentialsScript = function() {
+        if (!_.isEmpty(this._credentials)) {
+            return "casper.setHttpAuth('" + escapeSingleQuotes(this._credentials.user) + "', '" + escapeSingleQuotes(this._credentials.pass) + "');";
+        }
+        return "";
+    };
+
+    function escapeSingleQuotes(string) {
+        return string.replace(/'/g, "\\'");
+    }
 
     return Site;
 

@@ -14,6 +14,15 @@ module.exports = (function () {
                 AngularScope.apply($scope, function () {
                     $scope.name = currentPageDetails ? currentPageDetails.title : '';
                     $scope.url = currentPageDetails ? currentPageDetails.url: '';
+                    $scope.useBasicAuth = false;
+                    $scope.credentials = {};
+
+                    // empty credentials object every time the checkbox gets unchecked
+                    $scope.$watch('useBasicAuth', function (enabled) {
+                        if (!enabled) {
+                            $scope.credentials = {};
+                        }
+                    });
 
                     $scope.create = function () {
                         $scope.name = $scope.name ? $scope.name.toLowerCase() : '';
@@ -29,6 +38,7 @@ module.exports = (function () {
                                 var site = Site.getDefaults();
                                 site.name = $scope.name;
                                 site.url = $scope.url;
+                                site.credentials = $scope.credentials;
 
                                 RunInBackgroundScript.setInLocalStorage({
                                     key: $scope.name,
