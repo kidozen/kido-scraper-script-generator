@@ -3,9 +3,9 @@
 <div class="col-md-12">
     <div class="form-group form-inline" role="form">
         <div class="form-group">
-            <select class="form-control select select-primary" select2 ng-model="selectedService"
-                    ng-options="s as s.name for s in services | filter:{ enterpriseApi : 'webauthorapi' }"
-                    data-placeholder="Run in service ...">
+            <select class="form-control select select-primary" select2 ng-model="selectedServiceName"
+                    ng-options="s.name as s.name for s in services | filter:{ enterpriseApi : 'webauthorapi' }"
+                    data-placeholder="Run in service ..." ng-change="openModalIfNecessary()">
                 <option></option>
             </select>
         </div>
@@ -32,3 +32,30 @@
 <div class="col-md-12" ng-show="executionResult">
     <pre>{{executionResult}}</pre>
 </div>
+
+<script type="text/ng-template" id="createNewServiceModal.html">
+    <div class="modal-header">
+        <h6 class="modal-title">New Service</h6>
+    </div>
+    <div class="modal-body">
+        <table class="table">
+            <tr>
+                <td class="three-cols-first-column">
+                    <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" regexp-matching="/^[-a-zA-Z0-9,&]+$/"
+                           class="form-control" placeholder="New Service Name">
+                </td>
+                <td class="three-cols-second-column">
+                    <select class="form-control select select-primary" select2 ng-model="runOn"
+                            ng-options="a.name group by a.type for a in agents"
+                            data-placeholder="Choose where to run ...">
+                        <option></option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="createNewService()">Create</button>
+        <button class="btn" ng-click="cancelNewServiceCreation()">Cancel</button>
+    </div>
+</script>

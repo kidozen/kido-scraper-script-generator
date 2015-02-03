@@ -5,8 +5,8 @@ var Site = require('../../model/Site');
 module.exports = (function () {
 
     angular.module('KidoScraper').controller('ProjectRunController', function ($scope, $routeParams, $location, $http,
-                                                                               RunInBackgroundScript, AngularScope, baseErrorHandler,
-                                                                               serviceService, agentService) {
+                                                                               $modal, RunInBackgroundScript, AngularScope,
+                                                                               baseErrorHandler, serviceService, agentService) {
         console.log('Loading Project Run Controller...');
 
         if (!$routeParams.name) {
@@ -15,7 +15,19 @@ module.exports = (function () {
         $scope.breadcrumbReplacements = {'Project Name': $routeParams.name};
         $scope.timeout = 60; //default, can be changed by the user
         $scope.running = false;
-        $scope.selectedService = undefined;
+        $scope.selectedServiceName = '';
+        $scope.NEW_SERVICE_META_KEY = "New Service...";
+
+        $scope.openModalIfNecessary = function() {
+            if ($scope.selectedServiceName === $scope.NEW_SERVICE_META_KEY) {
+                var modalInstance = $modal.open({
+                    scope: $scope,
+                    templateUrl: 'createNewServiceModal.html',
+                    controller: 'NewServiceModalController',
+                    backdrop: 'static'
+                });
+            }
+        };
 
         RunInBackgroundScript.getFromLocalStorage(RunInBackgroundScript.lastUsedMarketplaceURL).done(function (lastUsedMarketplaceURL) {
             AngularScope.apply($scope, function () {
@@ -30,6 +42,8 @@ module.exports = (function () {
                     if (error) {
                         return baseErrorHandler.handleError(error, "Error while attempting to retrieve services", $scope.marketplaceURL);
                     }
+                    // prepend an special option for creating a new service
+                    services.unshift({name: $scope.NEW_SERVICE_META_KEY, enterpriseApi: "webauthorapi"});
                     $scope.services = services;
                 });
 
@@ -42,33 +56,8 @@ module.exports = (function () {
                     $scope.agents = agents;
                 });
 
-                $scope.createNewService = function () {
-                    var service = {};
-                    service.name = $scope.newServiceName;
-                    service.runOn = $scope.runOn;
-                    service.enterpriseApi = 'webauthorapi';
-                    service.config = {};
-
-                    if (serviceService.serviceIsInvalid(service, $scope.services)) return;
-
-                    if (service.runOn.type === 'cloud') {
-                        service.runOn.type = 'hub';
-                    }
-                    serviceService.createService(service, $scope.services, $scope.marketplaceURL, function (error) {
-                        if (error) {
-                            return baseErrorHandler.handleError(error, "Error while attempting to create a new service", $scope.marketplaceURL);
-                        }
-                        if (service.runOn.type === 'hub') {
-                            service.runOn.type = 'cloud';
-                        }
-                        $scope.services.push(service);
-                        $scope.newServiceName = '';
-                        $scope.runOn = null;
-                    });
-                };
-
                 $scope.run = function () {
-                    if (!$scope.selectedService) {
+                    if (!$scope.selectedServiceName) {
                         alert("Please choose the service to run the script with!");
                         return;
                     }
@@ -81,7 +70,7 @@ module.exports = (function () {
                     RunInBackgroundScript.getAuthToken($scope.marketplaceURL).done(function (token) {
                         $http({
                             method: 'POST',
-                            url: $scope.marketplaceURL + 'api/admin/services/' + $scope.selectedService.name + '/invoke/runJson',
+                            url: $scope.marketplaceURL + 'api/admin/services/' + $scope.selectedServiceName + '/invoke/runJson',
                             headers: {
                                 'Authorization': token,
                                 'timeout': $scope.timeout,
@@ -102,11 +91,11 @@ module.exports = (function () {
                     });
                 };
                 $scope.createDatasource = function () {
-                    if (!$scope.selectedService) {
+                    if (!$scope.selectedServiceName) {
                         alert("Could not determine the service the datasource will be associated to!");
                         return;
                     }
-                    $location.path('/datasources/create/' + $scope.site.name + '/' + $scope.selectedService.name);
+                    $location.path('/datasources/create/' + $scope.site.name + '/' + $scope.selectedServiceName);
                 };
 
                 var timeoutIsInvalid = function () {
@@ -118,5 +107,50 @@ module.exports = (function () {
                 };
             });
         });
+    });
+
+    angular.module('KidoScraper').controller('NewServiceModalController', function ($scope, $modalInstance, AngularScope,
+                                                                                    baseErrorHandler, serviceService) {
+        $scope.createNewService = function () {
+            if ($scope.newServiceName === $scope.NEW_SERVICE_META_KEY) {
+                return alert("The service name you specified is invalid. Please choose a different one");
+            }
+            var service = {};
+            service.name = $scope.newServiceName;
+            service.runOn = $scope.runOn;
+            service.enterpriseApi = 'webauthorapi';
+            service.config = {};
+
+            if (serviceService.serviceIsInvalid(service, $scope.services)) return;
+
+            if (service.runOn.type === 'cloud') {
+                service.runOn.type = 'hub';
+            }
+            serviceService.createService(service, $scope.services, $scope.marketplaceURL, function (error) {
+                if (error) {
+                    $modalInstance.dismiss('error');
+                    return baseErrorHandler.handleError(error, "Error while attempting to create a new service", $scope.marketplaceURL);
+                }
+                if (service.runOn.type === 'hub') {
+                    service.runOn.type = 'cloud';
+                }
+                $scope.services.push(service);
+                $scope.services.sort(function (a, b) {
+                    if (a.name == $scope.NEW_SERVICE_META_KEY || a.name < b.name) return -1;
+                    if (b.name == $scope.NEW_SERVICE_META_KEY || a.name > b.name) return 1;
+                    return 0;
+                });
+                // FIXME For some reason, the select widget does not update and causes a couple of problems...
+                $scope.selectedServiceName = service.name;
+                $modalInstance.close();
+
+                $scope.newServiceName = '';
+                $scope.runOn = null;
+            });
+        };
+
+        $scope.cancelNewServiceCreation = function () {
+            $modalInstance.dismiss('cancel');
+        };
     });
 })();
