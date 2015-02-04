@@ -2,6 +2,7 @@ var prefix = 'Success payload=';
 var auth_key_in_storage = 'token_';
 var auth_service_url_in_storage = 'auth_service_url_';
 var NOT_LOGGED_IN_MESSAGE = "You are not logged in to any marketplace yet.\nPlease do so by opening the extension's popup dialog (next to the address bar) and try again.";
+var AUTH_COOKIE_NAME = 'connect.sid';
 
 // TODO This does not work when running as a web application, refactor!
 var haveAccessToChromeStorageAPI = function() { return chrome && chrome.storage; };
@@ -131,8 +132,38 @@ var BackgroundScript = {
 		return deferredResponse.promise();
 	},
 
-	getAuthToken: function (options) {
-		 // Ugly code warning: mutable parameters: can accept either the marketplaceURL or an object with more options
+    getAuthCookie: function (marketplaceURL) {
+        var deferredResponse = $.Deferred();
+        var self = this;
+
+        if (marketplaceURL) {
+            chrome.cookies.get({url: marketplaceURL, name: AUTH_COOKIE_NAME},
+                function (cookie) {
+                    if (cookie) {
+                        deferredResponse.resolve(cookie.value);
+
+                        //$.ajax({
+                        //    type: "GET",
+                        //    url: marketplaceURL + "api/admin/services",
+                        //    headers: {'Cookie': AUTH_COOKIE_NAME + "=" + cookie.value}
+                        //}).done(function (data) {
+                        //    alert("I could invoke a service passing the cookie!: " + JSON.stringify(data, null, 2));
+                        //}).fail(function (jqXHR) {
+                        //    alert("Could not invoke service passing the cookie: " + jqXHR.status);
+                        //});
+
+                    } else {
+                        alert("We need to define what happens when the cookie is not present");
+                    }
+                });
+        } else {
+            alert("We need to define what happens when there isn't a known marketplaceURL");
+        }
+        return deferredResponse.promise();
+    },
+
+    getAuthToken: function (options) {
+        // Ugly code warning: mutable parameters: can accept either the marketplaceURL or an object with more options
 		var marketplaceURL = options;
 		var fromLogin = false;
 

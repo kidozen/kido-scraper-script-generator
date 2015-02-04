@@ -4,7 +4,7 @@
     "name": "Kido Scraper Script Generator",
     "short_name": "Kido Scraper",
     "description": "KidoZen tool to build scripts for data extraction from websites",
-    "permissions": ["<all_urls>", "tabs", "notifications", "storage", "unlimitedStorage", "downloads"],
+    "permissions": ["<all_urls>", "cookies", "tabs", "notifications", "storage", "unlimitedStorage", "downloads"],
     "icons": {
         "16": "assets/images/16.png",
         "19": "assets/images/19.png",

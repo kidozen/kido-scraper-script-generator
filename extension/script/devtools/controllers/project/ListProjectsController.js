@@ -9,7 +9,6 @@ module.exports = (function () {
         RunInBackgroundScript.getFromLocalStorage(null).done(function(allSites) {
             AngularScope.apply($scope, function () {
                 $scope.sites = allSites;
-                $scope.appcenter = '';
 
                 $scope.createNewProject = function () {
                     $location.path('/projects/create');
