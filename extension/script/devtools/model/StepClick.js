@@ -38,11 +38,11 @@ module.exports = (function() {
         return Util.supplant.call(multiline(function() {
             /*
                  casper.then(function() {
-                     this.click({{key}});
+                     this.click('{{key}}');
                  });
              */
         }), {
-            key: Util.quote.call(this._key)
+            key: this._key
         });
     };
 

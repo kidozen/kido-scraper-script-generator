@@ -5,7 +5,7 @@ module.exports = (function () {
 
     angular.module('KidoScraper')
         .service('baseErrorHandler', function () {
-            var handleError = function (error, baseMessage, marketplaceURL) {
+            var handleError = function (error, baseMessage, marketplaceURL, dealWithNonRestErrors) {
                 var msg = baseMessage;
                 if (error && error.status != null) {
                     if (error.status === 0) {
@@ -13,8 +13,11 @@ module.exports = (function () {
                     } else {
                         msg += " (status code: " + error.status + ")";
                     }
-                } else if (error instanceof Error) {
-                    msg = error.message;
+                } else {
+                    if (!dealWithNonRestErrors) return;
+                    if (error instanceof Error) {
+                        msg = error.message;
+                    }
                 }
                 alert(msg);
             };

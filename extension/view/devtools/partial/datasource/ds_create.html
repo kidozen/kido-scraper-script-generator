@@ -59,14 +59,14 @@
             <label class="col-md-2 control-label">Description</label>
 
             <div class="col-md-10">
-                <textarea rows="5" class="form-control" ng-model="description" ng-maxlength="400"/>
+                <textarea rows="3" class="form-control" ng-model="description" ng-maxlength="400"/>
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-md-2 control-label">Timeout (seconds)</label>
 
-            <div class="col-md-10">
+            <div class="col-md-4">
                 <input type="number" ng-model="timeout" class="form-control" placeholder="timeout">
             </div>
         </div>
@@ -75,6 +75,19 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <button ng-click="createNewDatasource()" class="btn btn-primary">Create</button>
                 <button ng-click="goBack()" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-8" ng-show="dsBody">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-12">
+                <small><label ng-show="method === 'runJson'">If you want, you can edit the JSON content.</label></small>
+                <small><label ng-show="method === 'runScript'">If you want, you can edit the Casper Script. <strong>Comments
+                    are not allowed and single quotes are preferred over double quotes.</strong></label></small>
+                <textarea rows="20" class="form-control" ng-model="dsBody"/>
             </div>
         </div>
     </div>

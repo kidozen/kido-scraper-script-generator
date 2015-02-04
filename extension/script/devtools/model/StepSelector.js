@@ -55,15 +55,15 @@ module.exports = (function () {
         if (options && options.scrapeWithinContainer) {
             code = function () {
                 /*
-                    element = container.querySelector({{key}});
-                    currentItemScrapedValues[{{name}}] = element ? element.innerText : null;
+                    element = container.querySelector('{{key}}');
+                    currentItemScrapedValues['{{name}}'] = element ? element.innerText : null;
                  */
             };
         } else {
             code = function () {
                 /*
-                    values[{{name}}] = this.evaluate(function() {
-                        var selection = document.querySelectorAll({{key}});
+                    values['{{name}}'] = this.evaluate(function() {
+                        var selection = document.querySelectorAll('{{key}}');
                         return [].map.call(selection, function(item) {
                             return item.innerText;
                         });
@@ -73,8 +73,8 @@ module.exports = (function () {
         }
 
         return Util.supplant.call(multiline(code), {
-            name: Util.quote.call(this._name),
-            key: Util.quote.call(this._key)
+            name: this._name,
+            key: this._key
         });
     };
 

@@ -4,7 +4,10 @@ var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('CreateDatasourceController', function ($scope, $routeParams, $location, $http, RunInBackgroundScript, AngularScope, baseErrorHandler, datasourceService, serviceService) {
+    angular.module('KidoScraper').controller('CreateDatasourceController', function ($scope, $routeParams, $location,
+                                                                                     $http, RunInBackgroundScript,
+                                                                                     AngularScope, baseErrorHandler,
+                                                                                     datasourceService, serviceService) {
         console.log('Loading CreateDatasource Controller...');
 
         $scope.serviceName = $routeParams.serviceName;
@@ -14,15 +17,31 @@ module.exports = (function () {
         $scope.methods = ['runJson', 'runScript'];
         $scope.timeout = 60;
 
+        $scope.$watchGroup(['siteName', 'method'], function(newValues, oldValues) {
+            if ($scope.siteName && $scope.method) {
+
+                RunInBackgroundScript.getFromLocalStorage($scope.siteName).done(function (siteAsJson) {
+                    AngularScope.apply($scope, function () {
+                        var options = {parameterizable: true};
+
+                        $scope.site = new Site(siteAsJson);
+                        $scope.dsBody = $scope.method === 'runJson' ?
+                                        JSON.stringify($scope.site.toJson(options), null, 4) :
+                                        $scope.site.toCasper(options);
+                    });
+                });
+            }
+        });
+
         // TODO This is a clear candidate to be refactored out, to a service that deals with user session, auth credentials, etc...
         RunInBackgroundScript.getFromLocalStorage(RunInBackgroundScript.lastUsedMarketplaceURL).done(function (lastUsedMarketplaceURL) {
             AngularScope.apply($scope, function () {
                 $scope.marketplaceURL = lastUsedMarketplaceURL;
 
                 //TODO Create a "projectService" that deals with the details of how to retrieve projects
-                RunInBackgroundScript.getFromLocalStorage(null).done(function (allSites) {
+                RunInBackgroundScript.getFromLocalStorage(null).done(function (allProjects) {
                     AngularScope.apply($scope, function () {
-                        $scope.projects = allSites;
+                        $scope.projects = allProjects;
                     });
                 });
 
@@ -33,8 +52,10 @@ module.exports = (function () {
                     $scope.services = services;
 
                     $scope.createNewDatasource = function () {
-
-                        if (siteNameIsNotPresent()) {
+                        if (projectNameIsNotPresent()) {
+                            return;
+                        }
+                        if ($scope.method === 'runJson' && !isValidJson($scope.dsBody)) {
                             return;
                         }
                         RunInBackgroundScript.getFromLocalStorage($scope.siteName).done(function (siteAsJson) {
@@ -53,12 +74,13 @@ module.exports = (function () {
                                 datasource.cache = '0';
                                 datasource.params = $scope.site.getAllParams();
                                 datasource.body = $scope.method === 'runJson' ?
-                                    JSON.stringify({json: $scope.site.toJson(options)}) :
-                                    JSON.stringify({script: $scope.site.toCasper(options)});
+                                    JSON.stringify({json: JSON.parse($scope.dsBody)}) :
+                                    JSON.stringify({script: removeLineBreaksFrom($scope.dsBody)});
 
                                 datasourceService.createDatasource(datasource, $scope.marketplaceURL, function (error) {
                                     if (error) {
-                                        baseErrorHandler.handleError(error, "Error while creating datasource '" + datasource.name + "'", $scope.marketplaceURL);
+                                        baseErrorHandler.handleError(error, "Error while creating datasource '" + datasource.name + "'",
+                                            $scope.marketplaceURL, false);
                                         return;
                                     }
                                     $location.path('/datasources');
@@ -67,13 +89,29 @@ module.exports = (function () {
                         });
                     };
 
-                    var siteNameIsNotPresent = function () {
+                    var projectNameIsNotPresent = function () {
                         if (!$scope.siteName) {
                             alert('Please specify the site name');
                             return true;
                         }
                         return false;
                     };
+
+                    var isValidJson = function(jsonString) {
+                        if (jsonString) {
+                            try {
+                                JSON.parse(jsonString);
+                                return true;
+                            } catch (err) {
+                                alert("The specified JSON is invalid. Please review and try again.");
+                            }
+                        }
+                        return false;
+                    }
+
+                    var removeLineBreaksFrom = function(string) {
+                        return string.replace(/[\n\r]/g, "");
+                    }
                 });
             });
         });

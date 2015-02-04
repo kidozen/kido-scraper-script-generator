@@ -9,7 +9,7 @@ module.exports = (function () {
             // TODO The marketplaceURL should be provided by a service that knows the current auth details
             var createDatasource = function (ds, marketplaceURL, cb) {
                 if (_datasourceIsInvalid(ds)) {
-                    return cb(Error.create("Validation errors"));
+                    return cb(new Error("Validation errors"));
                 }
                 RunInBackgroundScript.getAuthToken(marketplaceURL).done(function (token) {
                     $http({
@@ -19,7 +19,7 @@ module.exports = (function () {
                             'Authorization': token,
                             "Content-Type": "application/json"
                         },
-                        data: JSON.stringify(ds)
+                        data: ds
                     }).then(function (response) {
                         cb(null);
                     }, function (err) {

@@ -18,15 +18,15 @@ module.exports = (function () {
                         $(element).select2("val", newValue);
                     }
                 });
-                scope.$watch('selectedServiceName', function (newValue, oldValue) {
-                    //$(element).select2().initSelection();
-                    $(element).select2("val", newValue);
+                //scope.$watch('selectedServiceName', function (newValue, oldValue) {
+                //    $(element).select2().initSelection();
+                //    $(element).select2("val", newValue);
                 //    $(element).trigger('input');
                 //    $(element).trigger('change');
                 //    ngModel.$setViewValue(newValue);
                 //    ngModel.$render();
                 //    scope.$apply();
-                });
+                //});
             }
         };
     });

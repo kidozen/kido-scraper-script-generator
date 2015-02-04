@@ -125,21 +125,21 @@ module.exports = (function() {
 
     Site.prototype.toCasper = function(options) {
         return beautify(Util.supplant.call(multiline(function() {
-            /*
-                 var casper = require('casper').create({
-                     pageSettings: {
-                         loadImages: false,
-                         loadPlugins: false
-                     }
-                 });
-                 casper.start();
-                 {{credentials}}
-                 casper.thenOpen('{{url}}');
-                 {{steps}}
-                 casper.run(function() {
-                     this.exit();
-                 });
-             */
+/*
+     var casper = require('casper').create({
+         pageSettings: {
+             loadImages: false,
+             loadPlugins: false
+         }
+     });
+     casper.start();
+     {{credentials}}
+     casper.thenOpen('{{url}}');
+     {{steps}}
+     casper.run(function() {
+         this.exit();
+     });
+ */
         }), {
             credentials: this._getHttpBasicCredentialsScript(),
             url: this._url,

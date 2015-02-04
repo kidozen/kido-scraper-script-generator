@@ -55,7 +55,7 @@ module.exports = (function() {
         }
         return Util.supplant.call(multiline(code), {
                 header: this._fields.map(function (field) {
-                    return "casper.waitForSelector(\"" + field.getKey() + "\", function() {";
+                    return "casper.waitForSelector('" + field.getKey() + "', function() {";
                 }).join('\n'),
                 container: this._container,
                 fields: this._fields.map(function (field) {
@@ -73,7 +73,7 @@ module.exports = (function() {
                 casper.then(function() {
                     {{header}}
                     var result = this.evaluate(function() {
-                        var containers = Array.prototype.slice.call(document.querySelectorAll("{{container}}"));
+                        var containers = Array.prototype.slice.call(document.querySelectorAll('{{container}}'));
 
                         return [].map.call(containers, function(container) {
                             var element;

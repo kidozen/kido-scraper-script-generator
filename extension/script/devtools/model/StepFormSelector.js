@@ -54,8 +54,8 @@ module.exports = (function() {
     };
 
     StepFormSelector.prototype.toCasper = function(options) {
-        return Util.supplant.call('document.querySelector({{key}}).value = "{{value}}";', {
-            key: Util.quote.call(this._key),
+        return Util.supplant.call("document.querySelector('{{key}}').value = '{{value}}';", {
+            key: this._key,
             value: this._getValue(options)
         });
     };
