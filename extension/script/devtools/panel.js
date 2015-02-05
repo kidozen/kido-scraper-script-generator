@@ -21,17 +21,17 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap',
         $routeProvider
             .when('/projects', {
                 templateUrl: 'partial/project/project_list.html',
-                controller: 'ListProjectsController',
+                controller: 'ProjectListController',
                 label: 'Projects'
             })
             .when('/projects/create', {
-                templateUrl: 'partial/project/project_create.html',
-                controller: 'CreateProjectController',
+                templateUrl: 'partial/project/project_edit.html',
+                controller: 'ProjectCreateOrEditController',
                 label: 'New'
             })
             .when('/projects/:name/edit_basic_details', {
-                templateUrl: 'partial/project/project_create.html',
-                controller: 'CreateProjectController',
+                templateUrl: 'partial/project/project_edit.html',
+                controller: 'ProjectCreateOrEditController',
                 label: 'Edit Basic Details'
             })
             .when('/projects/:name', {

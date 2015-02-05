@@ -5,8 +5,8 @@ var _ = require('lodash');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('CreateProjectController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
-        console.log('Loading Create Project Controller...');
+    angular.module('KidoScraper').controller('ProjectCreateOrEditController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
+        console.log('Loading Project Create or Edit Controller...');
 
         $scope.editMode = $routeParams.name != null;
 

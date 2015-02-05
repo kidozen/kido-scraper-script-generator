@@ -48,12 +48,11 @@ module.exports = (function () {
                 $scope.editBasicDetails = function() {
                     $location.path('/projects/' + $scope.site.name + '/edit_basic_details');
                 };
-                // TODO Remove the parameter "site" from all these guys
-                $scope.exportSite = function (site) {
-                    $location.path('/projects/' + site.name + "/export");
+                $scope.exportSite = function () {
+                    $location.path('/projects/' + $scope.site.name + "/export");
                 };
-                $scope.runSite = function (site) {
-                    $location.path('/projects/' + site.name + "/run");
+                $scope.runSite = function () {
+                    $location.path('/projects/' + $scope.site.name + "/run");
                 };
                 $scope.editStep = function (step) {
                     $location.path('/projects/' + $scope.site.name + '/step/edit/' + step.type + '/' + step.name);
