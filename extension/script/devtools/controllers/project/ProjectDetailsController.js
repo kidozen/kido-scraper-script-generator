@@ -45,6 +45,10 @@ module.exports = (function () {
                 $scope.addScrape = function () {
                     _addStep(Site.TYPES.SCRAPE);
                 };
+                $scope.editBasicDetails = function() {
+                    $location.path('/projects/' + $scope.site.name + '/edit_basic_details');
+                };
+                // TODO Remove the parameter "site" from all these guys
                 $scope.exportSite = function (site) {
                     $location.path('/projects/' + site.name + "/export");
                 };

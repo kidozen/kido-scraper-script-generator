@@ -3,16 +3,16 @@
 <div class="row">
     <div class="col-md-6">
         <button ng-click="addCompleteForm()" class="btn btn-primary">
-            <span class="fui-plus"></span>
-            Complete Form
+            <span class="fui-plus"></span>Complete Form
         </button>
         <button ng-click="addClickEvent()" class="btn btn-primary">
-            <span class="fui-plus"></span>
-            Click Event
+            <span class="fui-plus"></span>Click Event
         </button>
         <button ng-click="addScrape()" class="btn btn-danger">
-            <span class="fui-upload"></span>
-            Scrape Data
+            <span class="fui-upload"></span>Scrape Data
+        </button>
+        <button ng-click="editBasicDetails()" class="btn btn-info" style="float:right">
+            <span class="fui-new"></span>Edit Basic Details
         </button>
         <table class="table" style="margin:10px">
             <tr ng-repeat="s in site.steps">

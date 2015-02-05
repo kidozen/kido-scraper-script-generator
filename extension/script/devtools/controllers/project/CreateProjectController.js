@@ -1,80 +1,108 @@
 'use strict';
 require('angular');
 var Site = require('../../model/Site');
+var _ = require('lodash');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('CreateProjectController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
+    angular.module('KidoScraper').controller('CreateProjectController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Create Project Controller...');
 
-        RunInBackgroundScript
-            .getCurrentPageDetails()
-            .done(function (currentPageDetails) {
+        $scope.editMode = $routeParams.name != null;
 
+        if ($scope.editMode) {
+            RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function(siteAsJson) {
                 AngularScope.apply($scope, function () {
-                    $scope.name = currentPageDetails ? currentPageDetails.title : '';
-                    $scope.url = currentPageDetails ? currentPageDetails.url : '';
-                    $scope.useBasicAuth = false;
-                    $scope.credentials = {};
+                    $scope.site = siteAsJson;
+                    $scope.useBasicAuth = !_.isEmpty($scope.site.credentials);
 
-                    // empty credentials object every time the checkbox gets unchecked
-                    $scope.$watch('useBasicAuth', function (enabled) {
-                        if (!enabled) {
-                            $scope.credentials = {};
-                        }
-                    });
-                });
-            }
-        );
-
-        $scope.create = function () {
-            $scope.name = $scope.name ? $scope.name.toLowerCase() : '';
-            if (!$scope.name || !$scope.url) {
-                return alert('name and url are required');
-            }
-            RunInBackgroundScript.getFromLocalStorage($scope.name).done(function (existingSite) {
-
-                AngularScope.apply($scope, function () {
-                    if (existingSite) {
-                        return alert('name already in use');
-                    }
-                    var site = Site.getDefaults();
-                    site.name = $scope.name;
-                    site.url = $scope.url;
-                    site.credentials = $scope.credentials;
-
-                    RunInBackgroundScript.setInLocalStorage({
-                        key: $scope.name,
-                        value: new Site(site).toJson()
-                    }).done(function () {
-                        AngularScope.apply($scope, function () {
-                            $location.path('/projects/' + $scope.name);
-                        });
-                    });
+                    emptyCredentialsBasedOnCheckboxValue();
                 });
             });
+        } else {
+            $scope.site = Site.getDefaults();
+            RunInBackgroundScript
+                .getCurrentPageDetails()
+                .done(function (currentPageDetails) {
+                    AngularScope.apply($scope, function () {
+                        $scope.site.name = currentPageDetails ? currentPageDetails.title : '';
+                        $scope.site.url = currentPageDetails ? currentPageDetails.url : '';
+                        $scope.useBasicAuth = false;
+
+                        emptyCredentialsBasedOnCheckboxValue();
+                    });
+                }
+            );
+        }
+
+        $scope.create = function () {
+            $scope.site.name = $scope.site.name ? $scope.site.name.toLowerCase() : '';
+
+            try {
+                Site.validate($scope.site);
+            } catch (err) {
+                return alert(err);
+            }
+            var originalProjectName = $routeParams.name;
+            var projectNameWasChanged = $scope.editMode && originalProjectName != $scope.site.name;
+
+            if (!$scope.editMode || projectNameWasChanged) {
+                RunInBackgroundScript.getFromLocalStorage($scope.site.name).done(function (existingSite) {
+                    AngularScope.apply($scope, function () {
+                        if (existingSite) {
+                            return alert('$scope.site.name is already in use. Please choose a different one');
+                        }
+                        if (projectNameWasChanged) {
+                            RunInBackgroundScript.deleteFromLocalStorage(originalProjectName);
+                        }
+                        saveProjectInLocalStorage();
+                    });
+                });
+            } else {
+                saveProjectInLocalStorage();
+            }
         };
 
         $scope.extractSiteDetailsFromCurrentTab = function () {
             RunInBackgroundScript.getCurrentPageDetails().done(function (currentPageDetails) {
                 AngularScope.apply($scope, function () {
-                    $scope.name = currentPageDetails ? currentPageDetails.title : '';
-                    $scope.url = currentPageDetails ? currentPageDetails.url : '';
+                    $scope.site.name = currentPageDetails ? currentPageDetails.title : '';
+                    $scope.site.url = currentPageDetails ? currentPageDetails.url : '';
                 });
             });
         };
 
         $scope.openSiteURLInCurrentTab = function () {
-            if (!$scope.url) {
-                return alert('The URL is required');
+            if (!$scope.site.url) {
+                return alert("The Site's URL is required");
             }
-            RunInBackgroundScript.loadURLInCurrentTab($scope.url);
+            RunInBackgroundScript.loadURLInCurrentTab($scope.site.url);
         };
 
         $scope.cancel = function () {
-            $scope.name = '';
-            $scope.url = '';
+            $scope.site.name = '';
+            $scope.site.url = '';
             return $location.path('/projects');
         };
+
+        function emptyCredentialsBasedOnCheckboxValue() {
+            // empty credentials object every time the checkbox gets unchecked
+            $scope.$watch('useBasicAuth', function (enabled) {
+                if (!enabled) {
+                    $scope.site.credentials = {};
+                }
+            });
+        }
+
+        function saveProjectInLocalStorage() {
+            RunInBackgroundScript.setInLocalStorage({
+                key: $scope.site.name,
+                value: new Site($scope.site).toJson()
+            }).done(function () {
+                AngularScope.apply($scope, function () {
+                    $location.path('/projects/' + $scope.site.name);
+                });
+            });
+        }
     });
 })();

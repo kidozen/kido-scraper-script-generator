@@ -12,16 +12,7 @@ var _ = require('lodash');
 module.exports = (function() {
 
     function Site(site) {
-        if (!site) throw 'The "site" argument is required';
-        if (!site.name) throw 'The "site.name" property is required';
-        if (!site.url) throw 'The "site.url" property is required';
-        if (!_.isEmpty(site.credentials)) {
-            if ((site.credentials.user && !site.credentials.pass) ||
-                (!site.credentials.user && site.credentials.pass)) {
-                throw 'Both the username and password are required';
-            }
-        }
-        if (!Array.isArray(site.steps)) throw 'The "site.steps" property must be an array';
+        Site.validate(site);
         this._name = site.name;
         this._url = site.url;
         this._credentials = site.credentials;
@@ -64,7 +55,7 @@ module.exports = (function() {
             case undefined:
                 return Site;
             default:
-                throw 'The type is not valid';
+                throw 'The Step type ' + type + ' is not valid';
         }
     };
 
@@ -80,10 +71,23 @@ module.exports = (function() {
         };
     };
 
+    Site.validate = function(site) {
+        if (!site) throw 'The "Site" is required';
+        if (!site.name) throw 'Site\'s name is required';
+        if (!site.url) throw 'Site\'s URL is required';
+        if (!_.isEmpty(site.credentials)) {
+            if ((site.credentials.user && !site.credentials.pass) ||
+                (!site.credentials.user && site.credentials.pass)) {
+                throw 'Both the username and password are required';
+            }
+        }
+        if (!Array.isArray(site.steps)) throw 'The "site.steps" property must be an array';
+    };
+
     Site.validateStep = function(step, site, forCreation) {
-        if (!step) throw 'The "step" argument is required';
-        if (!step.name) throw 'The "step.name" property is required';
-        if (!step.type) throw 'The "step.type" property is required';
+        if (!step) throw 'The "Step" is required';
+        if (!step.name) throw 'Step\'s name is required';
+        if (!step.type) throw 'Step\'s type is required';
 
         if (forCreation) {
             var existingStepWithSameName = _.find(site.steps, function (s) {
