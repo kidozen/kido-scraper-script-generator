@@ -46,7 +46,11 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Method</label>
 
-            <div class="col-md-10">
+            <div class="col-md-10" ng-show="methodWasSpecified">
+                <label>{{method}}</label>
+            </div>
+
+            <div class="col-md-10" ng-show="!methodWasSpecified">
                 <select class="form-control select select-primary" select2 ng-model="method"
                         ng-options="m for m in methods"
                         data-placeholder="Choose the method to run ...">
@@ -92,3 +96,17 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="newDsCreatedModal.html">
+    <div class="modal-header">
+        <h6 class="modal-title">The Datasource "{{newDatasourceName}}" was successfully created</h6>
+    </div>
+    <div class="modal-body text-center">
+        <label>Now you can <strong>view it, edit it, test it, run it and more...</strong></label><br>
+        <a href="{{marketplaceURL}}#/admin/enterprise-api/datasources/{{newDatasourceName}}?indexTest=true&test=process"
+            target="_blank">at the KidoZen Application Center</a>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>

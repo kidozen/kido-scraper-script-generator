@@ -7,6 +7,8 @@ module.exports = (function () {
     angular.module('KidoScraper').controller('ProjectExportController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Project Export Controller...');
 
+        var options = {parameterizable: true};
+
         if (!$routeParams.name) {
             return $location.path('/');
         }
@@ -15,8 +17,8 @@ module.exports = (function () {
         RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function (siteAsJson) {
             AngularScope.apply($scope, function () {
                 $scope.site = siteAsJson;
-                $scope.json = JSON.stringify($scope.site, 0, 4);
-                $scope.script = new Site($scope.site).toCasper();
+                $scope.json = JSON.stringify(new Site($scope.site).toJson(options), 0, 4);
+                $scope.script = new Site($scope.site).toCasper(options);
                 $scope.scriptVisible = true;
 
                 $scope.showJson = function () {
@@ -30,7 +32,10 @@ module.exports = (function () {
                 };
 
                 $scope.createDatasource = function() {
-                    $location.path('/datasources/create/' + $scope.site.name);
+                    // We pass an empty service name as we do not know that detail here...
+                    var serviceName = '';
+                    var method = $scope.jsonVisible ? 'runJson' : 'runScript';
+                    $location.path('/datasources/create/' + $scope.site.name + '/' + serviceName + '/' + method);
                 }
             });
         });

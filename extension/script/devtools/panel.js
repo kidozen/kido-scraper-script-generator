@@ -49,25 +49,10 @@ angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap',
                 controller: 'ProjectRunController',
                 label: 'Run'
             })
-            .when('/datasources', {
-                templateUrl: 'partial/datasource/ds_list.html',
-                controller: 'ListDatasourcesController',
-                label: 'Datasources'
-            })
-            .when('/datasources/create', {
+            .when('/datasources/create/:siteName/:serviceName?/:method?', {
                 templateUrl: 'partial/datasource/ds_create.html',
                 controller: 'CreateDatasourceController',
-                label: 'New'
-            })
-            .when('/datasources/create/:siteName/:serviceName?', {
-                templateUrl: 'partial/datasource/ds_create.html',
-                controller: 'CreateDatasourceController',
-                label: 'New'
-            })
-            .when('/datasources/:dsName/run', {
-                templateUrl: 'partial/datasource/ds_run.html',
-                controller: 'RunDatasourceController',
-                label: 'Run'
+                label: 'New Datasource'
             })
             .otherwise({
                 redirectTo: '/projects'

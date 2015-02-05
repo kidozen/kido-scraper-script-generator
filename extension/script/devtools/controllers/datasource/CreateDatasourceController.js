@@ -5,15 +5,21 @@ var Site = require('../../model/Site');
 module.exports = (function () {
 
     angular.module('KidoScraper').controller('CreateDatasourceController', function ($scope, $routeParams, $location,
-                                                                                     $http, RunInBackgroundScript,
+                                                                                     $http, $modal, RunInBackgroundScript,
                                                                                      AngularScope, baseErrorHandler,
                                                                                      datasourceService, serviceService) {
         console.log('Loading CreateDatasource Controller...');
 
-        $scope.serviceName = $routeParams.serviceName;
+        var options = {parameterizable: true};
+
         $scope.siteName = $routeParams.siteName;
+        $scope.serviceName = $routeParams.serviceName;
+        $scope.method = $routeParams.method;
+
         $scope.projectNameWasSpecified = $scope.siteName != null;
         $scope.serviceNameWasSpecified = $scope.serviceName != null;
+        $scope.methodWasSpecified = $scope.method != null;
+
         $scope.methods = ['runJson', 'runScript'];
         $scope.timeout = 60;
 
@@ -22,8 +28,6 @@ module.exports = (function () {
 
                 RunInBackgroundScript.getFromLocalStorage($scope.siteName).done(function (siteAsJson) {
                     AngularScope.apply($scope, function () {
-                        var options = {parameterizable: true};
-
                         $scope.site = new Site(siteAsJson);
                         $scope.dsBody = $scope.method === 'runJson' ?
                                         JSON.stringify($scope.site.toJson(options), null, 4) :
@@ -61,7 +65,6 @@ module.exports = (function () {
                         RunInBackgroundScript.getFromLocalStorage($scope.siteName).done(function (siteAsJson) {
                             AngularScope.apply($scope, function () {
                                 $scope.site = new Site(siteAsJson);
-                                var options = { parameterizable: true };
 
                                 var datasource = {};
                                 datasource.name = $scope.newDatasourceName;
@@ -83,7 +86,12 @@ module.exports = (function () {
                                             $scope.marketplaceURL, false);
                                         return;
                                     }
-                                    $location.path('/datasources');
+                                    $modal.open({
+                                        scope: $scope,
+                                        templateUrl: 'newDsCreatedModal.html',
+                                        controller: 'NewDsCreatedModalController',
+                                        backdrop: 'static'
+                                    });
                                 });
                             });
                         });
@@ -115,5 +123,12 @@ module.exports = (function () {
                 });
             });
         });
+    });
+
+    angular.module('KidoScraper').controller('NewDsCreatedModalController', function ($scope, $location, $modalInstance) {
+        $scope.ok = function () {
+            $location.path('/projects/' + $scope.siteName);
+            $modalInstance.close();
+        };
     });
 })();
