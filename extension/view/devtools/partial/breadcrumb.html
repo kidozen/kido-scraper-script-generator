@@ -4,7 +4,7 @@
         <a ng-if="!$last" ng-href="#{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
         <span ng-if="$last" ng-bind="breadcrumb.label"></span>
     </li>
-    <li style="float:right" ng-show="loggedInTo">
+    <li class="small" style="float:right" ng-show="loggedInTo">
         <span>Logged in to</span>
         <a ng-href="{{loggedInTo}}" target="_blank">{{loggedInTo}}</a>
         <a class="btn btn-primary btn-sm" ng-click="logout()">Logout</a>

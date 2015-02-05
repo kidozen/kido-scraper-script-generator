@@ -90,44 +90,45 @@ var BackgroundScript = {
 		var deferredResponse = $.Deferred();
 		var self = this;
 
-		self.getAuthServiceUrlFor(marketplaceURL).done(function(authServiceUrl) {
-			chrome.tabs.create(
-				{url: authServiceUrl},
-				function (t) {
-					var authTokenGrabber = function (tabId, changeInfo, tab) {
-						if (tabId === t.id) {
-							if ((tab && tab.title || '').indexOf(prefix) === 0) {
+        self.getCurrentTab().done(function(originalTab) {
+		    self.getAuthServiceUrlFor(marketplaceURL).done(function(authServiceUrl) {
+                chrome.tabs.create(
+                    {url: authServiceUrl},
+                    function (t) {
+                        var authTokenGrabber = function (tabId, changeInfo, tab) {
+                            if (tabId === t.id) {
+                                if ((tab && tab.title || '').indexOf(prefix) === 0) {
 
-								var token = tab.title.substr(prefix.length);
+                                    var token = tab.title.substr(prefix.length);
+                                    try {
+                                        var accessToken = self.decodeToken(token);
 
-								try {
-									var accessToken = self.decodeToken(token);
+                                        var saveRequest = {};
+                                        saveRequest["key"] = auth_key_in_storage + marketplaceURL;
+                                        saveRequest["value"] = accessToken;
+                                        self.setInLocalStorage(saveRequest);
 
-									var saveRequest = {};
-									saveRequest["key"] = auth_key_in_storage + marketplaceURL;
-									saveRequest["value"] = accessToken;
+                                        chrome.tabs.onUpdated.removeListener(authTokenGrabber);
+                                        chrome.tabs.remove(tab.id);
+                                        chrome.tabs.update(originalTab.id, {active: true});
+                                        deferredResponse.resolve(accessToken);
+                                    } catch (err) {
+                                        var errorMsg = "Problem while attempting to retrieve auth token: " + err;
+                                        deferredResponse.reject(errorMsg);
 
-									self.setInLocalStorage(saveRequest);
-									chrome.tabs.onUpdated.removeListener(authTokenGrabber);
-									chrome.tabs.remove(tab.id);
-
-									deferredResponse.resolve(accessToken);
-								} catch (err) {
-									var errorMsg = "Problem while attempting to retrieve auth token: " + err;
-									deferredResponse.reject(errorMsg);
-
-									// This is a HACK: for some reason a weird error is thrown when invoking this
-									// function from the extension's popup, we can safely ignore it...
-									if (err && err.message && err.message.indexOf("Attempting to use a disconnected port object") == -1) {
-										alert(errorMsg);
-									}
-								}
-							}
-						}
-					};
-					chrome.tabs.onUpdated.addListener(authTokenGrabber);
-				}
-			);
+                                        // This is a HACK: for some reason a weird error is thrown when invoking this
+                                        // function from the extension's popup, we can safely ignore it...
+                                        if (err && err.message && err.message.indexOf("Attempting to use a disconnected port object") == -1) {
+                                            alert(errorMsg);
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                        chrome.tabs.onUpdated.addListener(authTokenGrabber);
+                    }
+                );
+            });
 		});
 		return deferredResponse.promise();
 	},
@@ -213,11 +214,28 @@ var BackgroundScript = {
 		return deferredResponse.promise();
 	},
 
-    loadURLInCurrentTab: function(url) {
+    getCurrentTab: function() {
         var deferredResponse = $.Deferred();
         chrome.tabs.query({active: true}, function(tab){
+            deferredResponse.resolve(tab[0]);
+        });
+        return deferredResponse.promise();
+    },
+
+    loadURLInCurrentTab: function(url) {
+        var deferredResponse = $.Deferred();
+
+        this.getCurrentTab().done(function(tab) {
             chrome.tabs.update(tab.id, {url: url});
             deferredResponse.resolve();
+        });
+        return deferredResponse.promise();
+    },
+
+    getCurrentPageDetails: function() {
+        var deferredResponse = $.Deferred();
+        this.getCurrentTab().done(function(tab) {
+            deferredResponse.resolve({title: tab.title, url:tab.url});
         });
         return deferredResponse.promise();
     },

@@ -3,28 +3,6 @@
  */
 var ContentScript = {
 
-	getCurrentPageDetails: function() {
-
-		var deferredResponse = $.Deferred();
-		var href = $(location).attr('href');
-		var title = $(document).attr('title');
-		deferredResponse.resolve({title: title, url:href});
-		return deferredResponse.promise();
-	},
-
-	/**
-	 * Fetch
-	 * @param request.CSSSelector	css selector as string
-	 * @returns $.Deferred()
-	 */
-	getHTML: function(request) {
-
-		var deferredHTML = $.Deferred();
-		var html = $(request.CSSSelector).clone().wrap('<p>').parent().html();
-		deferredHTML.resolve(html);
-		return deferredHTML.promise();
-	},
-
 	/**
 	 * Removes current content selector if is in use within the page
 	 * @returns $.Deferred()

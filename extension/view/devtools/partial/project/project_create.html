@@ -13,8 +13,11 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">Site URL</label>
 
-                <div class="col-sm-8">
-                    <input type="url" ng-model="url" class="form-control" placeholder="URL" ng-required>
+                <div class="col-sm-2">
+                    <a class="btn btn-info" ng-click="extractSiteDetailsFromCurrentTab()">Get from current page</a>
+                </div>
+                <div class="col-sm-6">
+                    <input type="url" ng-model="url" class="form-control" placeholder="URL">
                 </div>
                 <div class="col-sm-2">
                     <a class="btn btn-primary" ng-disabled="!url" ng-click="openSiteURLInCurrentTab()">Open in current tab</a>
