@@ -213,6 +213,15 @@ var BackgroundScript = {
 		return deferredResponse.promise();
 	},
 
+    loadURLInCurrentTab: function(url) {
+        var deferredResponse = $.Deferred();
+        chrome.tabs.query({active: true}, function(tab){
+            chrome.tabs.update(tab.id, {url: url});
+            deferredResponse.resolve();
+        });
+        return deferredResponse.promise();
+    },
+
 	changeExtensionPopUpIcon: function(loggedIn) {
 		// TODO Make this work
 		var deferredResponse = $.Deferred();

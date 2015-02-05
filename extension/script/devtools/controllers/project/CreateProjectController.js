@@ -51,6 +51,13 @@ module.exports = (function () {
                             });
                         });
                     };
+
+                    $scope.openSiteURLInCurrentTab = function () {
+                        if (!$scope.url) {
+                            return alert('The URL is required');
+                        }
+                        RunInBackgroundScript.loadURLInCurrentTab($scope.url);
+                    };
                 });
             }
         );
