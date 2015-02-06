@@ -1,14 +1,14 @@
-'use strict';
-var multiline = require('multiline');
-var Util = require('./Util');
-var Step = require('./Step');
-var StepSelector = require('./StepSelector');
+"use strict";
+var multiline = require("multiline");
+var Util = require("./Util");
+var Step = require("./Step");
+var StepSelector = require("./StepSelector");
 
 module.exports = (function() {
 
     function StepScrape(Site, step) {
         Step.call(this, Site, step);
-        if (!Array.isArray(step.fields)) throw 'The "step.fields" property must be an array';
+        if (!Array.isArray(step.fields)) throw "The \"step.fields\" property must be an array";
         this._fields = step.fields.map(function(s) {
             return new StepSelector(Site, s);
         });
@@ -17,14 +17,14 @@ module.exports = (function() {
 
     StepScrape.prototype = Object.create(Step.prototype);
     StepScrape.prototype._fields = [];
-    StepScrape.prototype._container = '';
+    StepScrape.prototype._container = "";
 
     StepScrape.getDefaults = function(Site) {
         return {
             type: Site.TYPES.SCRAPE,
-            name: 'Scrape',
+            name: "Scrape",
             fields: [Site.getDefaults(Site.TYPES.SELECTOR)],
-            container: ''
+            container: ""
         };
     };
 
@@ -56,14 +56,14 @@ module.exports = (function() {
         return Util.supplant.call(multiline(code), {
                 header: this._fields.map(function (field) {
                     return "casper.waitForSelector('" + field.getKey() + "', function() {";
-                }).join('\n'),
+                }).join("\n"),
                 container: this._container,
                 fields: this._fields.map(function (field) {
                     return field.toCasper(options);
-                }).join('\n'),
+                }).join("\n"),
                 footer: this._fields.map(function () {
                     return "});";
-                }).join('\n')
+                }).join("\n")
             });
     };
 

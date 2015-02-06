@@ -1,15 +1,15 @@
-'use strict';
-var Util = require('./Util');
-var Step = require('./Step');
+"use strict";
+var Util = require("./Util");
+var Step = require("./Step");
 
 module.exports = (function() {
 
     function StepFormSelector(Site, step) {
         Step.call(this, Site, step);
-        if (!step.key) throw 'The "step.key" property is required';
-        if (!step.value) throw 'The "step.value" property is required';
-        if (typeof step.isParameterizable !== 'boolean') throw 'The "step.isParameterizable" property is required';
-        if (!step.param) throw 'The "step.param" property is required';
+        if (!step.key) throw "The \"step.key\" property is required";
+        if (!step.value) throw "The \"step.value\" property is required";
+        if (typeof step.isParameterizable !== "boolean") throw "The \"step.isParameterizable\" property is required";
+        if (!step.param) throw "The \"step.param\" property is required";
         this._key = step.key;
         this._value = step.value;
         this._isParameterizable = step.isParameterizable;
@@ -25,15 +25,15 @@ module.exports = (function() {
     StepFormSelector.getDefaults = function(Site) {
         return {
             type: Site.TYPES.FORM_SELECTOR,
-            name: '',
-            key: '',
-            value: '',
+            name: "",
+            key: "",
+            value: "",
             isParameterizable: false,
             param: {
-                "name": '',
+                "name": "",
                 "required": false,
-                "type": '',
-                "default": ''
+                "type": "",
+                "default": ""
             }
         };
     };
@@ -63,14 +63,14 @@ module.exports = (function() {
     StepFormSelector.prototype._validateParam = function(param) {
         if (this._isParameterizable) {
             if (!param.name) {
-                throw 'Please specify the param name';
+                throw "Please specify the param name";
             }
             if (param.name.toString().match(/^[-a-zA-Z0-9,&]+$/) == null) {
-                throw 'Param name must contain only alphanumeric characters';
+                throw "Param name must contain only alphanumeric characters";
             }
             //FIXME Once we start actually supporting more kind of params, this IF condition should go away
             if (!param.type) {
-                param.type = 'string';
+                param.type = "string";
             }
         }
         return param;

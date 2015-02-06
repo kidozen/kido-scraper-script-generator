@@ -1,13 +1,13 @@
-'use strict';
-var multiline = require('multiline');
-var Util = require('./Util');
-var Step = require('./Step');
+"use strict";
+var multiline = require("multiline");
+var Util = require("./Util");
+var Step = require("./Step");
 
 module.exports = (function() {
 
     function StepClick(Site, step) {
         Step.call(this, Site, step);
-        if (!step.key) throw 'The "step.key" property is required';
+        if (!step.key) throw "The \"step.key\" property is required";
         this._key = step.key;
     }
 
@@ -17,8 +17,8 @@ module.exports = (function() {
     StepClick.getDefaults = function(Site) {
         return {
             type: Site.TYPES.CLICK,
-            name: '',
-            key: ''
+            name: "",
+            key: ""
         };
     };
 

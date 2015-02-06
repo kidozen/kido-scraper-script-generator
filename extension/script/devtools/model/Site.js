@@ -1,13 +1,13 @@
-'use strict';
-var multiline = require('multiline');
-var Util = require('./Util');
-var StepClick = require('./StepClick');
-var StepForm = require('./StepForm');
-var StepFormSelector = require('./StepFormSelector');
-var StepScrape = require('./StepScrape');
-var StepSelector = require('./StepSelector');
-var beautify = require('js-beautify').js_beautify;
-var _ = require('lodash');
+"use strict";
+var multiline = require("multiline");
+var Util = require("./Util");
+var StepClick = require("./StepClick");
+var StepForm = require("./StepForm");
+var StepFormSelector = require("./StepFormSelector");
+var StepScrape = require("./StepScrape");
+var StepSelector = require("./StepSelector");
+var beautify = require("js-beautify").js_beautify;
+var _ = require("lodash");
 
 module.exports = (function() {
 
@@ -33,11 +33,11 @@ module.exports = (function() {
     }
 
     Site.TYPES = {
-        CLICK: 'click',
-        FORM: 'form',
-        FORM_SELECTOR: 'form_selector',
-        SCRAPE: 'scrape',
-        SELECTOR: 'selector'
+        CLICK: "click",
+        FORM: "form",
+        FORM_SELECTOR: "form_selector",
+        SCRAPE: "scrape",
+        SELECTOR: "selector"
     };
 
     Site.getConstructor = function(type) {
@@ -55,7 +55,7 @@ module.exports = (function() {
             case undefined:
                 return Site;
             default:
-                throw 'The Step type ' + type + ' is not valid';
+                throw "The Step type " + type + " is not valid";
         }
     };
 
@@ -64,36 +64,36 @@ module.exports = (function() {
             return Site.getConstructor(type).getDefaults(Site);
         }
         return {
-            name: '',
-            url: '',
+            name: "",
+            url: "",
             credentials:{},
             steps: []
         };
     };
 
     Site.validate = function(site) {
-        if (!site) throw 'The "Site" is required';
-        if (!site.name) throw 'Site\'s name is required';
-        if (!site.url) throw 'Site\'s URL is required';
+        if (!site) throw "The \"Site\" is required";
+        if (!site.name) throw "Site's name is required";
+        if (!site.url) throw "Site's URL is required";
         if (!_.isEmpty(site.credentials)) {
             if ((site.credentials.user && !site.credentials.pass) ||
                 (!site.credentials.user && site.credentials.pass)) {
-                throw 'Both the username and password are required';
+                throw "Both the username and password are required";
             }
         }
-        if (!Array.isArray(site.steps)) throw 'The "site.steps" property must be an array';
+        if (!Array.isArray(site.steps)) throw "The \"site.steps\" property must be an array";
     };
 
     Site.validateStep = function(step, site, forCreation) {
-        if (!step) throw 'The "Step" is required';
-        if (!step.name) throw 'Step\'s name is required';
-        if (!step.type) throw 'Step\'s type is required';
+        if (!step) throw "The \"Step\" is required";
+        if (!step.name) throw "Step's name is required";
+        if (!step.type) throw "Step's type is required";
 
         if (forCreation) {
             var existingStepWithSameName = _.find(site.steps, function (s) {
                 return s.name === step.name;
             });
-            if (existingStepWithSameName) throw 'Duplicated step name: ' + step.name;
+            if (existingStepWithSameName) throw "Duplicated step name: " + step.name;
         }
         var Constructor = Site.getConstructor(step.type);
         try {
@@ -130,26 +130,26 @@ module.exports = (function() {
     Site.prototype.toCasper = function(options) {
         return beautify(Util.supplant.call(multiline(function() {
 /*
-     var casper = require('casper').create({
-         pageSettings: {
-             loadImages: false,
-             loadPlugins: false
-         }
-     });
-     casper.start();
-     {{credentials}}
-     casper.thenOpen('{{url}}');
-     {{steps}}
-     casper.run(function() {
-         this.exit();
-     });
+ var casper = require('casper').create({
+     pageSettings: {
+         loadImages: false,
+         loadPlugins: false
+     }
+ });
+ casper.start();
+ {{credentials}}
+ casper.thenOpen('{{url}}');
+ {{steps}}
+ casper.run(function() {
+     this.exit();
+ });
  */
         }), {
             credentials: this._getHttpBasicCredentialsScript(),
             url: this._url,
             steps: this._steps.map(function(step) {
                 return step.toCasper(options);
-            }).join('\n')
+            }).join("\n")
         }), { indent_size: 4 });
     };
 

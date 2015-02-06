@@ -1,16 +1,16 @@
-'use strict';
-var multiline = require('multiline');
-var Util = require('./Util');
-var Step = require('./Step');
-var StepClick = require('./StepClick');
-var StepFormSelector = require('./StepFormSelector');
+"use strict";
+var multiline = require("multiline");
+var Util = require("./Util");
+var Step = require("./Step");
+var StepClick = require("./StepClick");
+var StepFormSelector = require("./StepFormSelector");
 
 module.exports = (function() {
 
     function StepForm(Site, step) {
         Step.call(this, Site, step);
-        if (!Array.isArray(step.selectors)) throw 'The "step.selectors" property must be an array';
-        if (!step.submit) throw 'The "step.submit" property is required';
+        if (!Array.isArray(step.selectors)) throw "The \"step.selectors\" property must be an array";
+        if (!step.submit) throw "The \"step.submit\" property is required";
         this._selectors = step.selectors.map(function(s) {
             return new StepFormSelector(Site, s);
         });
@@ -24,7 +24,7 @@ module.exports = (function() {
     StepForm.getDefaults = function(Site) {
         return {
             type: Site.TYPES.FORM,
-            name: '',
+            name: "",
             selectors: [Site.getDefaults(Site.TYPES.FORM_SELECTOR)],
             submit: Site.getDefaults(Site.TYPES.CLICK)
         };
@@ -59,7 +59,7 @@ module.exports = (function() {
         }), {
             selectors: this._selectors.map(function(step) {
                 return step.toCasper(options);
-            }).join('\n'),
+            }).join("\n"),
             submit: this._submit.toCasper(options)
         });
     };

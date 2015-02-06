@@ -1,22 +1,22 @@
-'use strict';
-var multiline = require('multiline');
-var Util = require('./Util');
-var Step = require('./Step');
+"use strict";
+var multiline = require("multiline");
+var Util = require("./Util");
+var Step = require("./Step");
 
 module.exports = (function () {
 
     function StepSelector(Site, step) {
         Step.call(this, Site, step);
-        if (!step.name) throw 'The "step.name" property is required';
-        if (!step.key) throw 'The "step.key" property is required';
-        if (!step.attr) throw 'The "step.attr" property is required';
-        if (!Util.hasOwnValue.call(StepSelector.ATTRS, step.attr)) throw 'The "step.attr" property is not valid';
+        if (!step.name) throw "The \"step.name\" property is required";
+        if (!step.key) throw "The \"step.key\" property is required";
+        if (!step.attr) throw "The \"step.attr\" property is required";
+        if (!Util.hasOwnValue.call(StepSelector.ATTRS, step.attr)) throw "The \"step.attr\" property is not valid";
         this._key = step.key;
         this._attr = step.attr;
     }
 
     StepSelector.ATTRS = {
-        TEXT: 'innerText'
+        TEXT: "innerText"
     };
 
     StepSelector.prototype = Object.create(Step.prototype);
@@ -26,8 +26,8 @@ module.exports = (function () {
     StepSelector.getDefaults = function (Site) {
         return {
             type: Site.TYPES.SELECTOR,
-            name: '',
-            key: '',
+            name: "",
+            key: "",
             attr: StepSelector.ATTRS.TEXT
         };
     };
