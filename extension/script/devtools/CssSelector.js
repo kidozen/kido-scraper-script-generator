@@ -66,8 +66,8 @@ var ElementSelector = function (element, ignoredClasses) {
 
 	if (element.id !== '') {
 		if (typeof element.id === 'string') {
-			this.id = element.id;
-			this.id = this.id.replace(/:/g, '\\:');
+            this.id = cssesc(element.id, {'isIdentifier': true});
+			this.id = this.id.replace(/\\/g, '\\\\');
 		}
 	}
 

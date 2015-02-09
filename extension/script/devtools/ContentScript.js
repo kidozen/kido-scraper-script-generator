@@ -40,9 +40,8 @@ var ContentScript = {
 			});
 			window.cs = contentSelector;
 
-			var deferredCSSSelector = contentSelector.getCSSSelector();
-			deferredCSSSelector.done(function(response) {
-				this.removeCurrentContentSelector().done(function(){
+			contentSelector.getCSSSelector().done(function(response) {
+				this.removeCurrentContentSelector().done(function() {
 					deferredResponse.resolve(response);
 					window.cs = undefined;
 				}.bind(this));

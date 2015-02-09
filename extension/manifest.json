@@ -37,6 +37,7 @@
             "matches": ["*://*/*"],
             "js": [
                 "assets/jquery-2.0.3.js",
+                "assets/cssesc.js",
                 "script/devtools/ContentScript.js",
                 "script/devtools/ContentSelector.js",
                 "script/devtools/CssSelector.js",
