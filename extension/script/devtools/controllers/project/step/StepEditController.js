@@ -14,6 +14,8 @@ module.exports = (function () {
         $scope.creationMode = !$routeParams.stepName;
         $scope.editionMode = $routeParams.stepName;
 
+        $scope.currentStep = Site.getDefaults($routeParams.type);
+
         $scope.breadcrumbReplacements = {
             'Project Name': $routeParams.name,
             'Step Type or Name': $scope.editionMode ? $routeParams.stepName : "New " + $routeParams.type + " step"
@@ -28,8 +30,6 @@ module.exports = (function () {
                     if (!existingStep) return $location.path('/projects/' + $scope.site.name);
 
                     $scope.currentStep = existingStep;
-                } else {
-                    $scope.currentStep = Site.getDefaults($routeParams.type);
                 }
             });
         });
