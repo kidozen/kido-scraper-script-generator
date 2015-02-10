@@ -48,10 +48,13 @@ module.exports = (function () {
                 $scope.editBasicDetails = function() {
                     $location.path('/projects/' + $scope.site.name + '/edit_basic_details');
                 };
-                $scope.exportSite = function () {
+                $scope.exportProject = function () {
                     $location.path('/projects/' + $scope.site.name + "/export");
                 };
-                $scope.runSite = function () {
+                $scope.runProject = function () {
+                    if (!$scope.site.steps || $scope.site.steps.length == 0) {
+                        return alert("Cannot run the service without at least one scraping step!");
+                    }
                     $location.path('/projects/' + $scope.site.name + "/run");
                 };
                 $scope.editStep = function (step) {

@@ -32,6 +32,9 @@ module.exports = (function () {
                     $location.path('/projects/' + site.name + "/export");
                 };
                 $scope.runProject = function (site) {
+                    if (!site.steps || site.steps.length == 0) {
+                        return alert("Cannot run the service without at least one scraping step!");
+                    }
                     $location.path('/projects/' + site.name + "/run");
                 };
             });

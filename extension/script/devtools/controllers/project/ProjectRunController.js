@@ -57,13 +57,10 @@ module.exports = (function () {
                 });
 
                 $scope.run = function () {
-                    if (!$scope.selectedServiceName) {
-                        alert("Please choose the service to run the script with!");
-                        return;
-                    }
-                    if (timeoutIsInvalid()) {
-                        return;
-                    }
+                    if (!$scope.selectedServiceName) return alert("Please choose the service to run the script with!");
+                    if (timeoutIsInvalid()) return;
+                    if (!$scope.site.steps || $scope.site.steps.length == 0) return alert("Cannot run the service without at least one scraping step!");
+
                     $scope.running = true;
 
                     // TODO Move this to ServiceService.js
