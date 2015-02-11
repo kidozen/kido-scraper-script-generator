@@ -118,7 +118,7 @@ a {
 }
 
 .breadcrumb {
-    background-color: #29354F;
+    background-color: #2A364E;
 }
 
 /* This disables Bootstrap's way of doing it, see below... */
@@ -185,12 +185,12 @@ a {
 }
 .btn-cancel {
     color: #fff;
-    background-color: #FF642E;
-    border-color: #FA5019;
+    background-color: #F56954;
+    border-color: #F56954;
 }
 .btn.btn-primary {
-    background-color: #3c8dbc;
-    border-color: #367fa9;
+    background-color: #00A699;
+    border-color: #00A699;
 }
 .btn.btn-primary:hover,
 .btn.btn-primary:active,
@@ -208,7 +208,7 @@ a {
 }
 .btn.btn-info {
     background-color: #00c0ef;
-    border-color: #00acd6;
+    border-color: #00c0ef;
 }
 .btn.btn-info:hover,
 .btn.btn-info:active,
