@@ -45,15 +45,15 @@ module.exports = (function () {
                     // prepend an special option for creating a new service
                     services.unshift({name: $scope.NEW_SERVICE_META_KEY, enterpriseApi: "webauthorapi"});
                     $scope.services = services;
-                });
 
-                agentService.getAllAgents($scope.marketplaceURL, function (error, agents) {
-                    if (error) {
-                        return baseErrorHandler.handleError(error, "Error while attempting to retrieve agents", $scope.marketplaceURL);
-                    }
-                    // artificially add the 'kidozen' (cloud) option
-                    agents.unshift({name: 'kidozen', type: 'cloud'});
-                    $scope.agents = agents;
+                    agentService.getAllAgents($scope.marketplaceURL, function (error, agents) {
+                        if (error) {
+                            return baseErrorHandler.handleError(error, "Error while attempting to retrieve agents", $scope.marketplaceURL);
+                        }
+                        // artificially add the 'kidozen' (cloud) option
+                        agents.unshift({name: 'kidozen', type: 'cloud'});
+                        $scope.agents = agents;
+                    });
                 });
 
                 $scope.run = function () {
