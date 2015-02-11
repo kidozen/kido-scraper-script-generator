@@ -3,7 +3,7 @@
 
     <div class="col-md-10">
         <div class="form-inline" role="form">
-            <button ng-click="addField()" class="btn btn-primary btn-sm">Add Field</button>
+            <button ng-click="addField()" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add Field</button>
 
             <div class="form-group" popover-trigger="mouseenter" popover-placement="right"
                  popover="Use this option when all the fields are related with each other. This is usually the case when
@@ -14,7 +14,7 @@
 
             <div class="form-group" ng-show="scrapeWithinContainer">
                 <div class="form-inline" role="form">
-                    <button ng-click="selectContainer()" class="btn btn-info">Select it!</button>
+                    <button ng-click="selectContainer()" class="btn btn-info"><i class="fa fa-crosshairs"></i> Select it!</button>
                     <div class="form-group">
                         <div class="col-md-10">
                             <input ng-model="currentStep.container" class="form-control" placeholder="Container's CSS Selector">
@@ -24,11 +24,13 @@
             </div>
         </div>
         <div ng-repeat="f in currentStep.fields">
-            <div class="form-inline" role="form">
+            <div class="form-inline dynamic-row" role="form">
                 <div class="form-group">
                     <input ng-model="f.name" class="form-control" placeholder="Field Name">
                 </div>
-                <button ng-click="selectSelector($index)" class="btn btn-info">Select it!</button>
+                <button ng-click="selectSelector($index)" class="btn btn-info" style="margin-left: 10px;margin-right: 10px">
+                    <i class="fa fa-crosshairs"></i> Select it!
+                </button>
                 <div class="form-group">
                     <input ng-model="f.key" class="form-control" placeholder="CSS Selector">
                 </div>
@@ -38,7 +40,7 @@
                         <option></option>
                     </select>
                 </div-->
-                <button ng-click="removeField($index)" class="btn btn-danger">Remove</button>
+                <button ng-click="removeField($index)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
             </div>
         </div>
     </div>

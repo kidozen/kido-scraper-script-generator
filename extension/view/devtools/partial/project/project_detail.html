@@ -2,26 +2,28 @@
 
 <div class="row">
     <div class="col-md-6">
-        <button ng-click="addCompleteForm()" class="btn btn-primary">
-            <span class="fui-plus"></span>Complete Form
+        <button ng-click="addCompleteForm()" class="btn btn-danger">
+            <i class="fa fa-plus"></i> Complete Form
         </button>
-        <button ng-click="addClickEvent()" class="btn btn-primary">
-            <span class="fui-plus"></span>Click Event
+        <button ng-click="addClickEvent()" class="btn btn-danger">
+            <i class="fa fa-plus"></i> Click Event
         </button>
         <button ng-click="addScrape()" class="btn btn-danger">
-            <span class="fui-upload"></span>Scrape Data
+            <i class="fa fa-plus"></i> Scrape Data
         </button>
-        <button ng-click="editBasicDetails()" class="btn btn-info" style="float:right">
-            <span class="fui-new"></span>Edit Basic Details
+        <button ng-click="editBasicDetails()" class="btn btn-default btn-flat pull-right">
+            <i class="fa fa-edit"></i> Edit Basic Details
         </button>
         <table class="table" style="margin:10px">
             <tr ng-repeat="s in site.steps">
-                <td class="two-cols-column-long">
+                <td>
                     <label>{{ s.name }} ({{ s.type }})</label>
                 </td>
-                <td class="two-cols-column-short">
-                    <a class="btn btn-primary" ng-click="editStep(s)">Edit</a>
-                    <a class="btn btn-danger" ng-click="deleteStep($index)">Delete</a>
+                <td>
+                    <div class="pull-right">
+                        <a class="btn btn-info" ng-click="editStep(s)"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-danger" ng-click="deleteStep($index)"><i class="fa fa-trash-o"></i></a>
+                    </div>
                 </td>
             </tr>
         </table>
@@ -33,18 +35,29 @@
             </small>
         </p>
 
-        <a class="btn btn-primary" ng-click="exportProject()">Export</a>
-        <a class="btn btn-primary" ng-click="runProject()">Run</a>
+        <a class="btn btn-primary" ng-click="exportProject()"><i class="fa fa-code"></i> Export</a>
+        <a class="btn btn-warning" ng-click="runProject()"><i class="fa fa-play"></i> Run</a>
     </div>
-    <div class="col-md-6">
-        <div class="tile" style="text-align:left">
-            <h6>Complete Form</h6>
-            <small>Use the "Complete Form Step" to add values to a form and then either
-                use enter or a button to submit the data
-            </small>
-            <h6>Click Event</h6>
-            <small>Use the "Click" step to trigger a click event on any element of the page.
+    <div class="col-md-1" />
+    <div class="col-md-5">
+        <div class="alert alert-warning">
+            <h6 class="box-title"><i class="fa fa-bullhorn"></i> Complete Form</h6>
+            <small>
+                Use the "Complete Form" step to add values to a form and then either use enter or a button to submit the data
             </small>
         </div>
+        <div class="alert alert-warning">
+            <h6 class="box-title"><i class="fa fa-bullhorn"></i> Click Event</h6>
+            <small>Use the "Click" step to trigger a click event on any element of the page.</small>
+        </div>
+        <!--<div class="tile" style="text-align:left">-->
+            <!--<h6>Complete Form</h6>-->
+            <!--<small>Use the "Complete Form Step" to add values to a form and then either-->
+                <!--use enter or a button to submit the data-->
+            <!--</small>-->
+            <!--<h6>Click Event</h6>-->
+            <!--<small>Use the "Click" step to trigger a click event on any element of the page.-->
+            <!--</small>-->
+        <!--</div>-->
     </div>
 </div>

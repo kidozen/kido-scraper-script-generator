@@ -67,5 +67,212 @@ input.ng-valid {
 }
 .select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted > div {
     border-radius: 0px !important;
-    background: inherit !important;
+    background: #367fa9 !important;
+}
+
+.select2-drop .select2-highlighted > .select2-result-label {
+    color: #fff;
+    background: #367fa9;
+}
+
+.select-primary .select2-choice {
+    color: #fff;
+    background-color: #367fa9;
+}
+.select-primary .select2-choice:hover,
+.select-primary .select2-choice.hover,
+.select-primary .select2-choice:focus,
+.select-primary .select2-choice:active {
+    color: #fff;
+    background-color: #135078;
+    border-color: #135078;
+}
+.select-primary .select2-choice:active {
+    background: #135078;
+    border-color: #135078;
+}
+.select2-container-disabled.select-primary .select2-choice,
+.select2-container-disabled.select-primary .select2-choice:hover,
+.select2-container-disabled.select-primary .select2-choice:focus,
+.select2-container-disabled.select-primary .select2-choice:active {
+    background-color: #bdc3c7;
+    border-color: #367fa9;
+}
+.select-primary .select2-choice .select2-arrow {
+    border-top-color: #fff;
+}
+
+/* Overriding bootstrap's defaults in order to match the Look and Feel of Kidozen's marketplace */
+
+a {
+    color: #00BEF2;
+}
+
+.dynamic-row {
+    background-color: #F9F9F9;
+}
+
+.no-horizontal-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.breadcrumb {
+    background-color: #29354F;
+}
+
+/* This disables Bootstrap's way of doing it, see below... */
+.breadcrumb > li + li:before {
+    content: none;
+}
+
+/* This way, we prevent an extra slash being inserted before the "Logged in to ..." bit */
+.breadcrumb > li + li:not(:last-child):before {
+    padding: 0 5px;
+    color: #FFF;
+    content: "/\00a0";
+}
+
+.breadcrumb > .active {
+    color: #FFF;
+}
+
+.btn-logout {
+    padding: 5px 15px;
+    margin-left: 10px;
+}
+
+/*.btn-danger {*/
+    /*color: #fff;*/
+    /*background-color: #FF642E;*/
+    /*border-color: #FA5019;*/
+/*}*/
+
+/*.btn-info {*/
+    /*color: #fff;*/
+    /*background-color: #969696;*/
+    /*border-color: #818E92;*/
+/*}*/
+
+/*
+    Component: Buttons
+-------------------------
+*/
+
+.btn {
+    font-weight: 500;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    -webkit-box-shadow: inset 0px -2px 0px 0px rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: inset 0px -2px 0px 0px rgba(0, 0, 0, 0.09);
+    box-shadow: inset 0px -1px 0px 0px rgba(0, 0, 0, 0.09);
+}
+.btn.btn-default {
+    background-color: #fafafa;
+    color: #666;
+    border-color: #ddd;
+    border-bottom-color: #ddd;
+}
+.btn.btn-default:hover,
+.btn.btn-default:active,
+.btn.btn-default.hover {
+    background-color: #f4f4f4!important;
+}
+.btn.btn-default.btn-flat {
+    border-bottom-color: #d9dadc;
+}
+.btn-cancel {
+    color: #fff;
+    background-color: #FF642E;
+    border-color: #FA5019;
+}
+.btn.btn-primary {
+    background-color: #3c8dbc;
+    border-color: #367fa9;
+}
+.btn.btn-primary:hover,
+.btn.btn-primary:active,
+.btn.btn-primary.hover {
+    background-color: #367fa9;
+}
+.btn.btn-success {
+    background-color: #00a65a;
+    border-color: #008d4c;
+}
+.btn.btn-success:hover,
+.btn.btn-success:active,
+.btn.btn-success.hover {
+    background-color: #008d4c;
+}
+.btn.btn-info {
+    background-color: #00c0ef;
+    border-color: #00acd6;
+}
+.btn.btn-info:hover,
+.btn.btn-info:active,
+.btn.btn-info.hover {
+    background-color: #00acd6;
+}
+.btn.btn-danger {
+    background-color: #f56954;
+    border-color: #f4543c;
+}
+.btn.btn-danger:hover,
+.btn.btn-danger:active,
+.btn.btn-danger.hover {
+    background-color: #f4543c;
+}
+.btn.btn-warning {
+    background-color: #f39c12;
+    border-color: #e08e0b;
+}
+.btn.btn-warning:hover,
+.btn.btn-warning:active,
+.btn.btn-warning.hover {
+    background-color: #e08e0b;
+}
+.btn.btn-flat {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-width: 1px;
+}
+.btn:active {
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn:focus {
+    outline: none;
+}
+
+/*
+    Component: alert
+------------------------
+*/
+
+.alert {
+    padding-left: 30px;
+    margin-left: 15px;
+    position: relative;
+}
+.alert > .fa,
+.alert > .glyphicon {
+    position: absolute;
+    left: -15px;
+    top: -15px;
+    width: 35px;
+    height: 35px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    line-height: 35px;
+    text-align: center;
+    background: inherit;
+    border: inherit;
 }

@@ -1,18 +1,20 @@
 <div><breadcrumb/></div>
 
-<div class="col-md-8">
-    <a ng-click="createNewProject()" class="btn btn-primary">Add New Project</a>
+<div class="col-md-6">
+    <a ng-click="createNewProject()" class="btn btn-danger"><i class="fa fa-plus"></i> Create New Project</a>
 
     <table class="table">
         <tr ng-repeat="s in sites">
-            <td class="two-cols-column-long">
+            <td>
                 <label>{{ s.name }}</label>
             </td>
-            <td class="two-cols-column-short">
-                <a class="btn btn-primary" ng-click="openProjectDetails(s)">Open</a>
-                <a class="btn btn-primary" ng-click="exportProject(s)">Export</a>
-                <a class="btn btn-primary" ng-click="runProject(s)">Run</a>
-                <a class="btn btn-danger" ng-click="deleteProject($index)">Delete</a>
+            <td>
+                <div class="pull-right">
+                    <a title="Edit" class="btn btn-info" ng-click="openProjectDetails(s)"><i class="fa fa-edit"></i></a>
+                    <a title="Export" class="btn btn-primary" ng-click="exportProject(s)"><i class="fa fa-code"></i></a>
+                    <a title="Run" class="btn btn-warning" ng-click="runProject(s)"><i class="fa fa-play"></i></a>
+                    <a title="Delete" class="btn btn-danger" ng-click="deleteProject($index)"><i class="fa fa-trash-o"></i></a>
+                </div>
             </td>
         </tr>
     </table>

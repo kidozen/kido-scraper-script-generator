@@ -2,19 +2,19 @@
     <label class="col-md-2 control-label">Fields</label>
 
     <div class="col-md-10">
-        <button ng-click="addSelector()" class="btn btn-primary btn-sm">Add Field</button>
+        <button ng-click="addSelector()" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add Field</button>
         <div ng-repeat="s in currentStep.selectors">
-            <div class="form-inline" role="form">
+            <div class="form-inline dynamic-row" role="form">
 
                 <div class="form-group">
-                    <button ng-click="selectSelector($index)" class="btn btn-info">Select it!</button>
-                    <input ng-model="s.key" class="form-control" placeholder="CSS Selector">
+                    <button ng-click="selectSelector($index)" class="btn btn-info"><i class="fa fa-crosshairs"></i> Select it!</button>
+                    <input ng-model="s.key" class="form-control" placeholder="CSS Selector" style="margin-left: 10px">
                     <input ng-model="s.value" class="form-control" placeholder="Enter Value">
                     <input id="parameterizableCheckbox" type="checkbox" ng-model="s.isParameterizable">
-                    <label for="parameterizableCheckbox">Is parameterizable</label>
+                    <label for="parameterizableCheckbox">Parameterizable</label>
                 </div>
 
-                <button ng-click="removeSelector($index)" class="btn btn-danger">Remove</button>
+                <button ng-click="removeSelector($index)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
 
                 <div class="form-group form-inline" ng-show="s.isParameterizable">
                     <input ng-model="s.param.name" class="form-control" placeholder="Name">
@@ -37,8 +37,8 @@
 
     <div class="col-md-10">
         <div class="form-inline" role="form">
-            <button ng-click="selectSelector(-1)" class="btn btn-info">Select it!</button>
-            <input ng-model="currentStep.submit.key" class="form-control" placeholder="CSS Selector" style="width:91%;float:right">
+            <button ng-click="selectSelector(-1)" class="btn btn-info"><i class="fa fa-crosshairs"></i> Select it!</button>
+            <input ng-model="currentStep.submit.key" class="form-control pull-right" placeholder="CSS Selector" style="width:89%;">
         </div>
     </div>
 </div>
