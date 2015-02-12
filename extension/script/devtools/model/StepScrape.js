@@ -112,6 +112,10 @@ module.exports = (function() {
         };
     };
 
+    StepScrape.prototype.getHelperFunctions = function() {
+        return undefined;
+    };
+
     return StepScrape;
 
 })();

@@ -35,6 +35,7 @@ module.exports = (function () {
         });
         $scope.isForm = $routeParams.type === Site.TYPES.FORM;
         $scope.isClick = $routeParams.type === Site.TYPES.CLICK;
+        $scope.isSelect = $routeParams.type === Site.TYPES.SELECT;
         $scope.isScrape = $routeParams.type === Site.TYPES.SCRAPE;
 
         $scope.submit = function () {

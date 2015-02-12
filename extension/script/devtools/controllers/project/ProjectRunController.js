@@ -76,7 +76,7 @@ module.exports = (function () {
                             data: {json: new Site($scope.site).toJson()}
                         }).then(function (response) {
                             if (response.status !== 200 || response.data.error) {
-                                alert("The service invocation produced an error: " + response.statusText + " / " + JSON.stringify(response.data, null, 2));
+                                alert(JSON.stringify(response.data, null, 2));
                             } else {
                                 $scope.executionResult = JSON.stringify(response.data, null, 2);
                             }

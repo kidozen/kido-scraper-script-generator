@@ -78,6 +78,10 @@ module.exports = (function () {
         });
     };
 
+    StepSelector.prototype.getHelperFunctions = function() {
+        return undefined;
+    };
+
     return StepSelector;
 
 })();

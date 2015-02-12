@@ -37,13 +37,19 @@ module.exports = (function() {
     StepClick.prototype.toCasper = function(options) {
         return Util.supplant.call(multiline(function() {
             /*
-                 casper.then(function() {
-                     this.click('{{key}}');
-                 });
+                casper.then(function() {
+                    this.waitForSelector('{{key}}', function() {
+                        this.click('{{key}}');
+                    });
+                });
              */
         }), {
             key: this._key
         });
+    };
+
+    StepClick.prototype.getHelperFunctions = function() {
+        return undefined;
     };
 
     return StepClick;

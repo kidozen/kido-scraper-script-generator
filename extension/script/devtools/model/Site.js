@@ -2,6 +2,7 @@
 var multiline = require("multiline");
 var Util = require("./Util");
 var StepClick = require("./StepClick");
+var StepSelect = require("./StepSelect");
 var StepForm = require("./StepForm");
 var StepFormSelector = require("./StepFormSelector");
 var StepScrape = require("./StepScrape");
@@ -20,6 +21,8 @@ module.exports = (function() {
             switch (step.type) {
                 case Site.TYPES.CLICK:
                     return new StepClick(Site, step);
+                case Site.TYPES.SELECT:
+                    return new StepSelect(Site, step);
                 case Site.TYPES.FORM:
                     return new StepForm(Site, step);
                 case Site.TYPES.FORM_SELECTOR:
@@ -34,6 +37,7 @@ module.exports = (function() {
 
     Site.TYPES = {
         CLICK: "click",
+        SELECT: "select",
         FORM: "form",
         FORM_SELECTOR: "form_selector",
         SCRAPE: "scrape",
@@ -44,6 +48,8 @@ module.exports = (function() {
         switch (type) {
             case Site.TYPES.CLICK:
                 return StepClick;
+            case Site.TYPES.SELECT:
+                return StepSelect;
             case Site.TYPES.FORM:
                 return StepForm;
             case Site.TYPES.FORM_SELECTOR:
@@ -127,30 +133,37 @@ module.exports = (function() {
         };
     };
 
+    // WARNING: Do NOT change the indentation of the following comment, as it guarantees proper final output
     Site.prototype.toCasper = function(options) {
+        var allHelperFunctions = this._steps.map(function (step) {
+            return step.getHelperFunctions();
+        });
+
         return beautify(Util.supplant.call(multiline(function() {
 /*
- var casper = require('casper').create({
-     pageSettings: {
-         loadImages: false,
-         loadPlugins: false
-     }
- });
- casper.start();
- {{credentials}}
- casper.thenOpen('{{url}}');
- {{steps}}
- casper.run(function() {
-     this.exit();
- });
+var casper = require('casper').create({
+    pageSettings: {
+        loadImages: false,
+        loadPlugins: false
+    }
+});
+{{helper_functions}}
+casper.start();
+{{credentials}}
+casper.thenOpen('{{url}}');
+{{steps}}
+casper.run(function() {
+    this.exit();
+});
  */
         }), {
+            helper_functions: _.filter(allHelperFunctions, function (hf) { return hf != undefined; }).join("\n"),
             credentials: this._getHttpBasicCredentialsScript(),
             url: this._url,
-            steps: this._steps.map(function(step) {
+            steps: this._steps.map(function (step) {
                 return step.toCasper(options);
             }).join("\n")
-        }), { indent_size: 4 });
+        }), {indent_size: 4});
     };
 
     Site.prototype._getHttpBasicCredentialsScript = function() {

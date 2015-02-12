@@ -19,6 +19,9 @@ module.exports = (function () {
             id: Site.TYPES.CLICK,
             name: 'Click'
         }, {
+            id: Site.TYPES.SELECT,
+            name: 'Select'
+        }, {
             id: Site.TYPES.SCRAPE,
             name: 'Scrape'
         }];
@@ -36,13 +39,16 @@ module.exports = (function () {
                 $scope.addStep = function () {
                     _addStep($scope.stepType);
                 };
-                $scope.addCompleteForm = function () {
+                $scope.addCompleteFormStep = function () {
                     _addStep(Site.TYPES.FORM);
                 };
-                $scope.addClickEvent = function () {
+                $scope.addClickStep = function () {
                     _addStep(Site.TYPES.CLICK);
                 };
-                $scope.addScrape = function () {
+                $scope.addSelectStep = function () {
+                    _addStep(Site.TYPES.SELECT);
+                };
+                $scope.addScrapeStep = function () {
                     _addStep(Site.TYPES.SCRAPE);
                 };
                 $scope.editBasicDetails = function() {

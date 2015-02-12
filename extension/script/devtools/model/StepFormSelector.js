@@ -60,6 +60,10 @@ module.exports = (function() {
         });
     };
 
+    StepFormSelector.prototype.getHelperFunctions = function() {
+        return undefined;
+    };
+
     StepFormSelector.prototype._validateParam = function(param) {
         if (this._isParameterizable) {
             if (!param.name) {

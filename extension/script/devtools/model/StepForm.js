@@ -64,6 +64,10 @@ module.exports = (function() {
         });
     };
 
+    StepForm.prototype.getHelperFunctions = function() {
+        return undefined;
+    };
+
     return StepForm;
 
 })();
