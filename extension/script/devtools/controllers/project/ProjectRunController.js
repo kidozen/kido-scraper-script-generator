@@ -13,7 +13,8 @@ module.exports = (function () {
             return $location.path('/');
         }
         $scope.breadcrumbReplacements = {'Project Name': $routeParams.name};
-        $scope.timeout = 60; //default, can be changed by the user
+        $scope.timeout = 60;
+        $scope.ignoreSSLErrors = false;
         $scope.running = false;
         $scope.selectedServiceName = '';
         $scope.NEW_SERVICE_META_KEY = "New Service...";
@@ -73,7 +74,7 @@ module.exports = (function () {
                                 'timeout': $scope.timeout,
                                 "Content-Type": "application/json"
                             },
-                            data: {json: new Site($scope.site).toJson()}
+                            data: {json: new Site($scope.site).toJson(), ignoreSSLErrors: $scope.ignoreSSLErrors}
                         }).then(function (response) {
                             if (response.status !== 200 || response.data.error) {
                                 alert(JSON.stringify(response.data, null, 2));

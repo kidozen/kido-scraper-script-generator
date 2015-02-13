@@ -3,30 +3,36 @@
 
     <div class="col-md-10">
         <button ng-click="addSelector()" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add Field</button>
+
         <div ng-repeat="s in currentStep.selectors">
             <div class="form-inline dynamic-row" role="form">
 
                 <div class="form-group">
-                    <button ng-click="selectSelector($index)" class="btn btn-info"><i class="fa fa-crosshairs"></i> Select it!</button>
+                    <button ng-click="selectSelector($index)" class="btn btn-info">
+                        <i class="fa fa-crosshairs"></i> Select it!
+                    </button>
                     <input ng-model="s.key" class="form-control" placeholder="CSS Selector" style="margin-left: 10px">
                     <input ng-model="s.value" class="form-control" placeholder="Enter Value">
-                    <input id="parameterizableCheckbox" type="checkbox" ng-model="s.isParameterizable">
-                    <label for="parameterizableCheckbox">Parameterizable</label>
+                    <toggle-switch model="s.isParameterizable" class="switch-small extra-width" knob-label="Parameters"
+                                   on-label="Y" off-label="N"/>
                 </div>
 
-                <button ng-click="removeSelector($index)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-
                 <div class="form-group form-inline" ng-show="s.isParameterizable">
-                    <input ng-model="s.param.name" class="form-control" placeholder="Name">
+                    <input ng-model="s.param.name" class="form-control" placeholder="Param Name">
                     <!--select style="min-width:auto; width: auto" class="select select-primary" select2 ng-model="s.param.type"
                             ng-options="p for p in validParamTypes"
                             data-placeholder="Param Type">
                         <option></option>
                     </select-->
-                    <input ng-model="s.param.default" class="form-control" placeholder="Default">
-                    <input id="requiredCheckbox" type="checkbox" ng-model="s.param.required">
-                    <label for="requiredCheckbox">Required</label>
+                    <input ng-model="s.param.default" class="form-control" placeholder="Default Value">
+
+                    <toggle-switch model="s.param.required" class="switch-small" knob-label="Req'd" on-label="Y"
+                                   off-label="N"/>
                 </div>
+
+                <button ng-click="removeSelector($index)" class="btn btn-danger pull-right">
+                    <i class="fa fa-trash-o"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -37,8 +43,11 @@
 
     <div class="col-md-10">
         <div class="form-inline" role="form">
-            <button ng-click="selectSelector(-1)" class="btn btn-info"><i class="fa fa-crosshairs"></i> Select it!</button>
-            <input ng-model="currentStep.submit.key" class="form-control pull-right" placeholder="CSS Selector" style="width:89%;">
+            <button ng-click="selectSelector(-1)" class="btn btn-info">
+                <i class="fa fa-crosshairs"></i> Select it!
+            </button>
+            <input ng-model="currentStep.submit.key" class="form-control pull-right" placeholder="CSS Selector"
+                   style="width:90%;">
         </div>
     </div>
 </div>

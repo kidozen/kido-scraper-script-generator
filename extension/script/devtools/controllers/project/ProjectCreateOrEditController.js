@@ -9,6 +9,7 @@ module.exports = (function () {
         console.log('Loading Project Create or Edit Controller...');
 
         $scope.editMode = $routeParams.name != null;
+        $scope.useBasicAuth = false;
 
         if ($scope.editMode) {
             RunInBackgroundScript.getFromLocalStorage($routeParams.name).done(function(siteAsJson) {

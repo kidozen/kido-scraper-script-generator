@@ -5,19 +5,23 @@
         <div class="form-inline" role="form">
             <button ng-click="addField()" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add Field</button>
 
-            <div class="form-group" popover-trigger="mouseenter" popover-placement="right"
+            <div class="form-group" popover-trigger="mouseenter" popover-placement="bottom"
                  popover="Use this option when all the fields are related with each other. This is usually the case when
                     scraping data from a list of items (e.g. items from a product list on eBay).">
+
                 <input id="scrapeWithinContainerCheckbox" type="checkbox" ng-model="scrapeWithinContainer">
                 <label for="scrapeWithinContainerCheckbox">All fields belong to a common container</label>
             </div>
 
-            <div class="form-group" ng-show="scrapeWithinContainer">
+            <div class="form-group some-padding-on-the-left">
                 <div class="form-inline" role="form">
-                    <button ng-click="selectContainer()" class="btn btn-info"><i class="fa fa-crosshairs"></i> Select it!</button>
+                    <button ng-click="selectContainer()" ng-disabled="!scrapeWithinContainer" class="btn btn-info">
+                        <i class="fa fa-crosshairs"></i> Select it!
+                    </button>
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input ng-model="currentStep.container" class="form-control" placeholder="Container's CSS Selector">
+                            <input ng-model="currentStep.container" ng-readonly="!scrapeWithinContainer"
+                                   class="form-control" placeholder="Container's CSS Selector">
                         </div>
                     </div>
                 </div>
@@ -28,7 +32,7 @@
                 <div class="form-group">
                     <input ng-model="f.name" class="form-control" placeholder="Field Name">
                 </div>
-                <button ng-click="selectSelector($index)" class="btn btn-info" style="margin-left: 10px;margin-right: 10px">
+                <button ng-click="selectSelector($index)" class="btn btn-info" style="margin-left: 1%;margin-right: 1%">
                     <i class="fa fa-crosshairs"></i> Select it!
                 </button>
                 <div class="form-group">

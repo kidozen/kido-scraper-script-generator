@@ -6,7 +6,7 @@ require('angular-loading-bar');
 require("simple-errors");
 var Site = require('./model/Site');
 
-angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap', 'ng-breadcrumbs'])
+angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap', 'ng-breadcrumbs', 'toggle-switch'])
     .config(function ($routeProvider, $compileProvider, $tooltipProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);

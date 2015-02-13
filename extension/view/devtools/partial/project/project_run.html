@@ -10,7 +10,15 @@
             </select>
         </div>
         <div class="form-group">
-            <input type="number" ng-model="timeout" class="form-control" placeholder="Timeout (in seconds)">
+            <input title="Timeout" type="number" ng-model="timeout" class="form-control" placeholder="Timeout (in seconds)">
+        </div>
+        <div class="form-group" popover-trigger="mouseenter" popover-placement="bottom"
+             popover="Ignores SSL errors, such as expired or self-signed certificate errors.
+             This is especially useful when testing in non productive environments.">
+
+            <toggle-switch model="ignoreSSLErrors" class="switch-small extra-extra-width" knob-label="Ignore SSL Errors"
+                           on-label="Y" off-label="N">
+            </toggle-switch>
         </div>
         <div class="form-group">
             <button ng-click="!running && run()" class="btn btn-primary" ng-disabled="running">Run</button>
@@ -38,13 +46,13 @@
         <h6 class="modal-title">New Service</h6>
     </div>
     <div class="modal-body">
-        <table class="table">
+        <table class="table borderless">
             <tr>
-                <td class="three-cols-first-column">
+                <td>
                     <input ng-model="newServiceName" ng-pattern="/^[-a-zA-Z0-9,&]+$/" regexp-matching="/^[-a-zA-Z0-9,&]+$/"
                            class="form-control" placeholder="New Service Name">
                 </td>
-                <td class="three-cols-second-column">
+                <td>
                     <select class="form-control select select-primary" select2 ng-model="runOn"
                             ng-options="a.name group by a.type for a in agents"
                             data-placeholder="Choose where to run ...">

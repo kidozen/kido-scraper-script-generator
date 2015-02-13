@@ -1,26 +1,7 @@
-.two-cols-column-long {
-    width: 70%;
-}
-
-.two-cols-column-short {
-    width: 30%;
-}
-
-.two-cols-equal-width {
-    width: 50%;
-}
-
-.three-cols-first-column {
-    width: 38%;
-}
-
-.three-cols-second-column {
-    width: 31%;
-}
-
-.three-cols-third-column {
-    width: 31%;
-}
+/*
+    Kido Scraper's CSS customizations
+    ---------------------------------
+*/
 
 .form-horizontal .form-inline .form-group {
     margin-left: 0px;
@@ -28,26 +9,40 @@
     margin-bottom: 5px;
     padding-top: 5px;
 }
-
-th > label {
-    font-weight: bold;
-}
-
-.required-param:after {
-    color: #d00;
-    content: "*";
-}
-
 input.ng-invalid {
-    border: 1px solid #e74c3c;
+    border: 1px solid #F56954;
 }
 input.ng-valid {
-    border: 1px solid #2ecc71;
+    border: 1px solid #00a65a;
 }
-
 .popover-content {
     font-size: 14px;
 }
+.dynamic-row {
+    background-color: #F9F9F9;
+}
+.no-left-padding {
+    padding-left: 0;
+}
+.some-padding-on-the-left {
+    padding-left: 1%;
+}
+.no-horizontal-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+.borderless tbody tr td, .borderless thead tr th {
+    border: none;
+}
+textarea.code {
+    font-family: Consolas, Lucida Console, monospace;
+    font-size: small;
+}
+
+/*
+    Component: Select2
+    ------------------
+*/
 
 .select2-drop.select2-display-none.select2-with-searchbox.select2-drop-active {
     margin-top: 0px !important;
@@ -67,36 +62,32 @@ input.ng-valid {
 }
 .select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted > div {
     border-radius: 0px !important;
-    background: #367fa9 !important;
+    background: #00A699 !important;
 }
 
 .select2-drop .select2-highlighted > .select2-result-label {
     color: #fff;
-    background: #367fa9;
+    background: #00A699;
 }
 
 .select-primary .select2-choice {
     color: #fff;
-    background-color: #367fa9;
+    background-color: #00A699;
 }
 .select-primary .select2-choice:hover,
 .select-primary .select2-choice.hover,
 .select-primary .select2-choice:focus,
 .select-primary .select2-choice:active {
     color: #fff;
-    background-color: #135078;
-    border-color: #135078;
-}
-.select-primary .select2-choice:active {
-    background: #135078;
-    border-color: #135078;
+    background-color: #00A699;
+    border-color: #019186;
 }
 .select2-container-disabled.select-primary .select2-choice,
 .select2-container-disabled.select-primary .select2-choice:hover,
 .select2-container-disabled.select-primary .select2-choice:focus,
 .select2-container-disabled.select-primary .select2-choice:active {
     background-color: #bdc3c7;
-    border-color: #367fa9;
+    border-color: #00A699;
 }
 .select-primary .select2-choice .select2-arrow {
     border-top-color: #fff;
@@ -108,55 +99,35 @@ a {
     color: #00BEF2;
 }
 
-.dynamic-row {
-    background-color: #F9F9F9;
-}
-
-.no-horizontal-padding {
-    padding-left: 0;
-    padding-right: 0;
-}
+/*
+    Component: Breadcrumb
+    ---------------------
+*/
 
 .breadcrumb {
     background-color: #2A364E;
 }
-
 /* This disables Bootstrap's way of doing it, see below... */
 .breadcrumb > li + li:before {
     content: none;
 }
-
 /* This way, we prevent an extra slash being inserted before the "Logged in to ..." bit */
 .breadcrumb > li + li:not(:last-child):before {
     padding: 0 5px;
     color: #FFF;
     content: "/\00a0";
 }
-
 .breadcrumb > .active {
     color: #FFF;
 }
-
 .btn-logout {
     padding: 5px 15px;
     margin-left: 10px;
 }
 
-/*.btn-danger {*/
-    /*color: #fff;*/
-    /*background-color: #FF642E;*/
-    /*border-color: #FA5019;*/
-/*}*/
-
-/*.btn-info {*/
-    /*color: #fff;*/
-    /*background-color: #969696;*/
-    /*border-color: #818E92;*/
-/*}*/
-
 /*
     Component: Buttons
--------------------------
+    ------------------
 */
 
 .btn {
@@ -190,12 +161,12 @@ a {
 }
 .btn.btn-primary {
     background-color: #00A699;
-    border-color: #00A699;
+    border-color: #019186;
 }
 .btn.btn-primary:hover,
 .btn.btn-primary:active,
 .btn.btn-primary.hover {
-    background-color: #367fa9;
+    background-color: #019186;
 }
 .btn.btn-success {
     background-color: #00a65a;
@@ -208,7 +179,7 @@ a {
 }
 .btn.btn-info {
     background-color: #00c0ef;
-    border-color: #00c0ef;
+    border-color: #00acd6;
 }
 .btn.btn-info:hover,
 .btn.btn-info:active,
@@ -252,8 +223,54 @@ a {
 }
 
 /*
+    Component: angular-toggle-switch
+    --------------------------------
+*/
+
+/* Created ad-hoc for long knobs */
+.ats-switch.switch-small.extra-width {
+    min-width: 140px;
+}
+/* Created ad-hoc for long knobs */
+.ats-switch.switch-small.extra-extra-width {
+    min-width: 200px;
+}
+.ats-switch span.switch-left {
+    color: #fff;
+    background: #00A699;
+}
+.ats-switch span.switch-right {
+    color: #000;
+    background: #eeeeee;
+}
+.ats-switch.switch-primary span.switch-left {
+    color: #fff;
+    background: #00A699;
+}
+.ats-switch.switch-info span.switch-left {
+    color: #fff;
+    background: #00c0ef;
+}
+.ats-switch.switch-success span.switch-left {
+    color: #fff;
+    background: #00a65a;
+}
+.ats-switch.switch-warning span.switch-left {
+    background: #f39c12;
+    color: #fff;
+}
+.ats-switch.switch-danger span.switch-left {
+    color: #fff;
+    background: #f56954;
+}
+.ats-switch.switch-default span.switch-left {
+    color: #000;
+    background: #eeeeee;
+}
+
+/*
     Component: alert
-------------------------
+    ----------------
 */
 
 .alert {
@@ -275,4 +292,12 @@ a {
     text-align: center;
     background: inherit;
     border: inherit;
+}
+
+/* Created ad-hoc to make an alert occupy minimum space within a single row */
+
+.alert-one-row {
+    margin: 0;
+    margin-bottom: 1%;
+    padding: 5px;
 }

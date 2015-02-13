@@ -1,4 +1,6 @@
-<div><breadcrumb/></div>
+<div>
+    <breadcrumb/>
+</div>
 
 <div class="row">
     <div class="col-md-10">
@@ -14,12 +16,12 @@
                 <label class="col-md-2 control-label">Site URL</label>
 
                 <div class="col-md-10">
-                    <div class="col-md-2" style="padding-left:0px">
+                    <div class="col-md-2 no-left-padding">
                         <a class="btn btn-info" ng-click="extractSiteDetailsFromCurrentTab()">
                             <i class="fa fa-desktop"></i> From current tab
                         </a>
                     </div>
-                    <div class="col-md-8" style="padding-left:0px;">
+                    <div class="col-md-8 no-left-padding">
                         <input type="url" ng-model="site.url" class="form-control" placeholder="URL">
                     </div>
                     <div class="col-md-2 pull-right" style="padding-left: 3px;">
@@ -32,10 +34,17 @@
                 <label class="col-md-2 control-label">Use Basic Auth</label>
 
                 <div class="col-md-10 form-inline">
-                    <input type="checkbox" ng-model="useBasicAuth">
-                    <div class="form-group" ng-show="useBasicAuth">
-                        <input ng-model="site.credentials.user" class="form-control" placeholder="Username">
-                        <input ng-model="site.credentials.pass" class="form-control" placeholder="Password" type="password">
+                    <div class="col-md-2 no-horizontal-padding">
+                        <toggle-switch model="useBasicAuth" class="switch-small extra-width" knob-label="Basic Auth"
+                                       on-label="Y" off-label="N">
+                        </toggle-switch>
+                    </div>
+
+                    <div class="col-md-10 no-horizontal-padding">
+                        <input ng-model="site.credentials.user" class="form-control" placeholder="Username"
+                               ng-readonly="!useBasicAuth">
+                        <input ng-model="site.credentials.pass" class="form-control" placeholder="Password"
+                               type="password" ng-readonly="!useBasicAuth">
                     </div>
                 </div>
             </div>

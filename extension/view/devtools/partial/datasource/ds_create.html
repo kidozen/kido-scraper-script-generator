@@ -14,12 +14,11 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Project</label>
 
-            <div class="col-md-10" ng-show="projectNameWasSpecified">
-                <label>{{siteName}}</label>
-            </div>
+            <div class="col-md-10">
+                <label ng-show="projectNameWasSpecified">{{siteName}}</label>
 
-            <div class="col-md-10" ng-show="!projectNameWasSpecified">
-                <select class="form-control select select-primary" select2 ng-model="siteName"
+                <select ng-show="!projectNameWasSpecified" class="form-control select select-primary" select2
+                        ng-model="siteName"
                         ng-options="p.name as p.name for p in projects"
                         data-placeholder="Choose the associated project...">
                     <option></option>
@@ -30,12 +29,11 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Service</label>
 
-            <div class="col-md-10" ng-show="serviceNameWasSpecified">
-                <label>{{serviceName}}</label>
-            </div>
+            <div class="col-md-10">
+                <label ng-show="serviceNameWasSpecified">{{serviceName}}</label>
 
-            <div class="col-md-10" ng-show="!serviceNameWasSpecified">
-                <select class="form-control select select-primary" select2 ng-model="serviceName"
+                <select ng-show="!serviceNameWasSpecified" class="form-control select select-primary" select2
+                        ng-model="serviceName"
                         ng-options="s.name as s.name for s in services | filter:{ enterpriseApi : 'webauthorapi' }"
                         data-placeholder="Choose the associated service ...">
                     <option></option>
@@ -46,12 +44,10 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Method</label>
 
-            <div class="col-md-10" ng-show="methodWasSpecified">
-                <label>{{method}}</label>
-            </div>
+            <div class="col-md-10">
+                <label ng-show="methodWasSpecified">{{method}}</label>
 
-            <div class="col-md-10" ng-show="!methodWasSpecified">
-                <select class="form-control select select-primary" select2 ng-model="method"
+                <select ng-show="!methodWasSpecified" class="form-control select select-primary" select2 ng-model="method"
                         ng-options="m for m in methods"
                         data-placeholder="Choose the method to run ...">
                     <option></option>
@@ -85,16 +81,12 @@
 </div>
 
 <div class="col-md-8" ng-show="dsBody">
-    <div class="form-horizontal">
-        <div class="form-group">
-            <div class="col-md-12">
-                <small><label ng-show="method === 'runJson'">If you want, you can edit the JSON content.</label></small>
-                <small><label ng-show="method === 'runScript'">If you want, you can edit the Casper Script. <strong>Comments
-                    are not allowed and single quotes are preferred over double quotes.</strong></label></small>
-                <textarea rows="20" class="form-control" ng-model="dsBody"/>
-            </div>
-        </div>
+    <div class="alert alert-warning alert-one-row">
+        <p ng-show="method === 'runJson'"><i class="fa fa-bullhorn"></i> <small>If you want, you can edit the JSON content.</small></p>
+        <p ng-show="method === 'runScript'"><i class="fa fa-bullhorn"></i> <small>If you want, you can edit the Casper Script. <strong>Comments
+            are not allowed and single quotes are preferred over double quotes.</strong></small></p>
     </div>
+    <textarea class="form-control code" rows="22" ng-model="dsBody"/>
 </div>
 
 <script type="text/ng-template" id="newDsCreatedModal.html">
