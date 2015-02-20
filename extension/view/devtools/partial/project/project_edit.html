@@ -3,7 +3,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-9">
         <form class="form-horizontal">
             <div class="form-group">
                 <label class="col-md-2 control-label">Name</label>
@@ -21,12 +21,12 @@
                             <i class="fa fa-desktop"></i> From current tab
                         </a>
                     </div>
-                    <div class="col-md-8 no-left-padding">
+                    <div class="col-md-8">
                         <input type="url" ng-model="site.url" class="form-control" placeholder="URL">
                     </div>
-                    <div class="col-md-2 pull-right" style="padding-left: 3px;">
+                    <div class="col-md-2" style="padding-left: 5px">
                         <a class="btn btn-primary" ng-disabled="!site.url" ng-click="openSiteURLInCurrentTab()">
-                            <i class="fa fa-arrow-up"></i> Open in current tab</a>
+                            <i class="fa fa-arrow-up"></i> <small>Open in current tab</small></a>
                     </div>
                 </div>
             </div>
@@ -56,10 +56,10 @@
             </div>
         </form>
     </div>
-    <div class="col-md-4" ng-hide="editMode">
-        <div class="tile">
-            <h4>Creating a new Project</h4>
-            <p>By creating a new Project you can then record the steps for scraping data out of a website.</p>
+    <div class="col-md-3" ng-hide="editMode">
+        <div class="alert alert-warning">
+            <h6 class="box-title"><i class="fa fa-bullhorn"></i> Creating a new Project</h6>
+            <small>By creating a new Project you can then record the steps for scraping data out of a website.</small>
         </div>
     </div>
 </div>
