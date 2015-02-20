@@ -1,5 +1,6 @@
 'use strict';
 require('angular');
+require('../services/AngularScope');
 var _ = require('lodash');
 
 module.exports = (function () {

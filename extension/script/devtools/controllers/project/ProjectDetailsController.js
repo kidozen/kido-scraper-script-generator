@@ -1,5 +1,6 @@
 'use strict';
 require('angular');
+require('../../services/AngularScope');
 var Site = require('../../model/Site');
 
 module.exports = (function () {
