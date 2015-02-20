@@ -2,6 +2,8 @@
 require('angular');
 require('../../services/AngularScope');
 require('../../services/BaseErrorHandler');
+require('../../services/ServiceService');
+require('../../services/AgentService');
 var Site = require('../../model/Site');
 
 module.exports = (function () {
