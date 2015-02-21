@@ -1,10 +1,13 @@
 'use strict';
 require('angular');
 
+var kidoScraper = require('../KidoScraper');
+
+require('../services/RunInBackgroundScript');
+
 module.exports = (function () {
 
-    angular.module('KidoScraper')
-        .service('serviceService', function ($http, RunInBackgroundScript) {
+    kidoScraper.service('serviceService', function ($http, RunInBackgroundScript) {
 
             // TODO The marketplaceURL and existing services should not be passed in as parameters but provided someone else
             var createService = function (service, existingServices, marketplaceURL, cb) {

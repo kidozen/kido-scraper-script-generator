@@ -1,17 +1,20 @@
 'use strict';
 require('angular');
+
+var kidoScraper = require('../../KidoScraper');
+var Site = require('../../model/Site');
+
+require('../../services/RunInBackgroundScript');
 require('../../services/AngularScope');
 require('../../services/BaseErrorHandler');
 require('../../services/DatasourceService');
 require('../../services/ServiceService');
-var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('CreateDatasourceController', function ($scope, $routeParams, $location,
-                                                                                     $http, $modal, RunInBackgroundScript,
-                                                                                     AngularScope, baseErrorHandler,
-                                                                                     datasourceService, serviceService) {
+    kidoScraper.controller('CreateDatasourceController', function ($scope, $routeParams, $location, $http, $modal,
+                                                                   RunInBackgroundScript, AngularScope, baseErrorHandler,
+                                                                   datasourceService, serviceService) {
         console.log('Loading CreateDatasource Controller...');
 
         var options = {parameterizable: true};
@@ -27,15 +30,15 @@ module.exports = (function () {
         $scope.methods = ['runJson', 'runScript'];
         $scope.timeout = 60;
 
-        $scope.$watchGroup(['siteName', 'method'], function(newValues, oldValues) {
+        $scope.$watchGroup(['siteName', 'method'], function (newValues, oldValues) {
             if ($scope.siteName && $scope.method) {
 
                 RunInBackgroundScript.getFromLocalStorage($scope.siteName).done(function (siteAsJson) {
                     AngularScope.apply($scope, function () {
                         $scope.site = new Site(siteAsJson);
                         $scope.dsBody = $scope.method === 'runJson' ?
-                                        JSON.stringify($scope.site.toJson(options), null, 4) :
-                                        $scope.site.toCasper(options);
+                            JSON.stringify($scope.site.toJson(options), null, 4) :
+                            $scope.site.toCasper(options);
                     });
                 });
             }
@@ -109,7 +112,7 @@ module.exports = (function () {
                         return false;
                     };
 
-                    var isValidJson = function(jsonString) {
+                    var isValidJson = function (jsonString) {
                         if (jsonString) {
                             try {
                                 JSON.parse(jsonString);
@@ -121,7 +124,7 @@ module.exports = (function () {
                         return false;
                     }
 
-                    var removeLineBreaksFrom = function(string) {
+                    var removeLineBreaksFrom = function (string) {
                         return string.replace(/[\n\r]/g, "");
                     }
                 });
@@ -129,7 +132,7 @@ module.exports = (function () {
         });
     });
 
-    angular.module('KidoScraper').controller('NewDsCreatedModalController', function ($scope, $location, $modalInstance) {
+    kidoScraper.controller('NewDsCreatedModalController', function ($scope, $location, $modalInstance) {
         $scope.ok = function () {
             $location.path('/projects/' + $scope.siteName);
             $modalInstance.close();

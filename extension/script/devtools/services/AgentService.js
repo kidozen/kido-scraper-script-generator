@@ -1,10 +1,13 @@
 'use strict';
 require('angular');
 
+var kidoScraper = require('../KidoScraper');
+
+require('../services/RunInBackgroundScript');
+
 module.exports = (function () {
 
-    angular.module('KidoScraper')
-        .service('agentService', function ($http, RunInBackgroundScript) {
+    kidoScraper.service('agentService', function ($http, RunInBackgroundScript) {
 
             // TODO The marketplaceURL should be provided by a service that knows the current auth details
             var getAllAgents = function (marketplaceURL, cb) {

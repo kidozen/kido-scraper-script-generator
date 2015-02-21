@@ -1,10 +1,11 @@
 'use strict';
 require('angular');
 
+var kidoScraper = require('../KidoScraper');
+
 module.exports = (function () {
 
-    angular.module('KidoScraper')
-        .service('baseErrorHandler', function () {
+    kidoScraper.service('baseErrorHandler', function () {
             var handleError = function (error, baseMessage, marketplaceURL, dealWithNonRestErrors) {
                 var msg = baseMessage;
                 if (error && error.status != null) {

@@ -1,11 +1,12 @@
 'use strict';
 require('angular');
 
+var kidoScraper = require('../KidoScraper');
 var Site = require('../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').directive('select2', function () {
+    kidoScraper.directive('select2', function () {
         return {
             restrict: 'A',
             require: 'ngModel',

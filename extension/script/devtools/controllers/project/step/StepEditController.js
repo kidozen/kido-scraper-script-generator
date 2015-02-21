@@ -1,12 +1,16 @@
 'use strict';
 require('angular');
-var _ = require('lodash');
-require('../../../services/AngularScope');
+
+var kidoScraper = require('../../../KidoScraper');
 var Site = require('../../../model/Site');
+var _ = require('lodash');
+
+require('../../../services/RunInBackgroundScript');
+require('../../../services/AngularScope');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('StepEditController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
+    kidoScraper.controller('StepEditController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Step Edit Controller...');
 
         if (!$routeParams.name || !$routeParams.type) {

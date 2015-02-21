@@ -1,10 +1,14 @@
 'use strict';
 require('angular');
+
+var kidoScraper = require('../../KidoScraper');
+
+require('../../services/RunInBackgroundScript');
 require('../../services/AngularScope');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ProjectListController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
+    kidoScraper.controller('ProjectListController', function ($scope, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Project List Controller...');
 
         RunInBackgroundScript.getFromLocalStorage(null).done(function(allSites) {

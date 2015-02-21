@@ -1,10 +1,13 @@
 'use strict';
 require('angular');
 
+var kidoScraper = require('../KidoScraper');
+
+require('../services/RunInBackgroundScript');
+
 module.exports = (function () {
 
-    angular.module('KidoScraper')
-        .service('datasourceService', function ($http, RunInBackgroundScript) {
+    kidoScraper.service('datasourceService', function ($http, RunInBackgroundScript) {
 
             // TODO The marketplaceURL should be provided by a service that knows the current auth details
             var createDatasource = function (ds, marketplaceURL, cb) {
@@ -77,7 +80,7 @@ module.exports = (function () {
                     $http({
                         method: 'DELETE',
                         url: marketplaceURL + "api/admin/datasources/" + ds.name,
-                        headers: { 'Authorization': token }
+                        headers: {'Authorization': token}
                     }).then(function (response) {
                         cb(null, {deleted: true});
                     }, function (err) {
@@ -92,7 +95,7 @@ module.exports = (function () {
                 }
                 //TODO Process the params in order to better support more complex datatypes
 
-                var qs = ds.params.length > 0 ? "?"+ $.param(ds.params) : "";
+                var qs = ds.params.length > 0 ? "?" + $.param(ds.params) : "";
 
                 RunInBackgroundScript.getAuthToken(marketplaceURL).done(function (token) {
                     $http({

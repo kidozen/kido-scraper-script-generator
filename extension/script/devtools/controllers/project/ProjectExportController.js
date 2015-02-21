@@ -1,11 +1,15 @@
 'use strict';
 require('angular');
-require('../../services/AngularScope');
+
+var kidoScraper = require('../../KidoScraper');
 var Site = require('../../model/Site');
+
+require('../../services/RunInBackgroundScript');
+require('../../services/AngularScope');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ProjectExportController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
+    kidoScraper.controller('ProjectExportController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Project Export Controller...');
 
         var options = {parameterizable: true};

@@ -1,11 +1,15 @@
 'use strict';
 require('angular');
-require('../../services/AngularScope');
+
+var kidoScraper = require('../../KidoScraper');
 var Site = require('../../model/Site');
+
+require('../../services/RunInBackgroundScript');
+require('../../services/AngularScope');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ProjectDetailsController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
+    kidoScraper.controller('ProjectDetailsController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Project Details Controller...');
 
         if (!$routeParams.name) {

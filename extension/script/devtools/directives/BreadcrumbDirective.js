@@ -1,11 +1,15 @@
 'use strict';
 require('angular');
-require('../services/AngularScope');
+
+var kidoScraper = require('../KidoScraper');
 var _ = require('lodash');
+
+require('../services/RunInBackgroundScript');
+require('../services/AngularScope');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').directive('breadcrumb', function (RunInBackgroundScript, AngularScope, breadcrumbs) {
+    kidoScraper.directive('breadcrumb', function (RunInBackgroundScript, AngularScope, breadcrumbs) {
         return {
             restrict: 'E',
             scope: {

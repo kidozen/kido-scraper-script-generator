@@ -6,28 +6,8 @@ var connect = require('gulp-connect');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 
-var basePath = './extension/script/devtools';
-
 gulp.task('browserify', function () {
-    // The order here is important!
-    return browserify([
-        basePath + '/panel.js',
-        basePath + '/services/RunInCurrentTabContext.js',
-        basePath + '/services/RunInBackgroundScript.js',
-        basePath + '/controllers/project/ProjectCreateOrEditController.js',
-        basePath + '/controllers/project/ProjectListController.js',
-        basePath + '/controllers/project/ProjectDetailsController.js',
-        basePath + '/controllers/project/ProjectExportController.js',
-        basePath + '/controllers/project/ProjectRunController.js',
-        basePath + '/controllers/project/step/StepEditController.js',
-        basePath + '/controllers/datasource/CreateDatasourceController.js',
-        basePath + '/directives/BreadcrumbDirective.js',
-        basePath + '/directives/StepClickDirective.js',
-        basePath + '/directives/StepSelectDirective.js',
-        basePath + '/directives/StepFormDirective.js',
-        basePath + '/directives/StepScrapeDirective.js',
-        basePath + '/directives/Select2Directive.js',
-        basePath + '/directives/RegexpMatchingDirective.js'])
+    return browserify('./extension/script/devtools/panel.js')
         .bundle()
         .pipe(source('bundle.js'))
         .pipe(gulp.dest('./extension/'));

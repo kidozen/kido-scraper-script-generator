@@ -1,12 +1,16 @@
 'use strict';
 require('angular');
-require('../../services/AngularScope');
+
+var kidoScraper = require('../../KidoScraper');
 var Site = require('../../model/Site');
 var _ = require('lodash');
 
+require('../../services/RunInBackgroundScript');
+require('../../services/AngularScope');
+
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ProjectCreateOrEditController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
+    kidoScraper.controller('ProjectCreateOrEditController', function ($scope, $routeParams, $location, RunInBackgroundScript, AngularScope) {
         console.log('Loading Project Create or Edit Controller...');
 
         $scope.editMode = $routeParams.name != null;

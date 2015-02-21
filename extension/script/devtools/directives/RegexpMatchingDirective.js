@@ -1,7 +1,9 @@
 'use strict';
 require('angular');
 
-angular.module('KidoScraper').directive("regexpMatching", function () {
+var kidoScraper = require('../KidoScraper');
+
+kidoScraper.directive("regexpMatching", function () {
 
     var regexp;
     return {

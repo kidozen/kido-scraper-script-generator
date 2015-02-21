@@ -1,10 +1,14 @@
 'use strict';
 require('angular');
+
+var kidoScraper = require('../KidoScraper');
+
+require('../services/RunInCurrentTabContext');
 require('../services/AngularScope');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').directive('stepSelect', function (RunInCurrentTabContext, AngularScope) {
+    kidoScraper.directive('stepSelect', function (RunInCurrentTabContext, AngularScope) {
         return {
             restrict: 'E',
             scope: {

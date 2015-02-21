@@ -1,11 +1,14 @@
 'use strict';
 require('angular');
 
+var kidoScraper = require('../KidoScraper');
+
 module.exports = (function () {
 
-    angular.module('KidoScraper')
-        .service('RunInCurrentTabContext', function () {
-            return getContentScript(chrome && !chrome.tabs ? (chrome && chrome.storage ? "DevTools" : "ContentScript") : "BackgroundScript");
+    kidoScraper.service('RunInCurrentTabContext', function () {
+            return getContentScript(chrome && !chrome.tabs  ? (chrome && chrome.storage ? "DevTools"
+                                                                                        : "ContentScript")
+                                                            : "BackgroundScript");
         }
     );
 })();

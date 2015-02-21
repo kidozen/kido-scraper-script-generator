@@ -1,12 +1,24 @@
 /* global $, chrome, window, console, angular */
 'use strict';
-require('angular');
-require('angular-route');
-require('angular-loading-bar');
-require("simple-errors");
-var Site = require('./model/Site');
 
-angular.module('KidoScraper', ['ngRoute', 'angular-loading-bar', 'ui.bootstrap', 'ng-breadcrumbs', 'toggle-switch'])
+var kidoScraper = require('./KidoScraper');
+
+require('./controllers/project/ProjectCreateOrEditController');
+require('./controllers/project/ProjectListController');
+require('./controllers/project/ProjectDetailsController');
+require('./controllers/project/ProjectExportController');
+require('./controllers/project/ProjectRunController');
+require('./controllers/project/step/StepEditController');
+require('./controllers/datasource/CreateDatasourceController');
+require('./directives/BreadcrumbDirective');
+require('./directives/StepClickDirective');
+require('./directives/StepSelectDirective');
+require('./directives/StepFormDirective');
+require('./directives/StepScrapeDirective');
+require('./directives/Select2Directive');
+require('./directives/RegexpMatchingDirective');
+
+kidoScraper
     .config(function ($routeProvider, $compileProvider, $tooltipProvider) {
         $compileProvider
             .aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|filesystem:chrome-extension|blob:chrome-extension):/);

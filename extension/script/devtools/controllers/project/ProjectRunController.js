@@ -1,16 +1,20 @@
 'use strict';
 require('angular');
+
+var kidoScraper = require('../../KidoScraper');
+var Site = require('../../model/Site');
+
+require('../../services/RunInBackgroundScript');
 require('../../services/AngularScope');
 require('../../services/BaseErrorHandler');
 require('../../services/ServiceService');
 require('../../services/AgentService');
-var Site = require('../../model/Site');
 
 module.exports = (function () {
 
-    angular.module('KidoScraper').controller('ProjectRunController', function ($scope, $routeParams, $location, $http,
-                                                                               $modal, RunInBackgroundScript, AngularScope,
-                                                                               baseErrorHandler, serviceService, agentService) {
+    kidoScraper.controller('ProjectRunController', function ($scope, $routeParams, $location, $http, $modal,
+                                                             RunInBackgroundScript, AngularScope, baseErrorHandler,
+                                                             serviceService, agentService) {
         console.log('Loading Project Run Controller...');
 
         if (!$routeParams.name) {
@@ -111,7 +115,7 @@ module.exports = (function () {
         });
     });
 
-    angular.module('KidoScraper').controller('NewServiceModalController', function ($scope, $modalInstance, AngularScope,
+    kidoScraper.controller('NewServiceModalController', function ($scope, $modalInstance, AngularScope,
                                                                                     baseErrorHandler, serviceService) {
         $scope.createNewService = function () {
             if ($scope.newServiceName === $scope.NEW_SERVICE_META_KEY) {
