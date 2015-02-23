@@ -25,6 +25,7 @@ module.exports = (function () {
         $scope.ignoreSSLErrors = false;
         $scope.running = false;
         $scope.selectedServiceName = '';
+        $scope.alerts = [];
         $scope.NEW_SERVICE_META_KEY = "New Service...";
 
         $scope.openModalIfNecessary = function() {
@@ -115,7 +116,7 @@ module.exports = (function () {
         });
     });
 
-    kidoScraper.controller('NewServiceModalController', function ($scope, $modalInstance, AngularScope,
+    kidoScraper.controller('NewServiceModalController', function ($scope, $timeout, $modalInstance, AngularScope,
                                                                                     baseErrorHandler, serviceService) {
         $scope.createNewService = function () {
             if ($scope.newServiceName === $scope.NEW_SERVICE_META_KEY) {
@@ -152,11 +153,27 @@ module.exports = (function () {
 
                 $scope.newServiceName = '';
                 $scope.runOn = null;
+
+                $scope.addAlert({timeout: 3000, msg: "New service '" + $scope.selectedServiceName + "' has been successfully created"});
             });
         };
 
         $scope.cancelNewServiceCreation = function () {
             $modalInstance.dismiss('cancel');
+        };
+
+        $scope.addAlert = function(alert) {
+            $scope.alerts.push(alert);
+
+            if (alert.timeout) {
+                $timeout(function(){
+                    $scope.closeAlert($scope.alerts.indexOf(alert));
+                }, alert.timeout);
+            }
+        };
+
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
         };
     });
 })();
