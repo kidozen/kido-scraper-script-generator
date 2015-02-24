@@ -39,6 +39,21 @@ textarea.code {
     font-size: small;
 }
 
+/* Hack to style the "Create Datasource" button within the "Export" page*/
+li:nth-child(3) > a[tab-heading-transclude] {
+    padding: 0;
+}
+
+/*
+    Component: ace editor
+    ------------------
+*/
+
+/* Needed for ace editor to show up */
+.ace_editor {
+    height: 48px;
+}
+
 /*
     Component: Select2
     ------------------

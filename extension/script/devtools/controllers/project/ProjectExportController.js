@@ -24,16 +24,13 @@ module.exports = (function () {
                 $scope.site = siteAsJson;
                 $scope.json = JSON.stringify(new Site($scope.site).toJson(options), 0, 4);
                 $scope.script = new Site($scope.site).toCasper(options);
-                $scope.scriptVisible = true;
 
                 $scope.showJson = function () {
                     $scope.jsonVisible = true;
-                    $scope.scriptVisible = false;
                 };
 
                 $scope.showScript = function () {
                     $scope.jsonVisible = false;
-                    $scope.scriptVisible = true;
                 };
 
                 $scope.createDatasource = function() {

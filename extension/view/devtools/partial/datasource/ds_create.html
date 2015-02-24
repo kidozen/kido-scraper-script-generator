@@ -86,7 +86,11 @@
         <p ng-show="method === 'runScript'"><i class="fa fa-bullhorn"></i> <small>If you want, you can edit the Casper Script. <strong>Comments
             are not allowed and single quotes are preferred over double quotes.</strong></small></p>
     </div>
-    <textarea class="form-control code" rows="22" ng-model="dsBody"/>
+    <div ng-model="dsBody"
+         ui-ace="{ mode: '{{method === 'runJson' ? 'json' : 'javascript'}}',
+                   useWrapMode: true,
+                   showGutter: true,
+                   rendererOptions: {minLines:4,maxLines:36 }}"/>
 </div>
 
 <script type="text/ng-template" id="newDsCreatedModal.html">
@@ -95,8 +99,9 @@
     </div>
     <div class="modal-body text-center">
         <label>Now you can <strong>view it, edit it, test it, run it and more...</strong></label><br>
-        <a href="{{marketplaceURL}}#/admin/enterprise-api/datasources/{{newDatasourceName}}?indexTest=true&test=process"
-            target="_blank">at the KidoZen Application Center</a>
+        <a href="{{marketplaceURL}}admin/#/apis/data-access/{{newDatasourceName}}/test" target="_blank">
+            at the KidoZen Application Center
+        </a>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="ok()">OK</button>
