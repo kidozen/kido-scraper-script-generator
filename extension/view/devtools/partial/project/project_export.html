@@ -4,15 +4,15 @@
 
 <tabset class="col-md-6" style="clear: both">
     <tab heading="Script" ng-click="showScript()">
-        <div ng-model="script" readonly
+        <div ng-model="script" readonly="readonly"
              ui-ace="{ mode: 'javascript', useWrapMode: true, showGutter: false, rendererOptions: {minLines:4,maxLines:36 }}"/>
         </div>
     </tab>
     <tab heading="JSON" ng-click="showJson()">
-        <div ng-model="json" readonly
+        <div ng-model="json" readonly="readonly"
              ui-ace="{ mode: 'json', useWrapMode: true, showGutter: false, rendererOptions: {minLines:4,maxLines:36 }}"/>
     </tab>
-    <tab select="createDatasource()" class="pull-right">
+    <tab select="createDatasource()" class="pull-right create-ds-button">
         <tab-heading>
             <button class="btn btn-warning"><i class="fa fa-check"></i> Create Datasource</button>
         </tab-heading>

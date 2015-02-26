@@ -11,4 +11,8 @@ module.exports = angular.module('KidoScraper', ['ngRoute',
                                                 'ui.bootstrap',
                                                 'ng-breadcrumbs',
                                                 'toggle-switch',
-                                                'ui.ace']);
+                                                'ui.ace',
+                                                'ui.grid',
+                                                'ui.grid.resizeColumns',
+                                                'ui.grid.autoResize',
+                                                'ui.grid.moveColumns']);

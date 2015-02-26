@@ -43,8 +43,23 @@
     </div>
 </div>
 
-<div class="col-md-12" ng-show="executionResult">
-    <pre>{{executionResult}}</pre>
+<div class="small col-md-12" ng-show="executionResult">
+    <tabset>
+        <tab heading="Preview">
+            <div class="uiGrid"
+                 ui-grid="{data: executionResult}"
+                 ui-grid-pagination
+                 ui-grid-resize-columns
+                 ui-grid-auto-resize
+                 ui-grid-move-columns/>
+        </tab>
+        <tab heading="Raw">
+            <div ng-model="executionResultAsString"
+                 ui-ace="{ mode: 'json', useWrapMode : true, rendererOptions: {minLines:4,maxLines:25 }}"
+                 readonly="readonly">
+            </div>
+        </tab>
+    </tabset>
 </div>
 
 <script type="text/ng-template" id="createNewServiceModal.html">

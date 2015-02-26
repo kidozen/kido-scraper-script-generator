@@ -88,7 +88,8 @@ module.exports = (function () {
                             if (response.status !== 200 || response.data.error) {
                                 alert(JSON.stringify(response.data, null, 2));
                             } else {
-                                $scope.executionResult = JSON.stringify(response.data, null, 2);
+                                $scope.executionResult = response.data.data;
+                                $scope.executionResultAsString = JSON.stringify(response.data.data, null, 2);
                             }
                             $scope.running = false;
                         }, function (error) {
