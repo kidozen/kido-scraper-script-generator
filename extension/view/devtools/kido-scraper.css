@@ -145,7 +145,7 @@ a {
 .breadcrumb > .active {
     color: #FFF;
 }
-.btn-logout {
+.btn-signout {
     padding: 5px 15px;
     margin-left: 10px;
 }

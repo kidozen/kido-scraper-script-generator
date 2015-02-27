@@ -49,9 +49,9 @@ module.exports = (function () {
                     }
                 });
 
-                scope.logout = function () {
+                scope.signOut = function () {
                     if (!scope.loggedInTo) {
-                        alert("Unable to logout the user as the Marketplace URL could not be detected");
+                        alert("Unable to sign out the user as the Marketplace URL could not be detected");
                         return;
                     }
                     bgScript.getAuthTokenKeyInLocalStorageFor(scope.loggedInTo).done(function(tokenKey) {

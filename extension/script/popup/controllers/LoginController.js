@@ -39,7 +39,7 @@ angular.module('KidoScraperPopup').controller("LoginController", function ($scop
         });
     };
 
-    $scope.logout = function () {
+    $scope.signOut = function () {
         if (!$scope.marketplaceURL) {
             alert("The Marketplace URL is required");
             return;
