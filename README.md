@@ -17,3 +17,10 @@ kido-scraper-script-generator
 - Verify the installation
     - Open any page and toggle Chrome's Developer Tools (More tools --> Developer Tools)
     - You should see a small tab tagged "Kido Scraper". This reflects the extension has been installed successfully.
+
+# Extension packaging and publishing (only for Kidozen developers)
+- Do not forget to bump up the version in the manifest file.
+- Make sure all the tests are passing and then run `npm run bundle`.
+- From the `extension` subdirectory, run this command: `zip -r kido-scraper.zip *`
+- Log in to [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/developer) (ask someone for the proper credentials)
+- `Edit` the listing item corresponding to this extension and upload the new package using the button `Upload updated package`
