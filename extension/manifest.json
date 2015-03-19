@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "version": "0.0.1",
+    "version": "0.0.2",
     "name": "Kido Scraper Generator",
     "short_name": "Kido Scraper",
     "description": "KidoZen tool to build scripts for data extraction from websites",
